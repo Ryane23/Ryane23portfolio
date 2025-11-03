@@ -13,7 +13,7 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import MusicPlayer from "@/components/MusicPlayer";
 import AIAssistant from "@/components/AIAssistant";
-import SpotifyNowPlaying from "@/components/SpotifyNowPlaying";
+// import SpotifyNowPlaying from "@/components/SpotifyNowPlaying";
 
 const Index = () => {
   return (
@@ -33,7 +33,7 @@ const Index = () => {
       <Footer />
       <MusicPlayer />
       <AIAssistant />
-      <SpotifyNowPlaying />
+      {/* <SpotifyNowPlaying /> */}
     </div>
   );
 };
