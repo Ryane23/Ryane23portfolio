@@ -4,7 +4,7 @@ import { GraduationCap, Award, Download } from "lucide-react";
 const education = [
   {
     year: "2023 - Present",
-    institution: "African Institute of Computer Sciences (IAI)",
+    institution: "African Institute of Computer Sciences (IAI- Cameroon)",
     degree: "Bachelor in Software Engineering and DTS ",
     description: "Specialized in full-stack development,  and software architecture."
   },
@@ -12,6 +12,12 @@ const education = [
     year: "2021",
     institution: "Christ The King Comprehensive College Yaounde - Soa",
     degree: "Advanced Level Certificate",
+    description: "Focused on Mathematics, Computer Science, and Physics."
+  },
+   {
+    year: "2017",
+    institution: "Franky Comprehensive High School - Obili",
+    degree: "Ordinary Level Certificate",
     description: "Focused on Mathematics, Computer Science, and Physics."
   }
 ];
