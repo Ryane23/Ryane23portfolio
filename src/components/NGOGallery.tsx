@@ -57,8 +57,12 @@ const NGOGallery = () => {
               onClick={() => setSelectedProject(project)}
               className="group relative rounded-2xl overflow-hidden border border-border hover:border-primary/50 cursor-pointer transition-all duration-500 hover:shadow-glow aspect-video"
             >
+              <img 
+                src={project.image} 
+                alt={project.title}
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent z-10" />
-              <div className="absolute inset-0 bg-muted group-hover:scale-110 transition-transform duration-700" />
               
               <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
                 <p className="text-xs text-primary mb-2">{project.organization}</p>
@@ -106,7 +110,13 @@ const NGOGallery = () => {
                 <p className="text-sm text-muted-foreground mb-4">Role: {selectedProject.role}</p>
               </div>
 
-              <div className="aspect-video rounded-xl bg-muted mb-6" />
+              <div className="aspect-video rounded-xl bg-muted mb-6 overflow-hidden">
+                <img 
+                  src={selectedProject.image} 
+                  alt={selectedProject.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
               <p className="text-muted-foreground leading-relaxed">
                 {selectedProject.description}
