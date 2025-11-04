@@ -4,13 +4,13 @@ import { GraduationCap, Award, Download } from "lucide-react";
 const education = [
   {
     year: "2023 - Present",
-    institution: "University of Buea",
-    degree: "Bachelor in Software Engineering",
-    description: "Specialized in full-stack development, UI/UX design, and software architecture."
+    institution: "African Institute of Computer Sciences (IAI)",
+    degree: "Bachelor in Software Engineering and DTS ",
+    description: "Specialized in full-stack development,  and software architecture."
   },
   {
-    year: "2019 - 2022",
-    institution: "Government Bilingual High School Limbe",
+    year: "2021",
+    institution: "Christ The King Comprehensive College Yaounde - Soa",
     degree: "Advanced Level Certificate",
     description: "Focused on Mathematics, Computer Science, and Physics."
   }
@@ -19,24 +19,39 @@ const education = [
 const accomplishments = [
   {
     title: "TIC Summit 2025",
-    description: "Participated in Technology and Innovation Summit",
+    description: "Helped as an organiser of the Technology and Innovation Summit",
     icon: "🏆"
   },
   {
-    title: "Kidefind Youth Initiative",
-    description: "Co-founder and lead developer",
-    icon: "🌍"
-  },
-  {
-    title: "Full-Stack Development",
-    description: "Certified in MERN Stack Development",
+    title: "Software Engineering Diploma",
+    description: "Earned DTS, Bachelor's (Licence), and Engineering Diploma in Computer Science & Software Engineering.",
     icon: "💻"
   },
   {
-    title: "UI/UX Design",
-    description: "Professional certification in User Experience Design",
-    icon: "🎨"
-  }
+    title: "Aspire Leaders Program",
+    description: "Undergoing the Aspire Leaders Program at Aspire Institute, developing leadership, strategic thinking, and professional growth skills to drive impact and excellence.",
+    icon: "⭐"
+  },
+ {
+    title: "TIC Summit Volunteer & Mentor",
+    description: "Volunteered for TIC Summit 2025 and 2026, supporting event organization, mentoring young innovators, and facilitating Google Meet mentorship sessions to empower future tech leaders.",
+    icon: "🤝"
+ },
+ {
+  title: "Youth Tech & Innovation Activist",
+  description: "Actively involved in promoting technology adoption, youth empowerment, and innovation culture through events, workshops, and community initiatives.",
+  icon: "💡"
+},
+{
+  title: "LinkedIn Professional Milestone",
+  description: "Built a professional LinkedIn network of 500+ industry connections, fostering opportunities, mentorship, and personal development within the global tech ecosystem.",
+  icon: "📎"
+}, 
+{
+  title: "AMKAY Association — Youth Development Volunteer",
+  description: "Supported youth empowerment and community development activities, contributing to impactful programs that promote education, innovation, and personal growth.",
+  icon: "🕊️"
+}
 ];
 
 const Education = () => {
