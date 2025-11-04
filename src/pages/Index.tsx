@@ -11,8 +11,6 @@ import Guestbook from "@/components/Guestbook";
 import GitHubProfile from "@/components/GitHubProfile";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import MusicPlayer from "@/components/MusicPlayer";
-import AIAssistant from "@/components/AIAssistant";
 // import SpotifyNowPlaying from "@/components/SpotifyNowPlaying";
 
 const Index = () => {
@@ -31,8 +29,6 @@ const Index = () => {
       <Guestbook />
       <Contact />
       <Footer />
-      <MusicPlayer />
-      <AIAssistant />
       {/* <SpotifyNowPlaying /> */}
     </div>
   );

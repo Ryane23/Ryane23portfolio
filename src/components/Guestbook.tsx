@@ -88,22 +88,32 @@ const Guestbook = () => {
           className="mb-12 rounded-2xl border border-border bg-card p-6"
         >
           <div className="space-y-4">
-            <input
-              type="text"
-              placeholder="Your Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-input border border-border focus:outline-none focus:ring-2 focus:ring-ring"
-              maxLength={50}
-            />
-            <textarea
-              placeholder="Your Message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-input border border-border focus:outline-none focus:ring-2 focus:ring-ring resize-none"
-              rows={4}
-              maxLength={200}
-            />
+            <div>
+              <input
+                type="text"
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl bg-input border border-border focus:outline-none focus:ring-2 focus:ring-ring"
+                maxLength={50}
+              />
+              <p className="text-xs text-muted-foreground mt-1 text-right">
+                {name.length}/50 characters
+              </p>
+            </div>
+            <div>
+              <textarea
+                placeholder="Your Message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl bg-input border border-border focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+                rows={4}
+                maxLength={200}
+              />
+              <p className="text-xs text-muted-foreground mt-1 text-right">
+                {message.length}/200 characters
+              </p>
+            </div>
             <button
               type="submit"
               className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground hover:shadow-glow transition-all"

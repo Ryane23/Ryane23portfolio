@@ -6,6 +6,7 @@ const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.5);
+  const [hasError, setHasError] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const location = useLocation();
 
@@ -20,6 +21,18 @@ const MusicPlayer = () => {
       audioRef.current = new Audio(currentTrack);
       audioRef.current.loop = true;
       audioRef.current.volume = volume;
+      
+      // Add error handler
+      audioRef.current.addEventListener('error', () => {
+        console.error(`Failed to load audio: ${currentTrack}`);
+        setHasError(true);
+        setIsPlaying(false);
+      });
+      
+      // Add loaded handler
+      audioRef.current.addEventListener('loadeddata', () => {
+        setHasError(false);
+      });
     }
 
     return () => {
@@ -38,21 +51,33 @@ const MusicPlayer = () => {
       audioRef.current.src = currentTrack;
       audioRef.current.load();
       
+      setHasError(false); // Reset error state on track change
+      
       if (wasPlaying) {
-        audioRef.current.play().catch(console.error);
+        audioRef.current.play().catch((error) => {
+          console.error('Failed to play audio:', error);
+          setHasError(true);
+          setIsPlaying(false);
+        });
       }
     }
   }, [currentTrack]);
 
   const togglePlay = () => {
-    if (!audioRef.current) return;
+    if (!audioRef.current || hasError) return;
 
     if (isPlaying) {
       audioRef.current.pause();
+      setIsPlaying(false);
     } else {
-      audioRef.current.play().catch(console.error);
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch((error) => {
+          console.error('Failed to play audio:', error);
+          setHasError(true);
+          setIsPlaying(false);
+        });
     }
-    setIsPlaying(!isPlaying);
   };
 
   const toggleMute = () => {
@@ -104,7 +129,7 @@ const MusicPlayer = () => {
               {location.pathname === '/projects' ? 'Nemzzz' : 'MGMT - Little Dark Age'}
             </span>
             <span className="text-xs text-muted-foreground">
-              {isPlaying ? "Now Playing" : "Paused"}
+              {hasError ? "Track unavailable" : isPlaying ? "Now Playing" : "Paused"}
             </span>
           </div>
 

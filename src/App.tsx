@@ -4,6 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import MusicPlayer from "@/components/MusicPlayer";
+import AIAssistant from "@/components/AIAssistant";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import ProjectsPage from "./pages/ProjectsPage";
@@ -31,6 +33,8 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <MusicPlayer />
+          <AIAssistant />
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>

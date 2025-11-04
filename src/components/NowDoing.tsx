@@ -1,31 +1,25 @@
 import { useState, useEffect } from "react";
-import { Headphones, Code, Dumbbell, Music } from "lucide-react";
+import { Headphones, Code, Dumbbell, Music, Joystick } from "lucide-react";
 
 const activities = [
   {
-    icon: Headphones,
+    icon: Music,
     title: "Listening to Nemzzz",
     description: "Vibing to the latest tracks",
     emoji: "🎧"
   },
   {
     icon: Code,
-    title: "Building BusEase",
+    title: "Just Coding",
     description: "Developing smart transport solutions",
     emoji: "💻"
   },
   {
-    icon: Dumbbell,
-    title: "Football Training",
-    description: "Practicing drills and techniques",
+    icon: Joystick,
+    title: "FIFA 23",
+    description: "Career Mode and FUT23 Check me out",
     emoji: "⚽"
   },
-  {
-    icon: Music,
-    title: "Exploring New Music",
-    description: "Discovering fresh sounds",
-    emoji: "🎵"
-  }
 ];
 
 const NowDoing = () => {

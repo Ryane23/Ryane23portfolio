@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import LinkedInStats from "@/components/LinkedInStats";
 
 const About = () => {
   const calculateAge = (birthDate: Date) => {
@@ -13,7 +14,7 @@ const About = () => {
     return age;
   };
 
-  const birthDate = new Date("2000-05-15"); // Update with actual birth date
+  const birthDate = new Date("2001-10-16"); // Update with actual birth date
   const age = calculateAge(birthDate);
 
   return (
@@ -79,7 +80,7 @@ const About = () => {
                     <p className="text-xs text-muted-foreground">Focus on Full-Stack Development and Software Architecture</p>
                   </div>
                   <div className="border-l-2 border-primary pl-4">
-                    <h3 className="text-lg font-semibold">Franky Institute</h3>
+                    <h3 className="text-lg font-semibold">TIC Foundation</h3>
                     <p className="text-sm text-muted-foreground mb-2">Technical Training</p>
                     <p className="text-xs text-muted-foreground">Specialized in Web Technologies and Development Practices</p>
                   </div>
@@ -104,7 +105,7 @@ const About = () => {
                   about how digital solutions can transform real-world problems into innovative opportunities.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Throughout my education at IAI Cameroon and Franky Institute, I've developed a strong 
+                  Throughout my education at IAI Cameroon and TIC Foundation, I've developed a strong 
                   foundation in both frontend and backend technologies. My expertise spans across modern 
                   frameworks like React, Next.js, Laravel, and Django, allowing me to build comprehensive 
                   solutions from concept to deployment.
@@ -166,6 +167,9 @@ const About = () => {
               </div>
             </div>
           </motion.div>
+
+          {/* LinkedIn Stats */}
+          <LinkedInStats />
         </motion.div>
       </main>
 

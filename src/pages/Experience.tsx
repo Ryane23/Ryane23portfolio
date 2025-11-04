@@ -4,34 +4,103 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 const experiences = [
-  {
+ {
     company: "TIC Foundation",
-    role: "Full-Stack Developer",
+    role: "Full-Stack Developer Intern",
     location: "Cameroon",
     period: "2022 - Present",
-    description: "Leading development of digital solutions for educational and community-focused initiatives. Responsible for full-stack development, UI/UX design, and technical architecture decisions.",
+    description: "Working on digital solutions for educational and community initiatives. Responsible for full-stack development, UI/UX design, and implementing key features.",
     achievements: [
-      "Developed and deployed multiple web applications serving 1000+ users",
-      "Implemented responsive design systems improving user engagement by 40%",
-      "Led technical workshops and mentored junior developers",
-      "Integrated payment systems and real-time features"
+      "Built web applications for community projects",
+      "Created responsive and user-friendly interfaces",
+      "Assisted in mentoring junior developers",
+      "Implemented basic database and real-time features"
     ],
     technologies: ["React", "Node.js", "MongoDB", "Firebase", "Tailwind CSS"]
-  },
-  {
-    company: "Hydra Company",
-    role: "Software Engineer",
-    location: "Cameroon",
-    period: "2021 - 2022",
-    description: "Contributed to enterprise-level software solutions, focusing on backend development and API integration. Worked on scalable systems and database optimization.",
-    achievements: [
-      "Built RESTful APIs handling 10,000+ daily requests",
-      "Optimized database queries reducing response time by 60%",
-      "Implemented automated testing increasing code coverage to 85%",
-      "Collaborated with cross-functional teams on product development"
-    ],
-    technologies: ["PHP", "Laravel", "MySQL", "React", "Bootstrap"]
-  }
+},
+{
+  company: "Hydra",
+  role: "Software Development Intern",
+  location: "Cameroon",
+  period: "2023",
+  description: "Contributed to software development projects and supported the technical team in coding and testing tasks.",
+  achievements: [
+    "Developed simple modules and features",
+    "Assisted in testing and debugging code",
+    "Collaborated with team members on projects"
+  ],
+  technologies: ["JavaScript", "HTML", "CSS", "PHP"]
+},
+{
+  company: "Codeva Technology",
+  role: "Software Development Intern",
+  location: "Cameroon",
+  period: "2023",
+  description: "Supported development of web projects, learning best practices and coding standards in a professional environment.",
+  achievements: [
+    "Worked on small web development tasks",
+    "Assisted in front-end and back-end implementation",
+    "Participated in team code reviews"
+  ],
+  technologies: ["React", "Node.js", "MySQL", "CSS"]
+},
+{
+  company: "Ryans and Sons",
+  role: "Project Lead — Project EAGLE",
+  location: "Cameroon",
+  period: "2023 - Present",
+  description: "Leading Project EAGLE, focusing on team collaboration, code management, and delivering secure software solutions.",
+  achievements: [
+    "Managed code access and team branches",
+    "Structured project repositories and database",
+    "Coordinated team development tasks",
+    "Ensured secure coding practices"
+  ],
+  technologies: ["Git", "PHP", "MySQL", "JavaScript"]
+},
+{
+  company: "TIC Foundation",
+  role: "TIC Summit Volunteer & Mentor",
+  location: "Cameroon",
+  period: "2025 - 2026",
+  description: "Supported the TIC Summit events by volunteering on-site and mentoring participants online via Google Meet and other platforms.",
+  achievements: [
+    "Assisted with event logistics and setup",
+    "Guided and mentored participants during sessions",
+    "Managed virtual sessions and provided technical support",
+    "Ensured smooth coordination between speakers and attendees"
+  ],
+  technologies: ["Google Meet", "Microsoft Office", "Zoom"]
+},
+{
+  company: "Kidefind",
+  role: "Partnership Coordinator",
+  location: "Cameroon",
+  period: "2022 - Present",
+  description: "Responsible for developing and managing partnerships to support youth-focused initiatives and community programs.",
+  achievements: [
+    "Established partnerships with local organizations and stakeholders",
+    "Contributed to initiatives helping more than two orphanages",
+    "Coordinated collaboration efforts for community projects",
+    "Supported event planning and outreach programs"
+  ],
+  technologies: ["Microsoft Office", "Google Workspace"]
+},
+{
+  company: "Amkay",
+  role: "Volunteer / Team Member",
+  location: "Cameroon",
+  period: "2022 - Present",
+  description: "Participated in community development and youth empowerment initiatives organized by the Amkay association.",
+  achievements: [
+    "Assisted in organizing youth development events",
+    "Provided support for outreach and mentoring programs",
+    "Helped coordinate community service projects",
+    "Collaborated with team members to achieve project goals"
+  ],
+  technologies: ["Microsoft Office", "Google Workspace"]
+}
+
 ];
 
 const Experience = () => {
