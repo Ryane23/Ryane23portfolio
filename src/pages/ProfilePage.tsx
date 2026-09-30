@@ -1,4 +1,4 @@
-import ryanProfile from "@/assets/ryan-profile.png";
+import ryanProfile from "@/assets/ryan-profile.webp";
 import { education, localize, profile, skillGroups } from "@/data/portfolio";
 import { Link } from "react-router-dom";
 import { paths, useLocale } from "@/lib/locale";
