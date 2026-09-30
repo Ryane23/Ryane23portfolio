@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { articles, experiences, localize, profile, projects, skillGroups } from "@/data/portfolio";
+import NetworkPreview from "@/components/NetworkPreview";
 import { articlePath, paths, projectPath, useLocale } from "@/lib/locale";
 
 const EditorialHome = () => {
@@ -62,15 +63,17 @@ const EditorialHome = () => {
       </section>
 
       <section className="worlds-section section-pad">
-        <div className="section-heading"><span className="section-number">05</span><div><p className="meta-label">{locale === "en" ? "BEYOND CODE" : "AU-DELÀ DU CODE"}</p><h2>{locale === "en" ? "Two personal corners. One room." : "Deux univers personnels. Une seule pièce."}</h2></div></div>
+        <div className="section-heading"><span className="section-number">05</span><div><p className="meta-label">{locale === "en" ? "COMMUNITY & FOOTBALL" : "COMMUNAUTÉ & FOOTBALL"}</p><h2>{locale === "en" ? "Two human corners of the room." : "Deux espaces humains dans la pièce."}</h2></div></div>
         <div className="world-grid">
-          <Link to={paths.anime[locale]} className="world-card anime-world"><span className="meta-label">ARCHIVE / A</span><strong>DBZ<br />SOLO LEVELING</strong><span>{locale === "en" ? "ENTER ANIME ARCHIVE" : "ENTRER DANS L’ARCHIVE ANIME"} ↗</span></Link>
-          <Link to={paths.football[locale]} className="world-card football-world"><span className="meta-label">MATCH / 21.01.2025</span><strong>11<br />90+6</strong><span>{locale === "en" ? "ENTER FOOTBALL ROOM" : "ENTRER DANS LA SALLE FOOTBALL"} ↗</span></Link>
+          <Link to={paths.network[locale]} className="world-card anime-world"><span className="meta-label">COMMUNITY / ARCHIVE</span><strong>KIDEFIND<br />AMKAY</strong><span>{locale === "en" ? "OPEN COMMUNITY ARCHIVE" : "OUVRIR L’ARCHIVE COMMUNAUTAIRE"} ↗</span></Link>
+          <Link to={paths.football[locale]} className="world-card football-world"><img className="world-raphinha" src="/images/football/raphinha-11-goal.svg" alt="" /><span className="meta-label">MATCH / 21.01.2025</span><strong>11<br />90+6</strong><span>{locale === "en" ? "ENTER FOOTBALL ROOM" : "ENTRER DANS LA SALLE FOOTBALL"} ↗</span></Link>
         </div>
       </section>
 
+      <NetworkPreview />
+
       <section className="editorial-section section-pad">
-        <div className="section-heading"><span className="section-number">06</span><div><p className="meta-label">LIBRARY</p><h2>{locale === "en" ? "Notes from work in progress." : "Notes d’un travail en cours."}</h2></div><Link to={paths.library[locale]}>{locale === "en" ? "OPEN LIBRARY" : "OUVRIR LA BIBLIOTHÈQUE"} ↗</Link></div>
+        <div className="section-heading"><span className="section-number">07</span><div><p className="meta-label">LIBRARY</p><h2>{locale === "en" ? "Notes from work in progress." : "Notes d’un travail en cours."}</h2></div><Link to={paths.library[locale]}>{locale === "en" ? "OPEN LIBRARY" : "OUVRIR LA BIBLIOTHÈQUE"} ↗</Link></div>
         <div className="article-grid">
           {articles.map((article) => <Link to={articlePath(locale, article.slug)} key={article.slug} className="article-card"><span className="meta-label">{localize(article.status, locale)}</span><h3>{localize(article.title, locale)}</h3><p>{localize(article.excerpt, locale)}</p><span>{article.topics.join(" / ")}</span></Link>)}
         </div>

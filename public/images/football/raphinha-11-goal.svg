@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Number 11 scoring</title>
+  <desc id="desc">Original dimensional anime-inspired illustration of a braided footballer in a red and blue number 11 kit striking a ball.</desc>
+  <defs>
+    <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d89a73"/><stop offset=".55" stop-color="#9c5c3d"/><stop offset="1" stop-color="#633522"/></linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ed174b"/><stop offset="1" stop-color="#69072b"/></linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1359d1"/><stop offset="1" stop-color="#071d62"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe36e"/><stop offset="1" stop-color="#c38700"/></linearGradient>
+    <radialGradient id="ball" cx="35%" cy="28%"><stop stop-color="#fff"/><stop offset=".75" stop-color="#d8d8d8"/><stop offset="1" stop-color="#7e7e7e"/></radialGradient>
+    <filter id="shadow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="22"/></filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="10" flood-opacity=".34"/></filter>
+    <clipPath id="shirt"><path d="M355 274L276 314 303 474 371 464 385 567 553 554 542 456 610 465 633 309 541 274 482 248 411 250Z"/></clipPath>
+  </defs>
+
+  <ellipse cx="475" cy="781" rx="300" ry="52" fill="#000" opacity=".3" filter="url(#shadow)"/>
+  <path d="M103 555C214 510 282 500 356 521" fill="none" stroke="#e8e8e8" stroke-width="9" stroke-linecap="round" opacity=".18"/>
+  <path d="M68 604C187 550 264 544 344 555" fill="none" stroke="#e8e8e8" stroke-width="4" stroke-linecap="round" opacity=".12"/>
+
+  <!-- rear leg -->
+  <g filter="url(#soft)">
+    <path d="M480 543C456 598 433 653 433 708L510 716C523 652 540 613 564 568Z" fill="url(#blue)" stroke="#0a0a0a" stroke-width="7"/>
+    <path d="M434 698L510 706 522 789 426 786Z" fill="#121722" stroke="#0a0a0a" stroke-width="7"/>
+    <path d="M424 775L523 778 573 818C579 831 564 840 541 837L420 817Z" fill="#eeeeea" stroke="#0a0a0a" stroke-width="7"/>
+    <path d="M438 790L538 810" stroke="#111" stroke-width="7" opacity=".5"/>
+  </g>
+
+  <!-- torso -->
+  <g filter="url(#soft)">
+    <path d="M355 274L276 314 303 474 371 464 385 567 553 554 542 456 610 465 633 309 541 274 482 248 411 250Z" fill="url(#blue)" stroke="#090909" stroke-width="8"/>
+    <g clip-path="url(#shirt)">
+      <path d="M354 239H414V587H354Z" fill="url(#red)"/>
+      <path d="M471 239H531V587H471Z" fill="url(#red)"/>
+      <path d="M584 253H650V533H584Z" fill="url(#red)"/>
+      <path d="M283 264H336V525H283Z" fill="url(#red)"/>
+      <path d="M300 362C402 335 511 343 621 379" fill="none" stroke="#fff" stroke-width="5" opacity=".12"/>
+    </g>
+    <path d="M411 250Q447 296 482 248" fill="#0a1740" stroke="#090909" stroke-width="7"/>
+    <text x="445" y="465" fill="#f6d047" font-family="Arial Black,Arial,sans-serif" font-size="96" text-anchor="middle" transform="rotate(-3 445 465)">11</text>
+    <path d="M388 506Q469 531 550 500" fill="none" stroke="#f2cd3a" stroke-width="8" opacity=".7"/>
+  </g>
+
+  <!-- arms -->
+  <g filter="url(#soft)" stroke="#090909" stroke-width="8" stroke-linejoin="round">
+    <path d="M292 311C232 339 190 376 159 428L204 459C251 424 285 395 325 372Z" fill="url(#skin)"/>
+    <path d="M167 417C125 431 91 447 65 471 48 486 57 511 78 510 124 501 161 487 208 457Z" fill="url(#skin)"/>
+    <path d="M616 316C670 340 715 378 745 427L704 459C659 428 620 400 585 373Z" fill="url(#skin)"/>
+    <path d="M739 417C784 437 816 466 837 497 848 514 836 532 816 526 770 506 733 486 699 454Z" fill="url(#skin)"/>
+  </g>
+
+  <!-- neck and head -->
+  <g filter="url(#soft)">
+    <path d="M411 267L416 220 493 218 505 273C478 300 438 301 411 267Z" fill="url(#skin)" stroke="#090909" stroke-width="8"/>
+    <path d="M380 113C406 76 481 62 529 98 568 127 560 211 518 251 485 281 423 264 390 224 365 194 359 144 380 113Z" fill="url(#skin)" stroke="#090909" stroke-width="8"/>
+    <path d="M374 151C366 101 405 61 459 60 510 59 549 84 558 126 533 108 519 105 493 103 465 113 436 116 402 107 391 124 385 143 384 164Z" fill="#111217" stroke="#090909" stroke-width="8"/>
+    <g fill="none" stroke="#15151a" stroke-width="10" stroke-linecap="round">
+      <path d="M390 110C372 83 378 56 399 34"/><path d="M410 102C394 69 407 42 432 24"/><path d="M434 99C425 62 446 32 471 18"/><path d="M461 98C464 60 487 37 513 30"/><path d="M487 101C503 67 527 56 549 59"/>
+    </g>
+    <path d="M408 157Q427 145 445 157" fill="none" stroke="#171717" stroke-width="7" stroke-linecap="round"/>
+    <path d="M478 154Q498 143 515 157" fill="none" stroke="#171717" stroke-width="7" stroke-linecap="round"/>
+    <ellipse cx="430" cy="166" rx="7" ry="9" fill="#0b0b0b"/><ellipse cx="496" cy="164" rx="7" ry="9" fill="#0b0b0b"/>
+    <path d="M462 164L451 195 469 197" fill="none" stroke="#6e3825" stroke-width="5" stroke-linecap="round"/>
+    <path d="M430 218Q463 239 496 213" fill="#f2efe7" stroke="#321a15" stroke-width="6"/>
+    <path d="M430 218Q463 225 496 213" fill="none" stroke="#9b473f" stroke-width="7"/>
+    <path d="M421 238Q465 258 505 232" fill="none" stroke="#151515" stroke-width="9" stroke-linecap="round"/>
+  </g>
+
+  <!-- striking leg -->
+  <g filter="url(#soft)" stroke="#090909" stroke-width="8" stroke-linejoin="round">
+    <path d="M390 543C353 578 319 615 286 657L347 704C395 662 431 627 462 579Z" fill="url(#red)"/>
+    <path d="M292 651L350 698C317 737 281 765 237 782L203 717C236 695 264 672 292 651Z" fill="url(#skin)"/>
+    <path d="M211 710L246 778 176 838C150 851 122 832 136 810Z" fill="#eeeeea"/>
+    <path d="M163 804L229 752" fill="none" stroke="#111" stroke-width="7" opacity=".5"/>
+  </g>
+
+  <!-- ball and impact -->
+  <g transform="translate(103 690)" filter="url(#soft)">
+    <circle cx="0" cy="0" r="68" fill="url(#ball)" stroke="#090909" stroke-width="7"/>
+    <path d="M-13-25L15-34 35-10 21 18-12 19-31-7Z" fill="#111"/>
+    <path d="M15-34L32-58M35-10L62-2M21 18L38 48M-12 19L-32 50M-31-7L-57-21M-13-25L-17-57" fill="none" stroke="#222" stroke-width="6"/>
+  </g>
+  <path d="M21 646L77 665M9 699L69 700M29 748L80 728" stroke="#f3f3ef" stroke-width="7" stroke-linecap="round" opacity=".72"/>
+
+  <!-- dimensional edge highlights -->
+  <path d="M388 304C412 321 501 322 534 299" fill="none" stroke="#fff" stroke-width="4" opacity=".2"/>
+  <path d="M383 132C404 96 483 78 531 111" fill="none" stroke="#fff" stroke-width="5" opacity=".2"/>
+  <path d="M586 338C614 359 630 377 643 402" fill="none" stroke="#fff" stroke-width="4" opacity=".18"/>
+</svg>
