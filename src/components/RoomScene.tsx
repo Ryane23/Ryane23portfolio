@@ -213,13 +213,17 @@ const RoomScene = () => {
         screenContext.fillRect(0, 0, 512, 300);
         screenContext.fillStyle = dark ? "#ededeb" : "#111111";
         screenContext.font = "20px monospace";
-        screenContext.fillText("$ room11 --open", 25, 42);
-        [0.68, 0.42, 0.78, 0.36, 0.58, 0.24].forEach((width, index) => {
-          screenContext.globalAlpha = 0.28;
-          screenContext.fillRect(25, 70 + index * 28, width * 430, 8);
+        const projectMode = Math.floor(performance.now() / 2400) % 2 === 1;
+        screenContext.fillText(projectMode ? "$ work --featured" : "$ stack --active", 25, 42);
+        const monitorLabels = projectMode ? ["PROJINA", "CHOPASAP", "EAGLE", "NEXTPY", "BAJOMA", "BUSEASE"] : ["JS", "TS", "REACT", "NODE", "PYTHON", "SQL"];
+        monitorLabels.forEach((label, index) => {
+          screenContext.globalAlpha = index % 2 === 0 ? 0.9 : 0.5;
+          screenContext.font = projectMode ? "bold 17px monospace" : index < 2 ? "bold 30px monospace" : "20px monospace";
+          screenContext.fillText(label, 25 + (index % 2) * 235, 90 + Math.floor(index / 2) * 58);
+          screenContext.fillRect(25 + (index % 2) * 235, 101 + Math.floor(index / 2) * 58, 165, 3);
         });
         screenContext.globalAlpha = 1;
-        if (blink) screenContext.fillRect(25, 258, 12, 20);
+        if (blink) screenContext.fillRect(25, 262, 12, 18);
         screenTexture.needsUpdate = true;
       };
       const updateTheme = () => {

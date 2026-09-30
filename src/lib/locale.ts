@@ -14,6 +14,7 @@ export const paths = {
   anime: { en: "/en/anime", fr: "/fr/anime" },
   football: { en: "/en/football", fr: "/fr/football" },
   library: { en: "/en/library", fr: "/fr/bibliotheque" },
+  network: { en: "/en/network", fr: "/fr/reseau" },
   cv: { en: "/en/cv", fr: "/fr/cv" },
   contact: { en: "/en/contact", fr: "/fr/contact" },
 } as const;
