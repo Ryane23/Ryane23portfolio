@@ -1,0 +1,24 @@
+import { Link } from "react-router-dom";
+import { Github, Linkedin, MessageSquare, Users } from "lucide-react";
+import { paths, useLocale } from "@/lib/locale";
+
+const NetworkPreview = () => {
+  const locale = useLocale();
+  const items = [
+    { icon: Github, label: "GITHUB", text: locale === "en" ? "Live repositories and README" : "Dépôts et README en direct" },
+    { icon: Linkedin, label: "LINKEDIN", text: locale === "en" ? "Verified professional profile" : "Profil professionnel vérifié" },
+    { icon: Users, label: "COMMUNITY", text: locale === "en" ? "Kidefind, AMKAY, events" : "Kidefind, AMKAY, événements" },
+    { icon: MessageSquare, label: "GUESTBOOK", text: locale === "en" ? "Messages stored for moderation" : "Messages enregistrés pour modération" },
+  ];
+
+  return (
+    <section className="network-preview section-pad">
+      <div className="section-heading"><span className="section-number">06</span><div><p className="meta-label">NETWORK / SIGNALS</p><h2>{locale === "en" ? "The work connects outward." : "Le travail s’ouvre vers l’extérieur."}</h2></div><Link to={paths.network[locale]}>{locale === "en" ? "OPEN NETWORK" : "OUVRIR LE RÉSEAU"} ↗</Link></div>
+      <div className="network-preview-grid">
+        {items.map(({ icon: Icon, label, text }) => <Link to={paths.network[locale]} key={label}><Icon size={18} /><span className="meta-label">{label}</span><strong>{text}</strong><span>↗</span></Link>)}
+      </div>
+    </section>
+  );
+};
+
+export default NetworkPreview;

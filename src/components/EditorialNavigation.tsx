@@ -7,8 +7,8 @@ import { useTheme } from "@/contexts/EditorialThemeContext";
 import { paths, useLocale } from "@/lib/locale";
 
 const labels = {
-  en: { work: "Work", about: "About", experience: "Record", library: "Library", worlds: "Beyond code", contact: "Contact", cv: "CV" },
-  fr: { work: "Projets", about: "À propos", experience: "Parcours", library: "Bibliothèque", worlds: "Au-delà du code", contact: "Contact", cv: "CV" },
+  en: { work: "Work", about: "About", experience: "Record", library: "Library", network: "Network", contact: "Contact", cv: "CV" },
+  fr: { work: "Projets", about: "À propos", experience: "Parcours", library: "Bibliothèque", network: "Réseau", contact: "Contact", cv: "CV" },
 };
 
 const EditorialNavigation = () => {
@@ -31,7 +31,7 @@ const EditorialNavigation = () => {
   const links = [
     [copy.work, paths.work[locale]], [copy.about, paths.about[locale]],
     [copy.experience, paths.experience[locale]], [copy.library, paths.library[locale]],
-    [copy.worlds, paths.anime[locale]], [copy.contact, paths.contact[locale]],
+    [copy.network, paths.network[locale]], [copy.contact, paths.contact[locale]],
   ];
 
   return (

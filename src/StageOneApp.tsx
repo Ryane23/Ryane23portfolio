@@ -16,6 +16,7 @@ const ArticlePage = lazy(() => import("@/pages/ArticlePage"));
 const AnimePage = lazy(() => import("@/pages/AnimePage"));
 const FootballPage = lazy(() => import("@/pages/FootballPage"));
 const CvPage = lazy(() => import("@/pages/CvPage"));
+const NetworkPage = lazy(() => import("@/pages/NetworkPage"));
 const ReachOutPage = lazy(() => import("@/pages/ReachOutPage"));
 const EditorialNotFound = lazy(() => import("@/pages/EditorialNotFound"));
 
@@ -47,6 +48,7 @@ const StageOneApp = () => {
                   <Route path="/en/anime" element={<AnimePage />} /><Route path="/fr/anime" element={<AnimePage />} />
                   <Route path="/en/football" element={<FootballPage />} /><Route path="/fr/football" element={<FootballPage />} />
                   <Route path="/en/cv" element={<CvPage />} /><Route path="/fr/cv" element={<CvPage />} />
+                  <Route path="/en/network" element={<NetworkPage />} /><Route path="/fr/reseau" element={<NetworkPage />} />
                   <Route path="/en/contact" element={<ReachOutPage />} /><Route path="/fr/contact" element={<ReachOutPage />} />
                   <Route path="/about" element={<Navigate replace to="/en/about" />} /><Route path="/projects" element={<Navigate replace to="/en/work" />} />
                   <Route path="/experience" element={<Navigate replace to="/en/experience" />} /><Route path="/resume" element={<Navigate replace to="/en/cv" />} />
