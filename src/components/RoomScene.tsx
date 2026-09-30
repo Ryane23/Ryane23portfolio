@@ -1,0 +1,352 @@
+import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useTheme } from "@/contexts/EditorialThemeContext";
+
+type Stop = { position: [number, number, number]; lookAt: [number, number, number] };
+
+const stops: Record<string, Stop> = {
+  room: { position: [1.4, 2.7, 7.8], lookAt: [1.5, 1.1, -0.5] },
+  work: { position: [-0.7, 1.65, 1.2], lookAt: [-0.7, 1.35, -1.72] },
+  profile: { position: [1.25, 2.35, 1.6], lookAt: [1.15, 1.45, -1.85] },
+  record: { position: [2.1, 2.3, 1.4], lookAt: [2.25, 2.05, -1.82] },
+  library: { position: [4.25, 2.25, 2.25], lookAt: [4.35, 1.85, -1.75] },
+  football: { position: [5.6, 1.65, 3.65], lookAt: [5.75, 0.65, -1.15] },
+  contact: { position: [-2.1, 1.8, 2.1], lookAt: [-1.8, 1.05, -1.35] },
+};
+
+const homeSequence = [stops.room, stops.work, stops.record, stops.library, stops.football];
+
+const zoneForPath = (pathname: string) => {
+  if (/^\/(en|fr)\/?$/.test(pathname)) return "room";
+  if (pathname.includes("football")) return "football";
+  if (pathname.includes("anime") || pathname.includes("library") || pathname.includes("bibliotheque")) return "library";
+  if (pathname.includes("experience") || pathname.includes("parcours")) return "record";
+  if (pathname.includes("about") || pathname.includes("a-propos") || pathname.includes("cv")) return "profile";
+  if (pathname.includes("contact")) return "contact";
+  return "work";
+};
+
+const RoomScene = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pathRef = useRef(window.location.pathname);
+  const themeRef = useRef<"light" | "dark">("light");
+  const { pathname } = useLocation();
+  const { theme } = useTheme();
+  const [fallback, setFallback] = useState(false);
+
+  pathRef.current = pathname;
+  themeRef.current = theme;
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+    let webgl: WebGLRenderingContext | WebGL2RenderingContext | null = null;
+    try {
+      const probe = document.createElement("canvas");
+      webgl = probe.getContext("webgl2") || probe.getContext("webgl");
+    } catch {
+      webgl = null;
+    }
+
+    if (!webgl || connection?.saveData || (memory !== undefined && memory <= 2)) {
+      setFallback(true);
+      window.dispatchEvent(new Event("room11:ready"));
+      return;
+    }
+
+    let disposed = false;
+    let frame = 0;
+    let destroy = () => undefined;
+
+    const initialise = async () => {
+      const THREE = await import("three");
+      if (disposed) return;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.05;
+      const shadows = window.innerWidth > 760 && (memory === undefined || memory > 4);
+      renderer.shadowMap.enabled = shadows;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 40);
+      const materials: THREE.MeshStandardMaterial[] = [];
+      const makeMaterial = (gray: number, roughness = 0.72) => {
+        const result = new THREE.MeshStandardMaterial({ color: new THREE.Color(gray, gray, gray), roughness, metalness: 0.03 });
+        result.userData.gray = gray;
+        materials.push(result);
+        return result;
+      };
+      const box = (size: [number, number, number], position: [number, number, number], gray: number, parent: THREE.Object3D = scene) => {
+        const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size), makeMaterial(gray));
+        mesh.position.set(...position);
+        mesh.castShadow = shadows;
+        mesh.receiveShadow = shadows;
+        parent.add(mesh);
+        return mesh;
+      };
+      const cylinder = (top: number, bottom: number, height: number, position: [number, number, number], gray: number, parent: THREE.Object3D = scene) => {
+        const mesh = new THREE.Mesh(new THREE.CylinderGeometry(top, bottom, height, 16), makeMaterial(gray));
+        mesh.position.set(...position);
+        mesh.castShadow = shadows;
+        mesh.receiveShadow = shadows;
+        parent.add(mesh);
+        return mesh;
+      };
+
+      // Room and work station.
+      box([18, 0.12, 10], [3, -0.06, 1], 0.58);
+      box([18, 6, 0.12], [3, 3, -2.05], 0.78);
+      box([0.12, 6, 10], [-6, 3, 1], 0.7);
+      box([4.4, 0.1, 1.45], [-0.55, 0.78, -1.22], 0.28);
+      [-2.5, 1.4].forEach((x) => box([0.09, 0.78, 1.3], [x, 0.39, -1.22], 0.22));
+      box([1.75, 1.03, 0.07], [-0.72, 1.48, -1.62], 0.1);
+      box([0.08, 0.46, 0.08], [-0.72, 1.02, -1.65], 0.14);
+      box([0.48, 0.03, 0.28], [-0.72, 0.82, -1.58], 0.16);
+
+      const screenCanvas = document.createElement("canvas");
+      screenCanvas.width = 512;
+      screenCanvas.height = 300;
+      const screenContext = screenCanvas.getContext("2d");
+      const screenTexture = new THREE.CanvasTexture(screenCanvas);
+      screenTexture.colorSpace = THREE.SRGBColorSpace;
+      const monitorScreen = new THREE.Mesh(new THREE.PlaneGeometry(1.62, 0.9), new THREE.MeshBasicMaterial({ map: screenTexture }));
+      monitorScreen.position.set(-0.72, 1.48, -1.575);
+      scene.add(monitorScreen);
+
+      box([1.15, 0.035, 0.38], [-0.72, 0.85, -0.88], 0.12);
+      for (let row = 0; row < 4; row += 1) {
+        for (let column = 0; column < 13; column += 1) {
+          box([0.055, 0.025, 0.055], [-1.13 + column * 0.07 + row * 0.012, 0.88, -0.98 + row * 0.068], 0.25);
+        }
+      }
+      box([0.13, 0.035, 0.2], [0.12, 0.86, -0.9], 0.18);
+      cylinder(0.085, 0.072, 0.2, [-1.88, 0.92, -0.93], 0.83);
+
+      // Lamp.
+      cylinder(0.12, 0.14, 0.035, [1.13, 0.84, -1.63], 0.12);
+      const lampArm = box([0.035, 0.62, 0.035], [1.13, 1.15, -1.63], 0.12);
+      lampArm.rotation.z = 0.28;
+      const lampShade = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.24, 18, 1, true), makeMaterial(0.16));
+      lampShade.position.set(0.92, 1.46, -1.63);
+      lampShade.rotation.z = 0.28;
+      scene.add(lampShade);
+      const deskLight = new THREE.PointLight(0xf2eee6, 1.6, 5.5);
+      deskLight.position.set(0.92, 1.34, -1.45);
+      scene.add(deskLight);
+
+      // Experience and anime shelves.
+      [1.42, 2.04].forEach((y) => box([1.7, 0.055, 0.34], [2.15, y, -1.86], 0.28));
+      for (let index = 0; index < 11; index += 1) {
+        const book = box([0.065, 0.28 + (index % 3) * 0.05, 0.22], [1.48 + index * 0.13, 1.59 + (index % 3) * 0.025, -1.84], 0.16 + (index % 5) * 0.13);
+        book.rotation.z = index === 8 ? -0.14 : 0;
+      }
+      box([0.72, 0.95, 0.04], [2.23, 2.68, -1.96], 0.12);
+      box([0.62, 0.85, 0.025], [2.23, 2.68, -1.92], 0.88);
+      [1.35, 1.98, 2.62].forEach((y) => box([1.72, 0.05, 0.34], [4.28, y, -1.85], 0.27));
+      for (let index = 0; index < 21; index += 1) {
+        const row = Math.floor(index / 8);
+        const column = index % 8;
+        const book = box([0.075, 0.25 + (index % 4) * 0.035, 0.2], [3.64 + column * 0.16, 1.5 + row * 0.63, -1.83], 0.12 + (index % 6) * 0.13);
+        book.rotation.z = index % 7 === 0 ? 0.12 : 0;
+      }
+      cylinder(0.055, 0.075, 0.24, [4.72, 2.13, -1.82], 0.78);
+      const figureHead = new THREE.Mesh(new THREE.SphereGeometry(0.07, 12, 10), makeMaterial(0.78));
+      figureHead.position.set(4.72, 2.31, -1.82);
+      scene.add(figureHead);
+
+      // Football corner with a playable ball and responsive net.
+      const goal = new THREE.Group();
+      cylinder(0.027, 0.027, 0.92, [-0.87, 0.46, 0], 0.88, goal);
+      cylinder(0.027, 0.027, 0.92, [0.87, 0.46, 0], 0.88, goal);
+      const crossbar = cylinder(0.027, 0.027, 1.78, [0, 0.92, 0], 0.88, goal);
+      crossbar.rotation.z = Math.PI / 2;
+      goal.position.set(5.75, 0, -1.72);
+      scene.add(goal);
+      const netGeometry = new THREE.PlaneGeometry(1.74, 0.92, 14, 8);
+      const net = new THREE.Mesh(netGeometry, new THREE.MeshBasicMaterial({ color: 0x777777, wireframe: true, transparent: true, opacity: 0.42 }));
+      net.position.set(5.75, 0.46, -1.82);
+      scene.add(net);
+      const netBase = Float32Array.from(netGeometry.attributes.position.array as ArrayLike<number>);
+      const ballGroup = new THREE.Group();
+      ballGroup.add(
+        new THREE.Mesh(new THREE.SphereGeometry(0.17, 18, 14), makeMaterial(0.9)),
+        new THREE.Mesh(new THREE.IcosahedronGeometry(0.173, 1), new THREE.MeshBasicMaterial({ color: 0x111111, wireframe: true })),
+      );
+      scene.add(ballGroup);
+      const ballStart = new THREE.Vector3(5.75, 0.18, 0.82);
+      ballGroup.position.copy(ballStart);
+      let kickTime = -1;
+      let netAmplitude = 0;
+      const kick = () => { if (kickTime < 0) kickTime = 0; };
+      window.addEventListener("room11:kick", kick);
+
+      const hemisphere = new THREE.HemisphereLight(0xffffff, 0x555555, 1.25);
+      const sun = new THREE.DirectionalLight(0xffffff, 1.7);
+      sun.position.set(4, 7, 6);
+      sun.castShadow = shadows;
+      scene.add(hemisphere, sun);
+
+      const currentPosition = new THREE.Vector3(...stops.room.position);
+      const currentLookAt = new THREE.Vector3(...stops.room.lookAt);
+      const desiredPosition = currentPosition.clone();
+      const desiredLookAt = currentLookAt.clone();
+      let pointerX = 0;
+      let pointerY = 0;
+      let lastTime = performance.now();
+      let lastRender = 0;
+      let lastDark: boolean | null = null;
+      let blinkAt = 0;
+      let blink = true;
+
+      const drawMonitor = () => {
+        if (!screenContext) return;
+        const dark = themeRef.current === "dark";
+        screenContext.fillStyle = dark ? "#111111" : "#e7e7e3";
+        screenContext.fillRect(0, 0, 512, 300);
+        screenContext.fillStyle = dark ? "#ededeb" : "#111111";
+        screenContext.font = "20px monospace";
+        screenContext.fillText("$ room11 --open", 25, 42);
+        [0.68, 0.42, 0.78, 0.36, 0.58, 0.24].forEach((width, index) => {
+          screenContext.globalAlpha = 0.28;
+          screenContext.fillRect(25, 70 + index * 28, width * 430, 8);
+        });
+        screenContext.globalAlpha = 1;
+        if (blink) screenContext.fillRect(25, 258, 12, 20);
+        screenTexture.needsUpdate = true;
+      };
+      const updateTheme = () => {
+        const dark = themeRef.current === "dark";
+        if (dark === lastDark) return;
+        lastDark = dark;
+        const scalar = dark ? 0.42 : 1;
+        materials.forEach((entry) => entry.color.setScalar(Math.max(0.045, (entry.userData.gray as number) * scalar)));
+        const background = dark ? 0x080808 : 0xd9d9d5;
+        scene.background = new THREE.Color(background);
+        scene.fog = new THREE.Fog(background, 7, 18);
+        hemisphere.intensity = dark ? 0.55 : 1.25;
+        sun.intensity = dark ? 0.7 : 1.7;
+        deskLight.intensity = dark ? 2.1 : 0.8;
+        drawMonitor();
+      };
+      const resize = () => {
+        renderer.setSize(window.innerWidth, window.innerHeight, false);
+        camera.aspect = window.innerWidth / Math.max(window.innerHeight, 1);
+        camera.fov = camera.aspect < 0.9 ? 64 : 46;
+        camera.updateProjectionMatrix();
+      };
+      const onPointer = (event: PointerEvent) => {
+        pointerX = event.clientX / window.innerWidth - 0.5;
+        pointerY = event.clientY / window.innerHeight - 0.5;
+      };
+      const updateTarget = () => {
+        const path = pathRef.current;
+        if (/^\/(en|fr)\/?$/.test(path)) {
+          const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+          const progress = Math.min(0.999, window.scrollY / maxScroll) * (homeSequence.length - 1);
+          const index = Math.min(homeSequence.length - 2, Math.floor(progress));
+          const amount = progress - index;
+          const smooth = amount * amount * (3 - 2 * amount);
+          const from = homeSequence[index];
+          const to = homeSequence[index + 1];
+          desiredPosition.set(...from.position).lerp(new THREE.Vector3(...to.position), smooth);
+          desiredLookAt.set(...from.lookAt).lerp(new THREE.Vector3(...to.lookAt), smooth);
+        } else {
+          const stop = stops[zoneForPath(path)];
+          desiredPosition.set(...stop.position);
+          desiredLookAt.set(...stop.lookAt);
+        }
+      };
+      const render = (now: number) => {
+        frame = 0;
+        if (disposed || document.hidden) return;
+        if (now - lastRender < 1000 / 45) {
+          frame = requestAnimationFrame(render);
+          return;
+        }
+        const delta = Math.min(0.05, (now - lastTime) / 1000);
+        lastTime = now;
+        lastRender = now;
+        updateTheme();
+        updateTarget();
+        const easing = reducedMotion ? 1 : Math.min(1, delta * 4.8);
+        currentPosition.lerp(desiredPosition, easing);
+        currentLookAt.lerp(desiredLookAt, easing);
+        camera.position.set(currentPosition.x + (reducedMotion ? 0 : pointerX * 0.18), currentPosition.y + (reducedMotion ? 0 : -pointerY * 0.1), currentPosition.z);
+        camera.lookAt(currentLookAt);
+
+        if (!reducedMotion) {
+          ballGroup.rotation.y += delta * 0.45;
+          if (kickTime < 0) {
+            ballGroup.position.set(ballStart.x, ballStart.y + Math.abs(Math.sin(now / 455)) * 0.12, ballStart.z);
+          } else {
+            kickTime += delta;
+            if (kickTime <= 0.72) {
+              const progress = kickTime / 0.72;
+              ballGroup.position.set(ballStart.x, ballStart.y + Math.sin(Math.PI * progress) * 0.55, ballStart.z + (-1.79 - ballStart.z) * progress);
+              ballGroup.rotation.x -= delta * 10;
+              if (progress > 0.94) netAmplitude = 1;
+            } else if (kickTime < 1.75) ballGroup.position.set(ballStart.x, 0.18, -1.79);
+            else { kickTime = -1; ballGroup.position.copy(ballStart); }
+          }
+          if (netAmplitude > 0.002) {
+            const positions = netGeometry.attributes.position;
+            for (let index = 0; index < positions.count; index += 1) {
+              const x = netBase[index * 3];
+              const y = netBase[index * 3 + 1];
+              positions.setZ(index, netBase[index * 3 + 2] - Math.sin(Math.hypot(x, y) * 8 - now / 75) * netAmplitude * 0.11);
+            }
+            positions.needsUpdate = true;
+            netAmplitude *= Math.pow(0.04, delta);
+          }
+        }
+        if (now - blinkAt > 560) { blinkAt = now; blink = !blink; drawMonitor(); }
+        renderer.render(scene, camera);
+        frame = requestAnimationFrame(render);
+      };
+
+      window.addEventListener("resize", resize, { passive: true });
+      window.addEventListener("pointermove", onPointer, { passive: true });
+      resize();
+      updateTheme();
+      frame = requestAnimationFrame(render);
+      window.dispatchEvent(new Event("room11:ready"));
+
+      destroy = () => {
+        cancelAnimationFrame(frame);
+        window.removeEventListener("resize", resize);
+        window.removeEventListener("pointermove", onPointer);
+        window.removeEventListener("room11:kick", kick);
+        scene.traverse((object) => {
+          if (object instanceof THREE.Mesh) {
+            object.geometry.dispose();
+            (Array.isArray(object.material) ? object.material : [object.material]).forEach((entry) => entry.dispose());
+          }
+        });
+        screenTexture.dispose();
+        renderer.dispose();
+      };
+    };
+
+    void initialise();
+    return () => { disposed = true; destroy(); };
+  }, []);
+
+  const zone = zoneForPath(pathname);
+  return (
+    <div className={`room-scene room-scene-${zone}${fallback ? " is-fallback" : ""}`} aria-hidden="true">
+      <canvas ref={canvasRef} />
+      <div className="room-fallback-grid" />
+      <div className="room-coordinate meta-label"><span>ROOM 11</span><span>{zone.toUpperCase()} / 3D</span></div>
+    </div>
+  );
+};
+
+export default RoomScene;

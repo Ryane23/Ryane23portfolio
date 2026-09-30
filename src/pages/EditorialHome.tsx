@@ -1,7 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import ryanProfile from "@/assets/ryan-profile.png";
 import { articles, experiences, localize, profile, projects, skillGroups } from "@/data/portfolio";
 import { articlePath, paths, projectPath, useLocale } from "@/lib/locale";
 
@@ -28,10 +27,7 @@ const EditorialHome = () => {
           <strong>{localize(profile.role, locale)}</strong>
           <span>{locale === "en" ? "AVAILABLE FOR SELECT PROJECTS" : "DISPONIBLE POUR DES PROJETS SÉLECTIONNÉS"}</span>
         </motion.div>
-        <motion.figure className="hero-portrait" initial={reduceMotion ? false : { opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}>
-          <img src={ryanProfile} alt="Ryan Erick Ngu Javea Fominyen" />
-        </motion.figure>
-        <motion.div className="hero-intro" {...reveal(0.25)}>
+        <motion.div className="hero-intro room-copy-panel" {...reveal(0.25)}>
           <span className="display-serif">{locale === "en" ? "Hello," : "Bonjour,"}</span>
           <h1>{localize(profile.role, locale)}</h1>
           <p>{localize(profile.summary, locale)}</p>
