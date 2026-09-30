@@ -1,0 +1,40 @@
+/* Final scale, pacing, and utility corrections. */
+body { font-size: 15px; }
+.editorial-player { position: fixed; left: 0; bottom: 0; z-index: 900; }
+.footer-lead > a { font-size: clamp(2rem, 4.4vw, 4.25rem); }
+.footer-grid { font-size: .7rem; }
+.footer-grid > div { font-size: .68rem; }
+.page-hero h1 { font-size: clamp(2.45rem, 5vw, 5rem); }
+.section-heading h2 { font-size: clamp(1.85rem, 3.5vw, 3.7rem); }
+.profile-hero h1 { font-size: clamp(2.5rem, 4.8vw, 4.8rem); }
+.personal-hero h1, .football-copy h1 { font-size: clamp(3rem, 6.4vw, 6.4rem); }
+.case-hero h1 { font-size: clamp(3rem, 6.5vw, 6.5rem); }
+.article-page > header h1 { font-size: clamp(2.7rem, 5vw, 5rem); }
+.contact-page header h1 { font-size: clamp(2.5rem, 4.8vw, 4.8rem); }
+
+.intro-screen-cinematic { overflow: hidden; }
+.intro-grid-drift { animation: intro-grid-drift 5s linear both; }
+.intro-scanline { position: absolute; inset: -20% 0 auto; height: 18%; opacity: .24; background: linear-gradient(transparent, rgba(255,255,255,.16), transparent); animation: intro-scan 2.2s ease-in-out infinite; }
+.intro-orbit { position: absolute; width: clamp(12rem, 24vw, 20rem); aspect-ratio: 1; border: 1px solid rgba(255,255,255,.16); border-radius: 50%; animation: intro-spin 8s linear infinite; }
+.intro-orbit span { position: absolute; width: .45rem; aspect-ratio: 1; border-radius: 50%; background: #f3f3ef; }
+.intro-orbit span:nth-child(1) { top: -.22rem; left: 50%; }
+.intro-orbit span:nth-child(2) { right: 9%; bottom: 18%; }
+.intro-orbit span:nth-child(3) { left: 4%; bottom: 28%; }
+.intro-screen-cinematic .intro-mark { position: relative; z-index: 2; width: clamp(6rem, 12vw, 9rem); }
+.intro-screen-cinematic .intro-center p { margin-top: 5.5rem; }
+.intro-screen-cinematic .intro-progress span { transition: width .12s linear; }
+@keyframes intro-grid-drift { from { transform: scale(1.08); } to { transform: scale(1); } }
+@keyframes intro-scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(720%); } }
+@keyframes intro-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 720px) {
+  body { font-size: 14px; }
+  .footer-lead > a { font-size: 2.25rem; }
+  .section-heading h2 { font-size: 2.15rem; }
+  .page-hero h1, .profile-hero h1, .contact-page header h1 { font-size: 2.45rem; }
+  .player-controls { min-width: min(16rem, calc(100vw - 4.5rem)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-grid-drift, .intro-scanline, .intro-orbit { animation: none; }
+}

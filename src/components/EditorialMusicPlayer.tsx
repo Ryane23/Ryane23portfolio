@@ -7,13 +7,13 @@ const EditorialMusicPlayer = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const footballTrack = pathname.includes("football") || pathname.includes("anime") || pathname.includes("library") || pathname.includes("bibliotheque");
   const src = footballTrack ? "/music/nemzzz-track.mp3" : "/music/mgmt-little-dark-age.mp3";
   const title = footballTrack ? "Nemzzz" : "MGMT · Little Dark Age";
 
   useEffect(() => {
-    if (!audioRef.current) audioRef.current = new Audio(src);
+    if (!audioRef.current) audioRef.current = new Audio();
     const audio = audioRef.current;
     audio.loop = true;
     audio.volume = 0.45;
@@ -42,6 +42,13 @@ const EditorialMusicPlayer = () => {
     audioRef.current.muted = !muted;
     setMuted(!muted);
   };
+
+  useEffect(() => {
+    const report = () => window.dispatchEvent(new CustomEvent("room11:audio", { detail: { playing, title } }));
+    window.addEventListener("room11:audio-request", report);
+    report();
+    return () => window.removeEventListener("room11:audio-request", report);
+  }, [playing, title]);
 
   return (
     <div className={`editorial-player ${open ? "is-open" : ""}`}>
