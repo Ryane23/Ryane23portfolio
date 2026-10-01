@@ -12,7 +12,7 @@ const messages = [
 ];
 
 const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
-  const [visible, setVisible] = useState(() => /^\/(?:en|fr)?\/?$/.test(window.location.pathname));
+  const [visible, setVisible] = useState(true);
   const [progress, setProgress] = useState(0);
   const roomReady = useRef(false);
   const finished = useRef(false);

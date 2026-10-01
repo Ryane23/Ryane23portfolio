@@ -28,6 +28,6 @@ export const preloadRoute = (key: RouteModuleKey) => {
   void routeModules[key]();
 };
 
-export const preloadPrimaryRoutes = () => {
-  (["work", "profile", "record", "library", "contact"] as RouteModuleKey[]).forEach(preloadRoute);
+export const preloadAllRoutes = () => {
+  (["work", "project", "profile", "record", "library", "article", "anime", "football", "cv", "network", "contact"] as RouteModuleKey[]).forEach(preloadRoute);
 };

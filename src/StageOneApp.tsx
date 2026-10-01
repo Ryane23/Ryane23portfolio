@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/contexts/EditorialThemeContext";
 import EditorialLayout from "@/components/EditorialLayout";
 import LoadingScreen from "@/components/LoadingScreen";
 import EditorialHome from "@/pages/EditorialHome";
-import { preloadPrimaryRoutes, routeModules } from "@/lib/routeModules";
+import { preloadAllRoutes, routeModules } from "@/lib/routeModules";
 
 const WorkIndex = lazy(routeModules.work);
 const ProjectCaseStudy = lazy(routeModules.project);
@@ -28,8 +28,8 @@ const StageOneApp = () => {
 
   useEffect(() => {
     const idleWindow = window as Window & { requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number; cancelIdleCallback?: (id: number) => void };
-    const idleId = idleWindow.requestIdleCallback?.(preloadPrimaryRoutes, { timeout: 1800 });
-    const timer = idleId === undefined ? window.setTimeout(preloadPrimaryRoutes, 700) : undefined;
+    const idleId = idleWindow.requestIdleCallback?.(preloadAllRoutes, { timeout: 1200 });
+    const timer = idleId === undefined ? window.setTimeout(preloadAllRoutes, 500) : undefined;
     return () => {
       if (idleId !== undefined) idleWindow.cancelIdleCallback?.(idleId);
       if (timer !== undefined) window.clearTimeout(timer);
