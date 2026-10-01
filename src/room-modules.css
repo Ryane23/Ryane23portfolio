@@ -12,8 +12,26 @@
 .tech-stack-item:hover .tech-stack-mark { color: var(--brand, var(--ink)); }
 .tech-stack-mark b { font: 700 .53rem/1 ui-monospace, monospace; letter-spacing: -.04em; }
 
+.work-signal-section { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(15rem, .7fr) minmax(0, 1.5fr); gap: clamp(2rem, 5vw, 5rem); margin-top: clamp(5rem, 9vw, 8rem); padding: clamp(2rem, 4vw, 4rem); color: var(--inverse-ink); background: var(--inverse-paper); }
+.work-signal-heading h2 { margin: 1.2rem 0; font-size: clamp(2rem, 4vw, 4.2rem); line-height: .92; letter-spacing: -.055em; }
+.work-signal-heading p { max-width: 31rem; color: color-mix(in srgb, currentColor 67%, transparent); line-height: 1.65; }
+.current-builds { border-top: 1px solid color-mix(in srgb, currentColor 40%, transparent); }
+.current-builds > a { display: grid; grid-template-columns: 2rem 1fr auto; gap: .7rem 1rem; align-items: center; padding: 1.35rem 0; border-bottom: 1px solid color-mix(in srgb, currentColor 25%, transparent); }
+.current-builds h3 { grid-column: 2; margin: 0; font-size: clamp(1.35rem, 2.2vw, 2.2rem); letter-spacing: -.04em; }
+.current-builds p { grid-column: 2 / -1; margin: 0; color: color-mix(in srgb, currentColor 65%, transparent); font-size: .82rem; line-height: 1.55; }
+.current-builds small { grid-column: 2 / -1; font: .58rem ui-monospace, monospace; letter-spacing: .06em; }
+.github-contribution-panel { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(14rem, .55fr) minmax(0, 1.45fr); gap: clamp(2rem, 5vw, 5rem); margin-top: 1rem; padding: clamp(1.5rem, 3vw, 3rem); border: 1px solid var(--ink); background: var(--paper); }
+.github-contribution-panel h2 { margin: .75rem 0; font-size: clamp(2rem, 4vw, 4rem); letter-spacing: -.055em; }
+.github-contribution-panel p { color: var(--quiet); line-height: 1.6; }
+.github-contribution-panel a { display: inline-flex; align-items: center; gap: .55rem; margin-top: 1rem; padding-bottom: .3rem; border-bottom: 1px solid; font: .62rem ui-monospace, monospace; letter-spacing: .09em; }
+.github-calendar-frame { align-self: center; min-width: 0; padding: 1rem; border: 1px solid var(--line); overflow: hidden; background: #f6f8fa; }
+.github-calendar-frame img { display: block; width: 100%; min-width: 38rem; height: auto; filter: grayscale(1) contrast(1.05); }
+.github-calendar-frame .meta-label { display: block; margin-top: .8rem; color: #57606a; }
+
 @media (max-width: 720px) {
   .tech-stack-grid { grid-template-columns: 1fr; }
   .tech-stack-group { min-height: auto; }
   .tech-stack-items { grid-template-columns: 1fr 1fr; }
+  .work-signal-section, .github-contribution-panel { grid-template-columns: 1fr; }
+  .github-calendar-frame { overflow-x: auto; }
 }

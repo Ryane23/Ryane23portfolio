@@ -286,18 +286,40 @@ const RoomScene = () => {
         screenContext.fillStyle = dark ? "#111111" : "#e7e7e3";
         screenContext.fillRect(0, 0, 512, 300);
         screenContext.fillStyle = dark ? "#ededeb" : "#111111";
-        screenContext.font = "20px monospace";
-        const projectMode = Math.floor(performance.now() / 2400) % 2 === 1;
-        screenContext.fillText(projectMode ? "$ work --featured" : "$ stack --active", 25, 42);
-        const monitorLabels = projectMode ? ["PROJINA", "CHOPASAP", "EAGLE", "NEXTPY", "BAJOMA", "BUSEASE"] : ["JS", "TS", "REACT", "NODE", "PYTHON", "SQL"];
-        monitorLabels.forEach((label, index) => {
-          screenContext.globalAlpha = index % 2 === 0 ? 0.9 : 0.5;
-          screenContext.font = projectMode ? "bold 17px monospace" : index < 2 ? "bold 30px monospace" : "20px monospace";
-          screenContext.fillText(label, 25 + (index % 2) * 235, 90 + Math.floor(index / 2) * 58);
-          screenContext.fillRect(25 + (index % 2) * 235, 101 + Math.floor(index / 2) * 58, 165, 3);
-        });
-        screenContext.globalAlpha = 1;
-        if (blink) screenContext.fillRect(25, 262, 12, 18);
+        const workMode = zoneForPath(pathRef.current) === "work";
+        if (workMode) {
+          const codeLines = [
+            "const room = createPortfolio({",
+            "  owner: 'Ryan Erick',",
+            "  stack: ['TS', 'React', 'Node'],",
+            "  focus: 'useful products',",
+            "  status: 'shipping'",
+            "});",
+            "room.deploy();",
+          ];
+          const visibleLines = 1 + Math.floor(performance.now() / 520) % codeLines.length;
+          screenContext.font = "16px monospace";
+          screenContext.fillStyle = dark ? "#7ee787" : "#176b37";
+          screenContext.fillText("~/room11/work  main*", 24, 34);
+          codeLines.slice(0, visibleLines).forEach((line, index) => {
+            screenContext.fillStyle = dark ? "#777" : "#999";
+            screenContext.fillText(String(index + 1).padStart(2, "0"), 24, 70 + index * 28);
+            screenContext.fillStyle = dark ? "#ededeb" : "#111111";
+            screenContext.fillText(line, 62, 70 + index * 28);
+          });
+          if (blink) screenContext.fillRect(62, 82 + visibleLines * 28, 11, 17);
+        } else {
+          screenContext.font = "20px monospace";
+          screenContext.fillText("$ room --overview", 25, 42);
+          const monitorLabels = ["PROJINA", "CHOPASAP", "EAGLE", "NEXTPY", "BAJOMA", "BUSEASE"];
+          monitorLabels.forEach((label, index) => {
+            screenContext.globalAlpha = index % 2 === 0 ? 0.9 : 0.5;
+            screenContext.font = "bold 17px monospace";
+            screenContext.fillText(label, 25 + (index % 2) * 235, 90 + Math.floor(index / 2) * 58);
+            screenContext.fillRect(25 + (index % 2) * 235, 101 + Math.floor(index / 2) * 58, 165, 3);
+          });
+          screenContext.globalAlpha = 1;
+        }
         screenTexture.needsUpdate = true;
       };
       const updateTheme = () => {
