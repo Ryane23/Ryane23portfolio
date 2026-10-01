@@ -8,14 +8,14 @@ type ProjectPreview = { slug: string; name: string; category: string; status: st
 
 const stops: Record<string, Stop> = {
   room: { position: [1.4, 2.7, 7.8], lookAt: [1.5, 1.1, -0.5] },
-  work: { position: [0, 1.72, 1.5], lookAt: [0, 1.4, -1.72] },
-  workPreview: { position: [0, 1.62, 0.5], lookAt: [0, 1.46, -1.62] },
-  profile: { position: [1.25, 2.35, 1.6], lookAt: [1.15, 1.45, -1.85] },
-  record: { position: [2.1, 2.3, 1.4], lookAt: [2.25, 2.05, -1.82] },
-  certifications: { position: [9.75, 2.5, 2.05], lookAt: [9.75, 2.35, -1.86] },
-  library: { position: [4.25, 2.25, 2.25], lookAt: [4.35, 1.85, -1.75] },
+  work: { position: [-0.1, 1.72, 1.65], lookAt: [-0.1, 1.38, -1.72] },
+  workPreview: { position: [0.22, 1.62, 0.62], lookAt: [0.22, 1.43, -1.62] },
+  profile: { position: [1.82, 2.35, 1.65], lookAt: [1.82, 1.92, -1.85] },
+  record: { position: [2.95, 2.3, 1.55], lookAt: [2.95, 2.05, -1.82] },
+  certifications: { position: [9.55, 2.45, 2.25], lookAt: [9.55, 2.35, -1.86] },
+  library: { position: [4.65, 2.25, 2.35], lookAt: [4.65, 1.85, -1.75] },
   football: { position: [5.6, 1.65, 3.65], lookAt: [5.75, 0.65, -1.15] },
-  network: { position: [-3.75, 1.9, 1.7], lookAt: [-3.75, 1.35, -1.72] },
+  network: { position: [-4.55, 1.9, 1.85], lookAt: [-4.55, 1.35, -1.72] },
   contact: { position: [10.9, 1.75, 2.25], lookAt: [10.9, 1.15, -1.82] },
   beyond: { position: [8.25, 1.75, 3.35], lookAt: [8.3, 0.72, -0.22] },
 };
@@ -59,7 +59,7 @@ const RoomScene = () => {
       webgl = null;
     }
 
-    if (!webgl || connection?.saveData || (memory !== undefined && memory <= 2)) {
+    if (!webgl) {
       setFallback(true);
       window.dispatchEvent(new Event("room11:ready"));
       return;
@@ -73,12 +73,14 @@ const RoomScene = () => {
       const THREE = await import("three");
       if (disposed) return;
 
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
+      const mobile = window.innerWidth <= 760;
+      const lowPower = mobile || connection?.saveData || (memory !== undefined && memory <= 4);
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: !lowPower, powerPreference: lowPower ? "low-power" : "high-performance" });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, lowPower ? 0.9 : 1.25));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.05;
-      const shadows = window.innerWidth > 760 && (memory === undefined || memory > 4);
+      const shadows = !lowPower;
       renderer.shadowMap.enabled = shadows;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -109,6 +111,7 @@ const RoomScene = () => {
       };
 
       const roomShell = new THREE.Group();
+      const furnitureGroup = new THREE.Group();
       const homeGroup = new THREE.Group();
       const workGroup = new THREE.Group();
       const profileGroup = new THREE.Group();
@@ -118,7 +121,7 @@ const RoomScene = () => {
       const networkGroup = new THREE.Group();
       const footballGroup = new THREE.Group();
       const contactGroup = new THREE.Group();
-      scene.add(roomShell, homeGroup, workGroup, profileGroup, recordGroup, certificationGroup, libraryGroup, networkGroup, footballGroup, contactGroup);
+      scene.add(roomShell, furnitureGroup, homeGroup, workGroup, profileGroup, recordGroup, certificationGroup, libraryGroup, networkGroup, footballGroup, contactGroup);
 
       const wallText = (text: string, position: [number, number, number], width: number, fontSize: number, parent: THREE.Object3D = roomShell) => {
         const textCanvas = document.createElement("canvas");
@@ -156,122 +159,155 @@ const RoomScene = () => {
       wallText("LEARN · SHIP · IMPROVE", [3.55, 4.35, -1.97], 2.75, 64);
 
       // Home furniture: a low bed that completes the room without appearing in focused route views.
-      box([2.8, 0.18, 1.72], [8.35, 0.34, -0.15], 0.18, homeGroup);
-      box([2.65, 0.34, 1.6], [8.35, 0.58, -0.15], 0.82, homeGroup);
-      box([2.8, 1.05, 0.12], [8.35, 0.82, -0.92], 0.22, homeGroup);
-      box([0.86, 0.16, 0.58], [7.55, 0.84, -0.55], 0.92, homeGroup).rotation.z = -0.04;
-      box([0.86, 0.16, 0.58], [8.55, 0.84, -0.55], 0.9, homeGroup).rotation.z = 0.04;
-      box([2.7, 0.08, 0.82], [8.35, 0.82, 0.21], 0.46, homeGroup);
-      box([4.4, 0.1, 1.45], [-0.55, 0.78, -1.22], 0.28, workGroup);
-      [-2.5, 1.4].forEach((x) => box([0.09, 0.78, 1.3], [x, 0.39, -1.22], 0.22, workGroup));
+      box([2.8, 0.18, 1.72], [8.15, 0.34, -0.05], 0.18, furnitureGroup);
+      box([2.65, 0.34, 1.6], [8.15, 0.58, -0.05], 0.82, furnitureGroup);
+      box([2.8, 1.05, 0.12], [8.15, 0.82, -0.82], 0.22, furnitureGroup);
+      box([0.86, 0.16, 0.58], [7.35, 0.84, -0.45], 0.92, furnitureGroup).rotation.z = -0.04;
+      box([0.86, 0.16, 0.58], [8.35, 0.84, -0.45], 0.9, furnitureGroup).rotation.z = 0.04;
+      box([2.7, 0.08, 0.82], [8.15, 0.82, 0.31], 0.46, furnitureGroup);
+      box([3.8, 0.1, 1.45], [-0.1, 0.78, -1.22], 0.28, furnitureGroup);
+      [-1.82, 1.62].forEach((x) => box([0.09, 0.78, 1.3], [x, 0.39, -1.22], 0.22, furnitureGroup));
       box([1.75, 1.03, 0.07], [-0.72, 1.48, -1.62], 0.1, workGroup);
       box([0.08, 0.46, 0.08], [-0.72, 1.02, -1.65], 0.14, workGroup);
       box([0.48, 0.03, 0.28], [-0.72, 0.82, -1.58], 0.16, workGroup);
 
-      const screenCanvas = document.createElement("canvas");
-      screenCanvas.width = 512;
-      screenCanvas.height = 300;
-      const screenContext = screenCanvas.getContext("2d");
-      const screenTexture = new THREE.CanvasTexture(screenCanvas);
-      screenTexture.colorSpace = THREE.SRGBColorSpace;
-      const monitorScreen = new THREE.Mesh(new THREE.PlaneGeometry(1.62, 0.9), new THREE.MeshBasicMaterial({ map: screenTexture }));
+      const codeCanvas = document.createElement("canvas");
+      codeCanvas.width = 512;
+      codeCanvas.height = 300;
+      const codeContext = codeCanvas.getContext("2d");
+      const codeTexture = new THREE.CanvasTexture(codeCanvas);
+      codeTexture.colorSpace = THREE.SRGBColorSpace;
+      const monitorScreen = new THREE.Mesh(new THREE.PlaneGeometry(1.62, 0.9), new THREE.MeshBasicMaterial({ map: codeTexture }));
       monitorScreen.position.set(-0.72, 1.48, -1.575);
       workGroup.add(monitorScreen);
-      const curvedScreenGeometry = new THREE.PlaneGeometry(1.25, 0.78, 16, 1);
+
+      const previewCanvas = document.createElement("canvas");
+      previewCanvas.width = 512;
+      previewCanvas.height = 300;
+      const previewContext = previewCanvas.getContext("2d");
+      const previewTexture = new THREE.CanvasTexture(previewCanvas);
+      previewTexture.colorSpace = THREE.SRGBColorSpace;
+      const curvedScreenGeometry = new THREE.PlaneGeometry(1.28, 0.79, 20, 1);
       const curvedScreenPositions = curvedScreenGeometry.attributes.position;
       for (let index = 0; index < curvedScreenPositions.count; index += 1) {
         const x = curvedScreenPositions.getX(index);
-        curvedScreenPositions.setZ(index, -0.1 * x * x);
+        curvedScreenPositions.setZ(index, -0.13 * x * x);
       }
       curvedScreenPositions.needsUpdate = true;
       curvedScreenGeometry.computeVertexNormals();
-      const curvedScreen = new THREE.Mesh(curvedScreenGeometry, new THREE.MeshBasicMaterial({ map: screenTexture }));
-      curvedScreen.position.set(0.78, 1.45, -1.56);
+      const curvedScreen = new THREE.Mesh(curvedScreenGeometry, new THREE.MeshBasicMaterial({ map: previewTexture }));
+      curvedScreen.position.set(0.62, 1.45, -1.54);
+      curvedScreen.rotation.y = -0.08;
       workGroup.add(curvedScreen);
+      box([1.38, 0.055, 0.055], [0.62, 1.88, -1.61], 0.09, workGroup);
+      box([1.38, 0.055, 0.055], [0.62, 1.02, -1.61], 0.09, workGroup);
+      box([0.06, 0.88, 0.055], [-0.08, 1.45, -1.61], 0.09, workGroup);
+      box([0.06, 0.88, 0.055], [1.32, 1.45, -1.61], 0.09, workGroup);
+      box([0.08, 0.45, 0.08], [0.62, 0.98, -1.64], 0.12, workGroup);
+      box([0.52, 0.035, 0.26], [0.62, 0.81, -1.55], 0.14, workGroup);
 
-      box([1.15, 0.035, 0.38], [-0.72, 0.85, -0.88], 0.12, workGroup);
+      // Gaming desk details.
+      box([2.65, 0.025, 0.62], [-0.12, 0.835, -1.01], 0.08, workGroup);
+      box([1.15, 0.035, 0.38], [-0.72, 0.86, -0.88], 0.12, workGroup);
+      const keyboardKeys: THREE.Mesh[] = [];
       for (let row = 0; row < 4; row += 1) {
         for (let column = 0; column < 13; column += 1) {
-          box([0.055, 0.025, 0.055], [-1.13 + column * 0.07 + row * 0.012, 0.88, -0.98 + row * 0.068], 0.25, workGroup);
+          keyboardKeys.push(box([0.055, 0.025, 0.055], [-1.13 + column * 0.07 + row * 0.012, 0.89, -0.98 + row * 0.068], 0.25, workGroup));
         }
       }
-      box([0.13, 0.035, 0.2], [0.12, 0.86, -0.9], 0.18, workGroup);
+      const mouse = box([0.13, 0.035, 0.2], [0.16, 0.87, -0.9], 0.18, workGroup);
       cylinder(0.085, 0.072, 0.2, [-1.88, 0.92, -0.93], 0.83, workGroup);
 
-      // Lamp.
-      cylinder(0.12, 0.14, 0.035, [1.13, 0.84, -1.63], 0.12, workGroup);
-      const lampArm = box([0.035, 0.62, 0.035], [1.13, 1.15, -1.63], 0.12, workGroup);
+      // PC tower, headphone hook, phone dock, and lamp.
+      box([0.54, 0.72, 0.72], [1.28, 0.39, -1.2], 0.1, workGroup);
+      box([0.45, 0.62, 0.02], [1.28, 0.39, -0.83], 0.22, workGroup);
+      [0.2, 0.52].forEach((y) => {
+        const fan = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.018, 8, 24), makeMaterial(0.72));
+        fan.position.set(1.28, y, -0.81);
+        workGroup.add(fan);
+      });
+      box([0.025, 0.44, 0.025], [-1.55, 1.05, -1.46], 0.12, workGroup);
+      box([0.27, 0.025, 0.025], [-1.43, 1.27, -1.46], 0.12, workGroup);
+      const headsetBand = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.025, 8, 22, Math.PI), makeMaterial(0.16));
+      headsetBand.position.set(-1.31, 1.21, -1.46);
+      headsetBand.rotation.z = Math.PI;
+      workGroup.add(headsetBand);
+      box([0.24, 0.035, 0.2], [0.34, 0.86, -0.7], 0.16, workGroup).rotation.x = -0.18;
+      const phone = box([0.22, 0.4, 0.025], [0.34, 1.03, -0.78], 0.08, workGroup);
+      phone.rotation.x = -0.18;
+      box([0.17, 0.32, 0.012], [0.34, 1.03, -0.755], 0.72, workGroup).rotation.x = -0.18;
+
+      cylinder(0.12, 0.14, 0.035, [1.58, 0.84, -1.55], 0.12, workGroup);
+      const lampArm = box([0.035, 0.62, 0.035], [1.58, 1.15, -1.55], 0.12, workGroup);
       lampArm.rotation.z = 0.28;
       const lampShade = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.24, 18, 1, true), makeMaterial(0.16));
-      lampShade.position.set(0.92, 1.46, -1.63);
+      lampShade.position.set(1.37, 1.46, -1.55);
       lampShade.rotation.z = 0.28;
       workGroup.add(lampShade);
       const deskLight = new THREE.PointLight(0xf2eee6, 1.6, 5.5);
-      deskLight.position.set(0.92, 1.34, -1.45);
+      deskLight.position.set(1.36, 1.34, -1.38);
       workGroup.add(deskLight);
 
       // Experience and anime shelves.
-      [1.42, 2.04].forEach((y) => box([1.7, 0.055, 0.34], [2.15, y, -1.86], 0.28, recordGroup));
+      [1.42, 2.04].forEach((y) => box([1.65, 0.055, 0.34], [2.9, y, -1.86], 0.28, furnitureGroup));
       for (let index = 0; index < 11; index += 1) {
-        const book = box([0.065, 0.28 + (index % 3) * 0.05, 0.22], [1.48 + index * 0.13, 1.59 + (index % 3) * 0.025, -1.84], 0.16 + (index % 5) * 0.13, recordGroup);
+        const book = box([0.065, 0.28 + (index % 3) * 0.05, 0.22], [2.24 + index * 0.13, 1.59 + (index % 3) * 0.025, -1.84], 0.16 + (index % 5) * 0.13, recordGroup);
         book.rotation.z = index === 8 ? -0.14 : 0;
       }
-      box([0.82, 1.08, 0.04], [1.05, 2.35, -1.96], 0.12, profileGroup);
+      box([0.82, 1.08, 0.04], [1.55, 2.35, -1.96], 0.12, profileGroup);
       const profileTexture = new THREE.TextureLoader().load(ryanProfile, () => window.dispatchEvent(new Event("room11:portrait-ready")));
       profileTexture.colorSpace = THREE.SRGBColorSpace;
       const profilePhoto = new THREE.Mesh(new THREE.PlaneGeometry(0.72, 0.98), new THREE.MeshBasicMaterial({ map: profileTexture }));
-      profilePhoto.position.set(1.05, 2.35, -1.925);
+      profilePhoto.position.set(1.55, 2.35, -1.925);
       profilePhoto.userData.labelTexture = profileTexture;
       profileGroup.add(profilePhoto);
-      [1.35, 1.98, 2.62].forEach((y) => box([1.72, 0.05, 0.34], [4.28, y, -1.85], 0.27, libraryGroup));
+      [1.35, 1.98, 2.62].forEach((y) => box([1.72, 0.05, 0.34], [4.65, y, -1.85], 0.27, furnitureGroup));
       for (let index = 0; index < 21; index += 1) {
         const row = Math.floor(index / 8);
         const column = index % 8;
-        const book = box([0.075, 0.25 + (index % 4) * 0.035, 0.2], [3.64 + column * 0.16, 1.5 + row * 0.63, -1.83], 0.12 + (index % 6) * 0.13, libraryGroup);
+        const book = box([0.075, 0.25 + (index % 4) * 0.035, 0.2], [4.01 + column * 0.16, 1.5 + row * 0.63, -1.83], 0.12 + (index % 6) * 0.13, libraryGroup);
         book.rotation.z = index % 7 === 0 ? 0.12 : 0;
       }
-      cylinder(0.055, 0.075, 0.24, [4.72, 2.13, -1.82], 0.78, libraryGroup);
+      cylinder(0.055, 0.075, 0.24, [5.09, 2.13, -1.82], 0.78, libraryGroup);
       const figureHead = new THREE.Mesh(new THREE.SphereGeometry(0.07, 12, 10), makeMaterial(0.78));
-      figureHead.position.set(4.72, 2.31, -1.82);
+      figureHead.position.set(5.09, 2.31, -1.82);
       libraryGroup.add(figureHead);
 
       // Certificate wall: verified credentials are framed above the far end of the room.
-      [8.85, 9.75, 10.65].forEach((x, index) => {
-        box([0.72, 0.9, 0.045], [x, 2.45, -1.96], index === 0 ? 0.15 : 0.28, certificationGroup);
-        box([0.61, 0.79, 0.018], [x, 2.45, -1.92], 0.88, certificationGroup);
-      });
-      wallText("ASPIRE", [8.85, 2.5, -1.89], 0.5, 78, certificationGroup);
-      wallText("VERIFIED CREDENTIALS", [9.75, 3.22, -1.95], 2.6, 54, certificationGroup);
+      box([1.18, 1.42, 0.055], [9.55, 2.36, -1.96], 0.15, certificationGroup);
+      box([1.03, 1.27, 0.018], [9.55, 2.36, -1.92], 0.88, certificationGroup);
+      wallText("ASPIRE LEADERS", [9.55, 2.45, -1.89], 0.88, 66, certificationGroup);
+      wallText("VERIFIED RECOGNITION", [9.55, 3.28, -1.95], 2.35, 50, certificationGroup);
 
       // Network station: separated from the workstation and built around event frames.
-      box([2.45, 0.08, 0.9], [-4.22, 0.82, -1.2], 0.26, networkGroup);
-      [-5.12, -3.32].forEach((x) => box([0.07, 0.8, 0.75], [x, 0.4, -1.2], 0.2, networkGroup));
+      box([2.1, 0.08, 0.9], [-4.65, 0.82, -1.2], 0.26, furnitureGroup);
+      [-5.48, -3.82].forEach((x) => box([0.07, 0.8, 0.75], [x, 0.4, -1.2], 0.2, furnitureGroup));
       [
-        { src: "/images/ngo/kidefind.webp", x: -4.9 },
-        { src: "/images/ngo/amkay.webp", x: -4.22 },
-        { src: "/images/ngo/tic-summit.webp", x: -3.54 },
+        { src: "/images/ngo/kidefind.webp", x: -5.25 },
+        { src: "/images/ngo/amkay.webp", x: -4.65 },
+        { src: "/images/ngo/tic-summit.webp", x: -4.05 },
       ].forEach(({ src, x }) => {
         box([0.52, 0.42, 0.04], [x, 1.12, -1.56], 0.14, networkGroup);
         wallImage(src, [0.44, 0.34], [x, 1.12, -1.53], networkGroup);
       });
-      const nodePositions = [[-5.05, 2.3], [-4.45, 2.68], [-3.75, 2.28], [-4.38, 1.92]] as const;
+      const nodePositions = [[-5.35, 2.3], [-4.8, 2.68], [-4.12, 2.28], [-4.72, 1.92]] as const;
       nodePositions.forEach(([x, y]) => {
         const node = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 10), makeMaterial(0.16));
         node.position.set(x, y, -1.9);
         networkGroup.add(node);
       });
       const nodeLines = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(-5.05, 2.3, -1.91), new THREE.Vector3(-4.45, 2.68, -1.91),
-        new THREE.Vector3(-4.45, 2.68, -1.91), new THREE.Vector3(-3.75, 2.28, -1.91),
-        new THREE.Vector3(-3.75, 2.28, -1.91), new THREE.Vector3(-4.38, 1.92, -1.91),
-        new THREE.Vector3(-4.38, 1.92, -1.91), new THREE.Vector3(-5.05, 2.3, -1.91),
+        new THREE.Vector3(-5.35, 2.3, -1.91), new THREE.Vector3(-4.8, 2.68, -1.91),
+        new THREE.Vector3(-4.8, 2.68, -1.91), new THREE.Vector3(-4.12, 2.28, -1.91),
+        new THREE.Vector3(-4.12, 2.28, -1.91), new THREE.Vector3(-4.72, 1.92, -1.91),
+        new THREE.Vector3(-4.72, 1.92, -1.91), new THREE.Vector3(-5.35, 2.3, -1.91),
       ]), new THREE.LineBasicMaterial({ color: 0x333333 }));
       networkGroup.add(nodeLines);
 
       // Contact marker: a simple door and illuminated mail slot.
-      box([1.25, 2.35, 0.08], [11.05, 1.18, -1.92], 0.22, contactGroup);
-      box([0.52, 0.08, 0.04], [11.05, 1.25, -1.85], 0.82, contactGroup);
-      cylinder(0.045, 0.045, 0.05, [11.48, 1.08, -1.82], 0.72, contactGroup).rotation.x = Math.PI / 2;
+      box([1.25, 2.35, 0.08], [11.15, 1.18, -1.92], 0.22, furnitureGroup);
+      box([0.52, 0.08, 0.04], [11.15, 1.25, -1.85], 0.82, contactGroup);
+      cylinder(0.045, 0.045, 0.05, [11.58, 1.08, -1.82], 0.72, contactGroup).rotation.x = Math.PI / 2;
 
       // Football corner with a playable ball and responsive net.
       wallImage("/images/football/fcb-official-badge.png", [2.45, 0.48], [6.75, 2.88, -1.95], footballGroup);
@@ -333,8 +369,10 @@ const RoomScene = () => {
       let lastRender = 0;
       let lastDark: boolean | null = null;
       let blinkAt = 0;
+      let monitorDrawAt = 0;
       let blink = true;
       let visibleZone = "";
+      let visibleHomeStop = "";
       let projectPreview: ProjectPreview | null = null;
       const previewImages = new Map<string, HTMLImageElement>();
       let homeStop = "room";
@@ -357,11 +395,14 @@ const RoomScene = () => {
       };
       const updateVisibility = () => {
         const nextZone = zoneForPath(pathRef.current);
-        if (nextZone === visibleZone) return;
+        if (nextZone === visibleZone && (nextZone !== "room" || homeStop === visibleHomeStop)) return;
         visibleZone = nextZone;
         if (nextZone === "room") updateHomeStop();
+        visibleHomeStop = homeStop;
         Object.entries(routeGroups).forEach(([name, group]) => {
-          group.visible = nextZone === "room" || name === nextZone || (nextZone === "beyond" && ["home", "library", "football"].includes(name));
+          const roomOverview = nextZone === "room" && homeStop === "room" && ["home", "work"].includes(name);
+          const beyondOverview = nextZone === "room" && homeStop === "beyond" && ["home", "library", "football"].includes(name);
+          group.visible = name === nextZone || roomOverview || beyondOverview || (nextZone === "room" && name === homeStop);
         });
       };
 
@@ -383,14 +424,47 @@ const RoomScene = () => {
       window.addEventListener("room11:project-preview", showProjectPreview);
       window.addEventListener("room11:project-preview-clear", clearProjectPreview);
 
-      const drawMonitor = () => {
-        if (!screenContext) return;
+      const codeLines = [
+        "const room = createPortfolio({",
+        "  owner: 'Ryan Erick',",
+        "  stack: ['TS', 'React', 'Node'],",
+        "  focus: 'useful products',",
+        "  status: 'shipping'",
+        "});",
+        "room.deploy();",
+      ];
+      const codeText = codeLines.join("\n");
+      const getTypedCount = (time = performance.now()) => Math.min(codeText.length, Math.floor(time / 52) % (codeText.length + 46));
+
+      const drawCodeMonitor = (time = performance.now()) => {
+        if (!codeContext) return;
         const dark = themeRef.current === "dark";
-        screenContext.fillStyle = dark ? "#111111" : "#e7e7e3";
-        screenContext.fillRect(0, 0, 512, 300);
-        screenContext.fillStyle = dark ? "#ededeb" : "#111111";
-        const workMode = zoneForPath(pathRef.current) === "work";
-        if (workMode && projectPreview) {
+        codeContext.fillStyle = dark ? "#0b0f0d" : "#e9ece8";
+        codeContext.fillRect(0, 0, 512, 300);
+        codeContext.font = "16px monospace";
+        codeContext.fillStyle = dark ? "#7ee787" : "#176b37";
+        codeContext.fillText("~/room11/work  main*", 24, 34);
+        const typedLines = codeText.slice(0, getTypedCount(time)).split("\n");
+        typedLines.forEach((line, index) => {
+          codeContext.fillStyle = dark ? "#69716c" : "#8a918c";
+          codeContext.fillText(String(index + 1).padStart(2, "0"), 24, 70 + index * 28);
+          codeContext.fillStyle = dark ? "#ededeb" : "#111111";
+          codeContext.fillText(line, 62, 70 + index * 28);
+        });
+        const activeLine = typedLines.at(-1) ?? "";
+        const cursorX = 62 + codeContext.measureText(activeLine).width;
+        const cursorY = 55 + Math.max(0, typedLines.length - 1) * 28;
+        if (blink) codeContext.fillRect(cursorX + 2, cursorY, 9, 18);
+        codeTexture.needsUpdate = true;
+      };
+
+      const drawPreviewMonitor = () => {
+        if (!previewContext) return;
+        const dark = themeRef.current === "dark";
+        previewContext.fillStyle = dark ? "#111111" : "#e7e7e3";
+        previewContext.fillRect(0, 0, 512, 300);
+        previewContext.fillStyle = dark ? "#ededeb" : "#111111";
+        if (projectPreview) {
           const preview = projectPreview;
           const capturedPreview = preview.previewImage ? previewImages.get(preview.previewImage) : undefined;
           if (capturedPreview?.complete && capturedPreview.naturalWidth > 0) {
@@ -407,67 +481,53 @@ const RoomScene = () => {
               sourceHeight = sourceWidth / destinationAspect;
               sourceY = Math.max(0, (capturedPreview.naturalHeight - sourceHeight) * 0.08);
             }
-            screenContext.drawImage(capturedPreview, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, 512, 300);
-            const overlay = screenContext.createLinearGradient(0, 190, 0, 300);
+            previewContext.drawImage(capturedPreview, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, 512, 300);
+            const overlay = previewContext.createLinearGradient(0, 190, 0, 300);
             overlay.addColorStop(0, "rgba(0,0,0,0)");
             overlay.addColorStop(1, "rgba(0,0,0,.9)");
-            screenContext.fillStyle = overlay;
-            screenContext.fillRect(0, 180, 512, 120);
-            screenContext.fillStyle = "#ffffff";
-            screenContext.font = "bold 25px Arial, sans-serif";
-            screenContext.fillText(preview.name.toUpperCase(), 22, 264);
-            screenContext.font = "11px monospace";
-            screenContext.fillText(preview.liveUrl?.replace(/^https?:\/\//, "").replace(/\/$/, "").toUpperCase() ?? "PROJECT PREVIEW", 22, 285);
+            previewContext.fillStyle = overlay;
+            previewContext.fillRect(0, 180, 512, 120);
+            previewContext.fillStyle = "#ffffff";
+            previewContext.font = "bold 25px Arial, sans-serif";
+            previewContext.fillText(preview.name.toUpperCase(), 22, 264);
+            previewContext.font = "11px monospace";
+            previewContext.fillText(preview.liveUrl?.replace(/^https?:\/\//, "").replace(/\/$/, "").toUpperCase() ?? "PROJECT PREVIEW", 22, 285);
           } else {
-            screenContext.font = "bold 12px monospace";
-            screenContext.fillStyle = dark ? "#8b8b8b" : "#676767";
-            screenContext.fillText(preview.previewImage ? "LOADING CAPTURE" : "PROJECT PREVIEW", 24, 38);
-            screenContext.font = "bold 40px Arial, sans-serif";
-            screenContext.fillStyle = dark ? "#f2f2ef" : "#101010";
-            screenContext.fillText(preview.name.toUpperCase(), 24, 92);
-            screenContext.font = "13px Arial, sans-serif";
-            screenContext.fillStyle = dark ? "#b8b8b4" : "#4f4f4f";
-            screenContext.fillText(preview.category.slice(0, 58), 24, 120);
+            previewContext.font = "bold 12px monospace";
+            previewContext.fillStyle = dark ? "#8b8b8b" : "#676767";
+            previewContext.fillText(preview.previewImage ? "LOADING CAPTURE" : "PROJECT PREVIEW", 24, 38);
+            previewContext.font = "bold 40px Arial, sans-serif";
+            previewContext.fillStyle = dark ? "#f2f2ef" : "#101010";
+            previewContext.fillText(preview.name.toUpperCase(), 24, 92);
+            previewContext.font = "13px Arial, sans-serif";
+            previewContext.fillStyle = dark ? "#b8b8b4" : "#4f4f4f";
+            previewContext.fillText(preview.category.slice(0, 58), 24, 120);
             preview.stack.slice(0, 4).forEach((item, index) => {
-              screenContext.strokeStyle = dark ? "#777" : "#555";
-              screenContext.strokeRect(24 + (index % 2) * 235, 160 + Math.floor(index / 2) * 54, 210, 36);
-              screenContext.fillText(item.toUpperCase().slice(0, 22), 36 + (index % 2) * 235, 183 + Math.floor(index / 2) * 54);
+              previewContext.strokeStyle = dark ? "#777" : "#555";
+              previewContext.strokeRect(24 + (index % 2) * 235, 160 + Math.floor(index / 2) * 54, 210, 36);
+              previewContext.fillText(item.toUpperCase().slice(0, 22), 36 + (index % 2) * 235, 183 + Math.floor(index / 2) * 54);
             });
           }
-        } else if (workMode) {
-          const codeLines = [
-            "const room = createPortfolio({",
-            "  owner: 'Ryan Erick',",
-            "  stack: ['TS', 'React', 'Node'],",
-            "  focus: 'useful products',",
-            "  status: 'shipping'",
-            "});",
-            "room.deploy();",
-          ];
-          const visibleLines = 1 + Math.floor(performance.now() / 520) % codeLines.length;
-          screenContext.font = "16px monospace";
-          screenContext.fillStyle = dark ? "#7ee787" : "#176b37";
-          screenContext.fillText("~/room11/work  main*", 24, 34);
-          codeLines.slice(0, visibleLines).forEach((line, index) => {
-            screenContext.fillStyle = dark ? "#777" : "#999";
-            screenContext.fillText(String(index + 1).padStart(2, "0"), 24, 70 + index * 28);
-            screenContext.fillStyle = dark ? "#ededeb" : "#111111";
-            screenContext.fillText(line, 62, 70 + index * 28);
-          });
-          if (blink) screenContext.fillRect(62, 82 + visibleLines * 28, 11, 17);
         } else {
-          screenContext.font = "20px monospace";
-          screenContext.fillText("$ room --overview", 25, 42);
-          const monitorLabels = ["PROJINA", "CHOPASAP", "EAGLE", "NEXTPY", "BAJOMA", "BUSEASE"];
-          monitorLabels.forEach((label, index) => {
-            screenContext.globalAlpha = index % 2 === 0 ? 0.9 : 0.5;
-            screenContext.font = "bold 17px monospace";
-            screenContext.fillText(label, 25 + (index % 2) * 235, 90 + Math.floor(index / 2) * 58);
-            screenContext.fillRect(25 + (index % 2) * 235, 101 + Math.floor(index / 2) * 58, 165, 3);
-          });
-          screenContext.globalAlpha = 1;
+          previewContext.font = "bold 12px monospace";
+          previewContext.fillStyle = dark ? "#777" : "#696969";
+          previewContext.fillText("SECONDARY DISPLAY / LIVE PREVIEW", 24, 38);
+          previewContext.font = "bold 35px Arial, sans-serif";
+          previewContext.fillStyle = dark ? "#f2f2ef" : "#111111";
+          previewContext.fillText("SELECT A PROJECT", 24, 100);
+          previewContext.font = "14px monospace";
+          previewContext.fillStyle = dark ? "#aaa" : "#555";
+          previewContext.fillText("Hover the work index to load its demo.", 24, 132);
+          for (let row = 0; row < 3; row += 1) {
+            previewContext.strokeStyle = dark ? "#333" : "#bbb";
+            previewContext.strokeRect(24, 165 + row * 36, 464, 24);
+          }
         }
-        screenTexture.needsUpdate = true;
+        previewTexture.needsUpdate = true;
+      };
+      const drawMonitor = (time = performance.now()) => {
+        drawCodeMonitor(time);
+        drawPreviewMonitor();
       };
       const updateTheme = () => {
         const dark = themeRef.current === "dark";
@@ -509,7 +569,7 @@ const RoomScene = () => {
       const render = (now: number) => {
         frame = 0;
         if (disposed || document.hidden) return;
-        if (now - lastRender < 1000 / 45) {
+        if (now - lastRender < 1000 / (lowPower ? 30 : 45)) {
           frame = requestAnimationFrame(render);
           return;
         }
@@ -526,6 +586,14 @@ const RoomScene = () => {
         camera.lookAt(currentLookAt);
 
         if (!reducedMotion) {
+          const typedCount = getTypedCount(now);
+          const activeKey = typedCount % keyboardKeys.length;
+          keyboardKeys.forEach((key, index) => {
+            const pressed = index === activeKey && typedCount < codeText.length;
+            key.position.y = pressed ? 0.882 : 0.89;
+            key.scale.y = pressed ? 0.55 : 1;
+          });
+          mouse.position.x = 0.16 + Math.sin(now / 880) * 0.025;
           ballGroup.rotation.y += delta * 0.45;
           if (kickTime < 0) {
             ballGroup.position.set(ballStart.x, ballStart.y + Math.abs(Math.sin(now / 455)) * 0.12, ballStart.z);
@@ -550,7 +618,11 @@ const RoomScene = () => {
             netAmplitude *= Math.pow(0.04, delta);
           }
         }
-        if (now - blinkAt > 560) { blinkAt = now; blink = !blink; drawMonitor(); }
+        if (now - blinkAt > 480) { blinkAt = now; blink = !blink; }
+        if (now - monitorDrawAt > (lowPower ? 130 : 72)) {
+          monitorDrawAt = now;
+          drawCodeMonitor(now);
+        }
         renderer.render(scene, camera);
         frame = requestAnimationFrame(render);
       };
@@ -581,7 +653,8 @@ const RoomScene = () => {
             labelTexture?.dispose?.();
           }
         });
-        screenTexture.dispose();
+        codeTexture.dispose();
+        previewTexture.dispose();
         renderer.dispose();
       };
     };
