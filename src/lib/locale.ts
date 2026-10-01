@@ -14,7 +14,7 @@ export const paths = {
   certifications: { en: "/en/certifications", fr: "/fr/certifications" },
   anime: { en: "/en/anime", fr: "/fr/anime" },
   football: { en: "/en/football", fr: "/fr/football" },
-  beyond: { en: "/en/beyond-work", fr: "/fr/hors-travail" },
+  beyond: { en: "/en#beyond", fr: "/fr#beyond" },
   library: { en: "/en/library", fr: "/fr/bibliotheque" },
   network: { en: "/en/network", fr: "/fr/reseau" },
   cv: { en: "/en/cv", fr: "/fr/cv" },

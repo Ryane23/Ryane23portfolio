@@ -14,7 +14,7 @@ const labels = {
 
 const EditorialNavigation = () => {
   const locale = useLocale();
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -27,13 +27,13 @@ const EditorialNavigation = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => setOpen(false), [pathname, hash]);
 
-  const links: [string, string, RouteModuleKey][] = [
+  const links: [string, string, RouteModuleKey | null][] = [
     [copy.work, paths.work[locale], "work"], [copy.about, paths.about[locale], "profile"],
     [copy.experience, paths.experience[locale], "record"], [copy.certifications, paths.certifications[locale], "certifications"],
     [copy.library, paths.library[locale], "library"],
-    [copy.beyond, paths.beyond[locale], "beyond"],
+    [copy.beyond, paths.beyond[locale], null],
     [copy.network, paths.network[locale], "network"], [copy.contact, paths.contact[locale], "contact"],
   ];
   const desktopLinks = links.filter(([, , module]) => module !== "contact");
@@ -45,8 +45,9 @@ const EditorialNavigation = () => {
         <Link to={paths.home[locale]} className="brand-lockup" aria-label="Ryan Erick home"><RyanMark className="brand-mark" /><span>RYAN ERICK</span></Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
           {desktopLinks.map(([label, href, module]) => {
-            const beyondActive = module === "beyond" && (pathname.includes("/anime") || pathname.includes("/football"));
-            return <Link key={href} to={href} onPointerEnter={() => preloadRoute(module)} onPointerDown={() => preloadRoute(module)} onFocus={() => preloadRoute(module)} className={pathname === href || beyondActive ? "is-active" : ""}>{label}</Link>;
+            const beyondActive = href.includes("#beyond") && (hash === "#beyond" || pathname.includes("/anime") || pathname.includes("/football"));
+            const preload = () => { if (module) preloadRoute(module); };
+            return <Link key={href} to={href} onPointerEnter={preload} onPointerDown={preload} onFocus={preload} className={pathname === href || beyondActive ? "is-active" : ""}>{label}</Link>;
           })}
         </nav>
         <div className="header-actions">
@@ -61,7 +62,10 @@ const EditorialNavigation = () => {
         {open && (
           <motion.nav id="mobile-navigation" className="mobile-nav" initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} aria-label="Mobile navigation">
             <p className="meta-label">INDEX / {locale.toUpperCase()}</p>
-            {links.map(([label, href, module], index) => <Link key={href} to={href} onPointerEnter={() => preloadRoute(module)} onPointerDown={() => preloadRoute(module)} onFocus={() => preloadRoute(module)}><span>0{index + 1}</span>{label}</Link>)}
+            {links.map(([label, href, module], index) => {
+              const preload = () => { if (module) preloadRoute(module); };
+              return <Link key={href} to={href} onPointerEnter={preload} onPointerDown={preload} onFocus={preload}><span>0{index + 1}</span>{label}</Link>;
+            })}
           </motion.nav>
         )}
       </AnimatePresence>

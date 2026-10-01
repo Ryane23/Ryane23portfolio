@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowUpRight, BookOpen, Gamepad2, Goal, Headphones, LibraryBig, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { articles, experiences, localize, profile, projects } from "@/data/portfolio";
 import NetworkPreview from "@/components/NetworkPreview";
@@ -55,9 +55,16 @@ const EditorialHome = () => {
         </div>
       </section>
 
-      <section className="worlds-section section-pad" data-room-stop="beyond">
-        <div className="section-heading"><span className="section-number">04</span><div><p className="meta-label">{locale === "en" ? "BEYOND WORK" : "HORS TRAVAIL"}</p><h2>{locale === "en" ? "Football, anime, and community." : "Football, anime et engagement communautaire."}</h2></div><Link to={paths.beyond[locale]}>{locale === "en" ? "EXPLORE" : "EXPLORER"} ↗</Link></div>
-        <Link to={paths.beyond[locale]} className="world-card beyond-world"><span className="world-football" aria-hidden="true" /><span className="meta-label">FOOTBALL / ANIME / COMMUNITY</span><strong>{locale === "en" ? "THE OTHER SIDE OF ME" : "L’AUTRE CÔTÉ DE MOI"}</strong><span>{locale === "en" ? "OPEN BEYOND WORK" : "OUVRIR HORS TRAVAIL"} ↗</span></Link>
+      <section id="beyond" className="worlds-section section-pad beyond-home" data-room-stop="beyond">
+        <div className="section-heading"><span className="section-number">04</span><div><p className="meta-label">{locale === "en" ? "BEYOND WORK" : "HORS TRAVAIL"}</p><h2>{locale === "en" ? "The interests that keep me curious." : "Les passions qui nourrissent ma curiosité."}</h2></div></div>
+        <div className="interest-grid" aria-label={locale === "en" ? "Personal interests" : "Centres d’intérêt"}>
+          <Link to={paths.football[locale]} className="interest-card"><Goal /><span className="interest-visual interest-visual-ball" aria-hidden="true" /><small>01 / FOOTBALL</small><strong>FC BARCELONA</strong><span>{locale === "en" ? "Club, tactics, Messi." : "Club, tactique, Messi."} ↗</span></Link>
+          <Link to={paths.anime[locale]} className="interest-card"><BookOpen /><span className="interest-visual interest-visual-level" aria-hidden="true" /><small>02 / ANIME</small><strong>DBZ · SOLO LEVELING</strong><span>{locale === "en" ? "Progress and resilience." : "Progression et résilience."} ↗</span></Link>
+          <article className="interest-card"><Gamepad2 /><span className="interest-visual interest-visual-pulse" aria-hidden="true" /><small>03 / GAMING</small><strong>PLAY & STRATEGY</strong><span>{locale === "en" ? "Systems, timing, teamwork." : "Systèmes, rythme, équipe."}</span></article>
+          <article className="interest-card"><LibraryBig /><span className="interest-visual interest-visual-pages" aria-hidden="true" /><small>04 / READING</small><strong>IDEAS & STORIES</strong><span>{locale === "en" ? "Learning beyond the screen." : "Apprendre au-delà de l’écran."}</span></article>
+          <article className="interest-card"><Headphones /><span className="interest-visual interest-visual-wave" aria-hidden="true" /><small>05 / MUSIC</small><strong>FOCUS MODE</strong><span>{locale === "en" ? "Sound for deep work." : "Le son pour se concentrer."}</span></article>
+          <article className="interest-card"><MessageCircle /><span className="interest-visual interest-visual-talk" aria-hidden="true" /><small>06 / SPEAKING</small><strong>SHARE & MENTOR</strong><span>{locale === "en" ? "Making knowledge useful." : "Rendre le savoir utile."}</span></article>
+        </div>
       </section>
 
       <NetworkPreview />
