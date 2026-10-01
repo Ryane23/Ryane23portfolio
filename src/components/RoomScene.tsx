@@ -4,22 +4,24 @@ import { useTheme } from "@/contexts/EditorialThemeContext";
 import ryanProfile from "@/assets/ryan-profile.webp";
 
 type Stop = { position: [number, number, number]; lookAt: [number, number, number] };
+type ProjectPreview = { slug: string; name: string; category: string; status: string; stack: string[]; liveUrl?: string };
 
 const stops: Record<string, Stop> = {
   room: { position: [1.4, 2.7, 7.8], lookAt: [1.5, 1.1, -0.5] },
   work: { position: [-0.7, 1.65, 1.2], lookAt: [-0.7, 1.35, -1.72] },
+  workPreview: { position: [-0.72, 1.57, 0.3], lookAt: [-0.72, 1.48, -1.62] },
   profile: { position: [1.25, 2.35, 1.6], lookAt: [1.15, 1.45, -1.85] },
   record: { position: [2.1, 2.3, 1.4], lookAt: [2.25, 2.05, -1.82] },
   library: { position: [4.25, 2.25, 2.25], lookAt: [4.35, 1.85, -1.75] },
   football: { position: [5.6, 1.65, 3.65], lookAt: [5.75, 0.65, -1.15] },
   network: { position: [-3.75, 1.9, 1.7], lookAt: [-3.75, 1.35, -1.72] },
   contact: { position: [-2.1, 1.8, 2.1], lookAt: [-1.8, 1.05, -1.35] },
+  beyond: { position: [8.25, 1.75, 3.35], lookAt: [8.3, 0.72, -0.22] },
 };
-
-const homeSequence = [stops.room, stops.work, stops.record, stops.library, stops.football];
 
 const zoneForPath = (pathname: string) => {
   if (/^\/(en|fr)\/?$/.test(pathname)) return "room";
+  if (pathname.includes("beyond-work") || pathname.includes("hors-travail")) return "beyond";
   if (pathname.includes("football")) return "football";
   if (pathname.includes("anime") || pathname.includes("library") || pathname.includes("bibliotheque")) return "library";
   if (pathname.includes("experience") || pathname.includes("parcours")) return "record";
@@ -292,14 +294,45 @@ const RoomScene = () => {
       let blinkAt = 0;
       let blink = true;
       let visibleZone = "";
+      let projectPreview: ProjectPreview | null = null;
+      let homeStop = "room";
 
       const routeGroups: Record<string, THREE.Group> = { home: homeGroup, work: workGroup, profile: profileGroup, record: recordGroup, library: libraryGroup, network: networkGroup, football: footballGroup, contact: contactGroup };
+      const updateHomeStop = () => {
+        if (!/^\/(en|fr)\/?$/.test(pathRef.current)) return;
+        const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-room-stop]"));
+        if (!sections.length) {
+          homeStop = "room";
+          return;
+        }
+        const targetLine = window.innerHeight * 0.42;
+        const closest = sections.reduce((best, section) => {
+          const distance = Math.abs(section.getBoundingClientRect().top - targetLine);
+          return distance < best.distance ? { section, distance } : best;
+        }, { section: sections[0], distance: Number.POSITIVE_INFINITY });
+        const candidate = closest.section.dataset.roomStop;
+        if (candidate && stops[candidate]) homeStop = candidate;
+      };
       const updateVisibility = () => {
         const nextZone = zoneForPath(pathRef.current);
         if (nextZone === visibleZone) return;
         visibleZone = nextZone;
-        Object.entries(routeGroups).forEach(([name, group]) => { group.visible = nextZone === "room" || name === nextZone; });
+        if (nextZone === "room") updateHomeStop();
+        Object.entries(routeGroups).forEach(([name, group]) => {
+          group.visible = nextZone === "room" || name === nextZone || (nextZone === "beyond" && ["home", "library", "football"].includes(name));
+        });
       };
+
+      const showProjectPreview = (event: Event) => {
+        projectPreview = (event as CustomEvent<ProjectPreview>).detail;
+        drawMonitor();
+      };
+      const clearProjectPreview = () => {
+        projectPreview = null;
+        drawMonitor();
+      };
+      window.addEventListener("room11:project-preview", showProjectPreview);
+      window.addEventListener("room11:project-preview-clear", clearProjectPreview);
 
       const drawMonitor = () => {
         if (!screenContext) return;
@@ -308,7 +341,51 @@ const RoomScene = () => {
         screenContext.fillRect(0, 0, 512, 300);
         screenContext.fillStyle = dark ? "#ededeb" : "#111111";
         const workMode = zoneForPath(pathRef.current) === "work";
-        if (workMode) {
+        if (workMode && projectPreview) {
+          const preview = projectPreview;
+          const accentByProject: Record<string, string> = {
+            projina: dark ? "#7dd3fc" : "#075985",
+            chopasap: dark ? "#fbbf24" : "#92400e",
+            bajoma: dark ? "#86efac" : "#166534",
+            busease: dark ? "#c4b5fd" : "#5b21b6",
+            eagle: dark ? "#fca5a5" : "#991b1b",
+            nextpy: dark ? "#93c5fd" : "#1e40af",
+            legitcm: dark ? "#d4d4d4" : "#404040",
+          };
+          const accent = accentByProject[preview.slug] ?? (dark ? "#ededeb" : "#111111");
+          screenContext.fillStyle = accent;
+          screenContext.fillRect(0, 0, 512, 9);
+          screenContext.font = "bold 11px monospace";
+          screenContext.fillStyle = dark ? "#8b8b8b" : "#676767";
+          screenContext.fillText(preview.liveUrl ? "LIVE PRODUCT / HOVER PREVIEW" : "PROJECT / HOVER PREVIEW", 24, 35);
+          screenContext.font = "bold 39px Arial, sans-serif";
+          screenContext.fillStyle = dark ? "#f2f2ef" : "#101010";
+          screenContext.fillText(preview.name.toUpperCase(), 24, 82);
+          screenContext.font = "13px Arial, sans-serif";
+          screenContext.fillStyle = dark ? "#b8b8b4" : "#4f4f4f";
+          screenContext.fillText(preview.category.slice(0, 58), 24, 108);
+          screenContext.strokeStyle = accent;
+          screenContext.lineWidth = 2;
+          screenContext.strokeRect(24, 132, 292, 112);
+          screenContext.fillStyle = dark ? "#1d1d1d" : "#d6d6d1";
+          screenContext.fillRect(38, 147, 264, 15);
+          const progress = (performance.now() / 18) % 180;
+          screenContext.fillStyle = accent;
+          screenContext.fillRect(38, 176, 92 + progress, 7);
+          screenContext.fillStyle = dark ? "#454545" : "#b4b4ae";
+          screenContext.fillRect(38, 197, 224, 7);
+          screenContext.fillRect(38, 218, 154, 7);
+          screenContext.fillStyle = accent;
+          screenContext.fillRect(338, 132, 150, 51);
+          screenContext.fillStyle = dark ? "#101010" : "#f2f2ef";
+          screenContext.font = "bold 12px monospace";
+          screenContext.fillText(preview.status.toUpperCase().slice(0, 19), 350, 162);
+          screenContext.fillStyle = dark ? "#a9a9a5" : "#555";
+          screenContext.font = "11px monospace";
+          preview.stack.slice(0, 3).forEach((item, index) => screenContext.fillText(item.toUpperCase().slice(0, 19), 338, 211 + index * 19));
+          screenContext.fillStyle = accent;
+          screenContext.fillText(preview.liveUrl ? preview.liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "").toUpperCase() : "CASE STUDY", 24, 278);
+        } else if (workMode) {
           const codeLines = [
             "const room = createPortfolio({",
             "  owner: 'Ryan Erick',",
@@ -370,17 +447,12 @@ const RoomScene = () => {
       const updateTarget = () => {
         const path = pathRef.current;
         if (/^\/(en|fr)\/?$/.test(path)) {
-          const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-          const progress = Math.min(0.999, window.scrollY / maxScroll) * (homeSequence.length - 1);
-          const index = Math.min(homeSequence.length - 2, Math.floor(progress));
-          const amount = progress - index;
-          const smooth = amount * amount * (3 - 2 * amount);
-          const from = homeSequence[index];
-          const to = homeSequence[index + 1];
-          desiredPosition.set(...from.position).lerp(new THREE.Vector3(...to.position), smooth);
-          desiredLookAt.set(...from.lookAt).lerp(new THREE.Vector3(...to.lookAt), smooth);
+          const stop = stops[homeStop] ?? stops.room;
+          desiredPosition.set(...stop.position);
+          desiredLookAt.set(...stop.lookAt);
         } else {
-          const stop = stops[zoneForPath(path)];
+          const zone = zoneForPath(path);
+          const stop = zone === "work" && projectPreview ? stops.workPreview : stops[zone];
           desiredPosition.set(...stop.position);
           desiredLookAt.set(...stop.lookAt);
         }
@@ -436,7 +508,9 @@ const RoomScene = () => {
 
       window.addEventListener("resize", resize, { passive: true });
       window.addEventListener("pointermove", onPointer, { passive: true });
+      window.addEventListener("scroll", updateHomeStop, { passive: true });
       resize();
+      updateHomeStop();
       updateTheme();
       frame = requestAnimationFrame(render);
       window.dispatchEvent(new Event("room11:ready"));
@@ -445,7 +519,10 @@ const RoomScene = () => {
         cancelAnimationFrame(frame);
         window.removeEventListener("resize", resize);
         window.removeEventListener("pointermove", onPointer);
+        window.removeEventListener("scroll", updateHomeStop);
         window.removeEventListener("room11:kick", kick);
+        window.removeEventListener("room11:project-preview", showProjectPreview);
+        window.removeEventListener("room11:project-preview-clear", clearProjectPreview);
         scene.traverse((object) => {
           if (object instanceof THREE.Mesh) {
             object.geometry.dispose();
