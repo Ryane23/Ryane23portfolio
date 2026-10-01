@@ -12,6 +12,7 @@ export const routeModules = {
   project: cached(() => import("@/pages/ProjectCaseStudy")),
   profile: cached(() => import("@/pages/ProfilePage")),
   record: cached(() => import("@/pages/RecordPage")),
+  certifications: cached(() => import("@/pages/CertificationsPage")),
   library: cached(() => import("@/pages/LibraryPage")),
   article: cached(() => import("@/pages/ArticlePage")),
   anime: cached(() => import("@/pages/AnimePage")),
@@ -30,5 +31,5 @@ export const preloadRoute = (key: RouteModuleKey) => {
 };
 
 export const preloadAllRoutes = () => {
-  (["work", "project", "profile", "record", "library", "article", "anime", "football", "beyond", "cv", "network", "contact"] as RouteModuleKey[]).forEach(preloadRoute);
+  (["work", "project", "profile", "record", "certifications", "library", "article", "anime", "football", "beyond", "cv", "network", "contact"] as RouteModuleKey[]).forEach(preloadRoute);
 };

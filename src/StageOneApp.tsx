@@ -12,6 +12,7 @@ const WorkIndex = lazy(routeModules.work);
 const ProjectCaseStudy = lazy(routeModules.project);
 const ProfilePage = lazy(routeModules.profile);
 const RecordPage = lazy(routeModules.record);
+const CertificationsPage = lazy(routeModules.certifications);
 const LibraryPage = lazy(routeModules.library);
 const ArticlePage = lazy(routeModules.article);
 const AnimePage = lazy(routeModules.anime);
@@ -52,6 +53,7 @@ const StageOneApp = () => {
                   <Route path="/en/work/:slug" element={<ProjectCaseStudy />} /><Route path="/fr/projets/:slug" element={<ProjectCaseStudy />} />
                   <Route path="/en/about" element={<ProfilePage />} /><Route path="/fr/a-propos" element={<ProfilePage />} />
                   <Route path="/en/experience" element={<RecordPage />} /><Route path="/fr/parcours" element={<RecordPage />} />
+                  <Route path="/en/certifications" element={<CertificationsPage />} /><Route path="/fr/certifications" element={<CertificationsPage />} />
                   <Route path="/en/library" element={<LibraryPage />} /><Route path="/fr/bibliotheque" element={<LibraryPage />} />
                   <Route path="/en/library/:slug" element={<ArticlePage />} /><Route path="/fr/bibliotheque/:slug" element={<ArticlePage />} />
                   <Route path="/en/anime" element={<AnimePage />} /><Route path="/fr/anime" element={<AnimePage />} />

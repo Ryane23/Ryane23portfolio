@@ -89,7 +89,7 @@ const NetworkPage = () => {
 
   return (
     <div className="network-page page-shell section-pad">
-      <header className="page-hero network-hero"><p className="meta-label">04 — NETWORK</p><h1>{locale === "en" ? "Professional profiles and community." : "Profils professionnels et communauté."}</h1><p>{locale === "en" ? "GitHub, LinkedIn, community photographs, room audio, and the guestbook." : "GitHub, LinkedIn, photographies communautaires, audio de la pièce et livre d’or."}</p></header>
+      <header className="page-hero network-hero"><p className="meta-label">07 — NETWORK</p><h1>{locale === "en" ? "Professional profiles and community." : "Profils professionnels et communauté."}</h1><p>{locale === "en" ? "GitHub, LinkedIn, community photographs, room audio, and the guestbook." : "GitHub, LinkedIn, photographies communautaires, audio de la pièce et livre d’or."}</p></header>
 
       <section className="network-section identity-section" id="profiles">
         <div className="network-section-head"><span className="meta-label">01 / PROFESSIONAL IDENTITIES</span><span>GITHUB ↔ LINKEDIN</span></div>

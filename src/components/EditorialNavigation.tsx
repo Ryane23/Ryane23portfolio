@@ -8,8 +8,8 @@ import { paths, useLocale } from "@/lib/locale";
 import { preloadRoute, type RouteModuleKey } from "@/lib/routeModules";
 
 const labels = {
-  en: { work: "Work", about: "About", experience: "Experience", library: "Library", beyond: "Beyond", network: "Network", contact: "Contact", cv: "CV" },
-  fr: { work: "Projets", about: "À propos", experience: "Parcours", library: "Bibliothèque", beyond: "Hors travail", network: "Réseau", contact: "Contact", cv: "CV" },
+  en: { work: "Work", about: "About", experience: "Experience", certifications: "Certs", library: "Library", beyond: "Beyond", network: "Network", contact: "Contact", cv: "CV" },
+  fr: { work: "Projets", about: "À propos", experience: "Parcours", certifications: "Certifs", library: "Bibliothèque", beyond: "Hors travail", network: "Réseau", contact: "Contact", cv: "CV" },
 };
 
 const EditorialNavigation = () => {
@@ -31,7 +31,8 @@ const EditorialNavigation = () => {
 
   const links: [string, string, RouteModuleKey][] = [
     [copy.work, paths.work[locale], "work"], [copy.about, paths.about[locale], "profile"],
-    [copy.experience, paths.experience[locale], "record"], [copy.library, paths.library[locale], "library"],
+    [copy.experience, paths.experience[locale], "record"], [copy.certifications, paths.certifications[locale], "certifications"],
+    [copy.library, paths.library[locale], "library"],
     [copy.beyond, paths.beyond[locale], "beyond"],
     [copy.network, paths.network[locale], "network"], [copy.contact, paths.contact[locale], "contact"],
   ];

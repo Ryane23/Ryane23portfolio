@@ -11,6 +11,7 @@ export const paths = {
   work: { en: "/en/work", fr: "/fr/projets" },
   about: { en: "/en/about", fr: "/fr/a-propos" },
   experience: { en: "/en/experience", fr: "/fr/parcours" },
+  certifications: { en: "/en/certifications", fr: "/fr/certifications" },
   anime: { en: "/en/anime", fr: "/fr/anime" },
   football: { en: "/en/football", fr: "/fr/football" },
   beyond: { en: "/en/beyond-work", fr: "/fr/hors-travail" },
