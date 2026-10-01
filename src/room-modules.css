@@ -72,15 +72,14 @@
 .certification-list article { display: grid; grid-template-columns: 2rem 1fr; gap: .8rem 1rem; padding: 1.5rem 0; border-bottom: 1px solid color-mix(in srgb, currentColor 25%, transparent); }
 .certification-list h3 { grid-column: 2; margin: 0; font-size: clamp(1.5rem, 2.6vw, 2.6rem); letter-spacing: -.04em; }
 .certification-list p { grid-column: 2; margin: 0; opacity: .65; }
-.certificate-wall { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1rem, 3vw, 2.5rem); padding: clamp(1.25rem, 4vw, 4rem); background: color-mix(in srgb, var(--paper) 96%, transparent); border: 1px solid var(--line); }
+.certificate-wall { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr); padding: clamp(1.25rem, 4vw, 4rem); background: color-mix(in srgb, var(--paper) 96%, transparent); border: 1px solid var(--line); }
 .certificate-frame { position: relative; display: flex; min-height: 28rem; flex-direction: column; align-items: flex-start; padding: clamp(1.5rem, 4vw, 3.5rem); color: var(--ink); background: var(--paper); border: clamp(.55rem, 1vw, .9rem) double var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.certificate-frame-single { width: min(100%, 58rem); min-height: 31rem; justify-self: center; }
 .certificate-frame > svg { margin-top: auto; }
 .certificate-frame h2 { max-width: 32rem; margin: 1.25rem 0 .75rem; font-size: clamp(2rem, 4vw, 4rem); line-height: .9; letter-spacing: -.06em; }
 .certificate-frame p { margin: 0; color: var(--quiet); }
 .certificate-index { position: absolute; top: 1.2rem; right: 1.2rem; font: .6rem ui-monospace, monospace; letter-spacing: .12em; }
-.certificate-frame-open { align-items: center; justify-content: center; color: var(--quiet); border-style: dashed; }
-.certificate-frame-open span { font-size: 4rem; font-weight: 200; }
-.certificate-frame-open small { margin-top: 1rem; font: .57rem ui-monospace, monospace; letter-spacing: .14em; }
+.certificate-source { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.5rem; padding-bottom: .25rem; border-bottom: 1px solid; font: .6rem ui-monospace, monospace; letter-spacing: .1em; }
 
 .contact-page { grid-template-columns: minmax(17rem, .68fr) minmax(0, 1.32fr); gap: clamp(2rem, 6vw, 6rem); }
 .contact-page header { position: sticky; top: 5.5rem; }
