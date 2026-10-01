@@ -105,6 +105,7 @@ const RoomScene = () => {
       };
 
       const roomShell = new THREE.Group();
+      const homeGroup = new THREE.Group();
       const workGroup = new THREE.Group();
       const profileGroup = new THREE.Group();
       const recordGroup = new THREE.Group();
@@ -112,7 +113,7 @@ const RoomScene = () => {
       const networkGroup = new THREE.Group();
       const footballGroup = new THREE.Group();
       const contactGroup = new THREE.Group();
-      scene.add(roomShell, workGroup, profileGroup, recordGroup, libraryGroup, networkGroup, footballGroup, contactGroup);
+      scene.add(roomShell, homeGroup, workGroup, profileGroup, recordGroup, libraryGroup, networkGroup, footballGroup, contactGroup);
 
       const wallText = (text: string, position: [number, number, number], width: number, fontSize: number, parent: THREE.Object3D = roomShell) => {
         const textCanvas = document.createElement("canvas");
@@ -133,6 +134,14 @@ const RoomScene = () => {
         plane.userData.labelTexture = texture;
         parent.add(plane);
       };
+      const wallImage = (src: string, size: [number, number], position: [number, number, number], parent: THREE.Object3D) => {
+        const texture = new THREE.TextureLoader().load(src);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        const image = new THREE.Mesh(new THREE.PlaneGeometry(...size), new THREE.MeshBasicMaterial({ map: texture, transparent: true }));
+        image.position.set(...position);
+        image.userData.labelTexture = texture;
+        parent.add(image);
+      };
 
       // Room and work station.
       box([18, 0.12, 10], [3, -0.06, 1], 0.58, roomShell);
@@ -141,6 +150,14 @@ const RoomScene = () => {
       wallText("RYAN ERICK", [0.2, 4.25, -1.97], 4.8, 152);
       wallText("BUILD USEFUL THINGS", [-3.55, 2.65, -1.97], 2.2, 78);
       wallText("LEARN · SHIP · IMPROVE", [4.25, 3.55, -1.97], 2.25, 68);
+
+      // Home furniture: a low bed that completes the room without appearing in focused route views.
+      box([2.8, 0.18, 1.72], [8.35, 0.34, -0.15], 0.18, homeGroup);
+      box([2.65, 0.34, 1.6], [8.35, 0.58, -0.15], 0.82, homeGroup);
+      box([2.8, 1.05, 0.12], [8.35, 0.82, -0.92], 0.22, homeGroup);
+      box([0.86, 0.16, 0.58], [7.55, 0.84, -0.55], 0.92, homeGroup).rotation.z = -0.04;
+      box([0.86, 0.16, 0.58], [8.55, 0.84, -0.55], 0.9, homeGroup).rotation.z = 0.04;
+      box([2.7, 0.08, 0.82], [8.35, 0.82, 0.21], 0.46, homeGroup);
       box([4.4, 0.1, 1.45], [-0.55, 0.78, -1.22], 0.28, workGroup);
       [-2.5, 1.4].forEach((x) => box([0.09, 0.78, 1.3], [x, 0.39, -1.22], 0.22, workGroup));
       box([1.75, 1.03, 0.07], [-0.72, 1.48, -1.62], 0.1, workGroup);
@@ -228,6 +245,10 @@ const RoomScene = () => {
       cylinder(0.045, 0.045, 0.05, [-4.72, 1.08, -1.82], 0.72, contactGroup).rotation.x = Math.PI / 2;
 
       // Football corner with a playable ball and responsive net.
+      wallImage("/images/football/raphinha-official.webp", [0.82, 1.05], [4.88, 2.45, -1.96], footballGroup);
+      wallImage("/images/football/raphinha-supplied.webp", [0.82, 1.05], [5.82, 2.45, -1.96], footballGroup);
+      wallImage("/images/football/fcb-official-badge.png", [2.25, 0.44], [7.2, 2.88, -1.95], footballGroup);
+      wallText("MY FAVORITE CLUB", [7.2, 2.35, -1.96], 2.15, 70, footballGroup);
       const goal = new THREE.Group();
       cylinder(0.027, 0.027, 0.92, [-0.87, 0.46, 0], 0.88, goal);
       cylinder(0.027, 0.027, 0.92, [0.87, 0.46, 0], 0.88, goal);
@@ -272,7 +293,7 @@ const RoomScene = () => {
       let blink = true;
       let visibleZone = "";
 
-      const routeGroups: Record<string, THREE.Group> = { work: workGroup, profile: profileGroup, record: recordGroup, library: libraryGroup, network: networkGroup, football: footballGroup, contact: contactGroup };
+      const routeGroups: Record<string, THREE.Group> = { home: homeGroup, work: workGroup, profile: profileGroup, record: recordGroup, library: libraryGroup, network: networkGroup, football: footballGroup, contact: contactGroup };
       const updateVisibility = () => {
         const nextZone = zoneForPath(pathRef.current);
         if (nextZone === visibleZone) return;

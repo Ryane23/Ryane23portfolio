@@ -28,10 +28,19 @@
 .github-calendar-frame img { display: block; width: 100%; min-width: 38rem; height: auto; filter: grayscale(1) contrast(1.05); }
 .github-calendar-frame .meta-label { display: block; margin-top: .8rem; color: #57606a; }
 
+.favorite-club { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,.24); }
+.favorite-club img { width: min(13rem, 48%); height: auto; }
+.raphinha-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #333; border: 1px solid #333; }
+.raphinha-gallery figure { position: relative; min-height: 30rem; margin: 0; overflow: hidden; background: #090909; }
+.raphinha-gallery img { width: 100%; height: 100%; object-fit: cover; object-position: top; filter: saturate(.88) contrast(1.05); }
+.raphinha-gallery figcaption { position: absolute; right: 1rem; bottom: 1rem; padding: .55rem .7rem; color: #f3f3ef; background: rgba(9,9,9,.78); font: .58rem ui-monospace, monospace; letter-spacing: .12em; }
+
 @media (max-width: 720px) {
   .tech-stack-grid { grid-template-columns: 1fr; }
   .tech-stack-group { min-height: auto; }
   .tech-stack-items { grid-template-columns: 1fr 1fr; }
   .work-signal-section, .github-contribution-panel { grid-template-columns: 1fr; }
   .github-calendar-frame { overflow-x: auto; }
+  .raphinha-gallery { grid-template-columns: 1fr; }
+  .raphinha-gallery figure { min-height: 24rem; }
 }
