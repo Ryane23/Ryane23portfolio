@@ -8,14 +8,14 @@ const WorkIndex = () => {
   const activeProjects = projects.filter((project) => project.status.en.toLowerCase().includes("development"));
   return (
     <div className="page-shell section-pad">
-      <header className="page-hero"><p className="meta-label">01 — {locale === "en" ? "WORK INDEX" : "INDEX DES PROJETS"}</p><h1>{locale === "en" ? "Selected work, documented honestly." : "Des projets sélectionnés, documentés honnêtement."}</h1><p>{locale === "en" ? "Prices are Cameroon-market comparable build values—not claims about what a client paid." : "Les prix indiquent une valeur de réalisation comparable au marché camerounais, et non le montant payé par un client."}</p></header>
+      <header className="page-hero"><p className="meta-label">01 — {locale === "en" ? "WORK INDEX" : "INDEX DES PROJETS"}</p><h1>{locale === "en" ? "Products across web, mobile, and platforms." : "Produits web, mobile et plateformes."}</h1><p>{locale === "en" ? "Project scope, technology, status, and estimated Cameroon-market build ranges." : "Périmètre, technologies, statut et estimations de réalisation pour le marché camerounais."}</p></header>
       <div className="work-table-head meta-label"><span>NO.</span><span>{locale === "en" ? "PROJECT" : "PROJET"}</span><span>{locale === "en" ? "TYPE" : "TYPE"}</span><span>{locale === "en" ? "VALUE" : "VALEUR"}</span><span>{locale === "en" ? "STATUS" : "STATUT"}</span></div>
       <div className="work-table">
         {projects.map((project) => <Link to={projectPath(locale, project.slug)} className="work-row" key={project.slug}><span>{project.number}</span><strong>{project.name}</strong><span>{localize(project.category, locale)}</span><span>{localize(project.price, locale)}</span><span>{localize(project.status, locale)}</span><ArrowUpRight /></Link>)}
       </div>
 
       <section className="work-signal-section" aria-labelledby="current-work-title">
-        <div className="work-signal-heading"><span className="meta-label">GITHUB / CURRENT SIGNAL</span><h2 id="current-work-title">{locale === "en" ? "What I’m building now." : "Ce que je construis actuellement."}</h2><p>{locale === "en" ? "Active development is separated from completed case studies so progress remains honest and easy to follow." : "Le développement actif est séparé des études de cas terminées afin que la progression reste honnête et facile à suivre."}</p></div>
+        <div className="work-signal-heading"><span className="meta-label">GITHUB / CURRENT SIGNAL</span><h2 id="current-work-title">{locale === "en" ? "What I’m building now." : "Ce que je construis actuellement."}</h2><p>{locale === "en" ? "Active builds and completed case studies are organized for quick review." : "Les projets actifs et les études de cas terminées sont organisés pour une consultation rapide."}</p></div>
         <div className="current-builds">
           {activeProjects.map((project) => <Link to={projectPath(locale, project.slug)} key={project.slug}><Code2 size={18} /><span className="meta-label">{localize(project.status, locale)}</span><h3>{project.name}</h3><p>{localize(project.context, locale)}</p><small>{project.stack.join(" · ")} ↗</small></Link>)}
         </div>

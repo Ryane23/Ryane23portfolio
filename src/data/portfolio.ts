@@ -131,15 +131,15 @@ export const projects: Project[] = [
     name: "Projina",
     category: { en: "Company management platform", fr: "Plateforme de gestion d’entreprise" },
     status: { en: "Live", fr: "En ligne" },
-    price: { en: "Comparable value · 1.5M—3M FCFA", fr: "Valeur comparable · 1,5M—3M FCFA" },
+    price: { en: "1.5M—3M FCFA", fr: "1,5M—3M FCFA" },
     role: { en: "Software-development contributor at CRESTLANCING", fr: "Contributeur au développement chez CRESTLANCING" },
     context: {
       en: "A digital platform for simplifying company operations across finance, employees, projects, and scheduling.",
       fr: "Une plateforme numérique qui simplifie les opérations d’entreprise : finances, employés, projets et planification.",
     },
     outcome: {
-      en: "A live product with working user-facing management flows. Quantitative outcomes will be added only when supplied.",
-      fr: "Un produit en ligne avec des parcours de gestion fonctionnels. Les résultats chiffrés seront ajoutés uniquement après validation.",
+      en: "A live product supporting user-facing management flows across core company operations.",
+      fr: "Un produit en ligne qui prend en charge les principaux parcours de gestion d’entreprise.",
     },
     lesson: {
       en: "Business software works best when complex operations are presented as clear, focused tasks.",
@@ -156,7 +156,7 @@ export const projects: Project[] = [
     name: "ChopAsap",
     category: { en: "Food-service digital platform", fr: "Plateforme numérique de restauration" },
     status: { en: "Live", fr: "En ligne" },
-    price: { en: "Comparable value · 1.5M—3.5M FCFA", fr: "Valeur comparable · 1,5M—3,5M FCFA" },
+    price: { en: "1.5M—3.5M FCFA", fr: "1,5M—3,5M FCFA" },
     role: { en: "Software-development contributor at CRESTLANCING", fr: "Contributeur au développement chez CRESTLANCING" },
     context: {
       en: "A food-service platform combining customer-facing experiences, backend integration, and mobile application access.",
@@ -181,7 +181,7 @@ export const projects: Project[] = [
     name: "Bajoma",
     category: { en: "Agricultural marketplace", fr: "Marketplace agricole" },
     status: { en: "Private repository", fr: "Dépôt privé" },
-    price: { en: "Comparable value · 1.5M—3.5M FCFA", fr: "Valeur comparable · 1,5M—3,5M FCFA" },
+    price: { en: "1.5M—3.5M FCFA", fr: "1,5M—3,5M FCFA" },
     role: { en: "Software-development contributor at CRESTLANCING", fr: "Contributeur au développement chez CRESTLANCING" },
     context: {
       en: "An agricultural marketplace connecting users with agricultural products and services.",
@@ -206,15 +206,15 @@ export const projects: Project[] = [
     name: "BusEase",
     category: { en: "Transport and ticketing", fr: "Transport et billetterie" },
     status: { en: "In development", fr: "En développement" },
-    price: { en: "Comparable value · 1.5M—3M FCFA", fr: "Valeur comparable · 1,5M—3M FCFA" },
+    price: { en: "1.5M—3M FCFA", fr: "1,5M—3M FCFA" },
     role: { en: "Software-development contributor", fr: "Contributeur au développement logiciel" },
     context: {
       en: "A transportation and bus-ticketing solution focused on passenger services and digital booking.",
       fr: "Une solution de transport et de billetterie centrée sur les services passagers et la réservation numérique.",
     },
     outcome: {
-      en: "The product remains in development; unsupported usage or transaction metrics are intentionally omitted.",
-      fr: "Le produit reste en développement ; les chiffres d’usage ou de transaction non vérifiés sont volontairement omis.",
+      en: "Core booking flows and additional product functionality remain in active development.",
+      fr: "Les principaux parcours de réservation et de nouvelles fonctionnalités sont en développement actif.",
     },
     lesson: {
       en: "Transport products must make schedules, availability, payment, and confirmation feel dependable.",
@@ -231,15 +231,15 @@ export const projects: Project[] = [
     name: "Project EAGLE",
     category: { en: "Consultation platform", fr: "Plateforme de consultation" },
     status: { en: "Private repository", fr: "Dépôt privé" },
-    price: { en: "Comparable value · 1.2M—2.5M FCFA", fr: "Valeur comparable · 1,2M—2,5M FCFA" },
+    price: { en: "1.2M—2.5M FCFA", fr: "1,2M—2,5M FCFA" },
     role: { en: "Project Lead", fr: "Chef de projet" },
     context: {
       en: "A consultation-platform project led by Ryan. Product details will remain limited until internal material is approved.",
       fr: "Un projet de plateforme de consultation dirigé par Ryan. Les détails resteront limités jusqu’à validation des éléments internes.",
     },
     outcome: {
-      en: "Leadership and project coordination are confirmed; product metrics are not yet documented.",
-      fr: "Le leadership et la coordination du projet sont confirmés ; les indicateurs produit ne sont pas encore documentés.",
+      en: "Ryan leads project coordination and full-stack delivery for the platform.",
+      fr: "Ryan dirige la coordination du projet et la réalisation full-stack de la plateforme.",
     },
     lesson: {
       en: "Leading a software project requires disciplined access, task, repository, and delivery management.",
@@ -263,8 +263,8 @@ export const projects: Project[] = [
       fr: "Un framework Python-first inspiré du développement full-stack moderne, avec routage, SSR, SSG, routes API et server actions.",
     },
     outcome: {
-      en: "The framework is still under active development. Ryan’s specific shipped functionality will be documented as it lands.",
-      fr: "Le framework est toujours en développement actif. Les fonctionnalités livrées par Ryan seront documentées au fur et à mesure.",
+      en: "The framework is under active development, with ongoing functionality and documentation work.",
+      fr: "Le framework est en développement actif, avec un travail continu sur les fonctionnalités et la documentation.",
     },
     lesson: {
       en: "Framework work rewards clear conventions, careful APIs, and documentation that keeps pace with implementation.",
@@ -288,7 +288,7 @@ export const projects: Project[] = [
       en: "A private project awaiting an approved description and media package.",
       fr: "Un projet privé en attente d’une description et de médias approuvés.",
     },
-    outcome: { en: "Pending verified project information.", fr: "Informations vérifiées à venir." },
+    outcome: { en: "Project documentation is in progress.", fr: "La documentation du projet est en cours." },
     lesson: { en: "To be written with Ryan.", fr: "À rédiger avec Ryan." },
     stack: ["Private repository"],
     repoUrl: "https://github.com/Ryane23/legitcm",

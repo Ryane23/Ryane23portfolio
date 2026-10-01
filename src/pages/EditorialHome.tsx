@@ -20,7 +20,7 @@ const EditorialHome = () => {
         <div className="hero-name" aria-label="Ryan Erick"><span>RYAN</span><span>ERICK</span></div>
         <motion.div className="hero-meta hero-meta-left" {...reveal(0.1)}>
           <span className="meta-label">01 / PROFILE</span>
-          <strong>{locale === "en" ? "4 VERIFIED ROLES" : "4 RÔLES VÉRIFIÉS"}</strong>
+          <strong>{locale === "en" ? "FULL-STACK · MOBILE" : "FULL-STACK · MOBILE"}</strong>
           <span>{locale === "en" ? "WEB · MOBILE · SYSTEMS" : "WEB · MOBILE · SYSTÈMES"}</span>
         </motion.div>
         <motion.div className="hero-meta hero-meta-right" {...reveal(0.2)}>
@@ -38,7 +38,7 @@ const EditorialHome = () => {
       </section>
 
       <section id="selected-work" className="editorial-section section-pad">
-        <div className="section-heading"><span className="section-number">02</span><div><p className="meta-label">{locale === "en" ? "SELECTED WORK" : "PROJETS SÉLECTIONNÉS"}</p><h2>{locale === "en" ? "Projects with real context." : "Des projets avec un contexte réel."}</h2></div><Link to={paths.work[locale]}>{locale === "en" ? "VIEW ALL" : "TOUT VOIR"} ↗</Link></div>
+        <div className="section-heading"><span className="section-number">02</span><div><p className="meta-label">{locale === "en" ? "PROJECTS" : "PROJETS"}</p><h2>{locale === "en" ? "Web, mobile, and platform work." : "Projets web, mobile et plateformes."}</h2></div><Link to={paths.work[locale]}>{locale === "en" ? "VIEW ALL" : "TOUT VOIR"} ↗</Link></div>
         <div className="project-index">
           {featured.map((project) => (
             <Link className="project-index-row" key={project.slug} to={projectPath(locale, project.slug)}>

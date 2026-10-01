@@ -89,7 +89,7 @@ const NetworkPage = () => {
 
   return (
     <div className="network-page page-shell section-pad">
-      <header className="page-hero network-hero"><p className="meta-label">04 — NETWORK / VERIFIED LINKS</p><h1>{locale === "en" ? "Professional identity and community, clearly connected." : "Identité professionnelle et communauté, clairement connectées."}</h1><p>{locale === "en" ? "Direct routes to Ryan’s verified GitHub and LinkedIn profiles, community photographs, room audio, and a moderated guestbook." : "Accès direct aux profils GitHub et LinkedIn vérifiés de Ryan, photographies communautaires, audio de la pièce et livre d’or modéré."}</p></header>
+      <header className="page-hero network-hero"><p className="meta-label">04 — NETWORK</p><h1>{locale === "en" ? "Professional profiles and community." : "Profils professionnels et communauté."}</h1><p>{locale === "en" ? "GitHub, LinkedIn, community photographs, room audio, and the guestbook." : "GitHub, LinkedIn, photographies communautaires, audio de la pièce et livre d’or."}</p></header>
 
       <section className="network-section identity-section" id="profiles">
         <div className="network-section-head"><span className="meta-label">01 / PROFESSIONAL IDENTITIES</span><span>GITHUB ↔ LINKEDIN</span></div>
@@ -97,12 +97,12 @@ const NetworkPage = () => {
           <article className="identity-card github-identity">
             <Github size={24} /><span className="meta-label">GITHUB / LIVE PUBLIC PROFILE</span>
             {!githubUser && !githubError && <div className="identity-loading"><Loader2 className="spin" /><span>CONNECTING TO GITHUB</span></div>}
-            {githubError && <p>GitHub’s public API is temporarily unavailable. The verified profile link remains available.</p>}
+            {githubError && <p>GitHub’s public API is temporarily unavailable. Open the profile directly below.</p>}
             {githubUser && <div className="identity-profile"><img src={githubUser.avatar_url} alt="" /><div><h2>{githubUser.name || githubUser.login}</h2><p>{githubUser.bio || "Full-stack and mobile developer"}</p></div><dl><div><dt>PUBLIC REPOS</dt><dd>{githubUser.public_repos}</dd></div><div><dt>FOLLOWERS</dt><dd>{githubUser.followers}</dd></div></dl></div>}
-            <a href={profile.github} target="_blank" rel="noopener noreferrer">OPEN VERIFIED GITHUB <ExternalLink size={14} /></a>
+            <a href={profile.github} target="_blank" rel="noopener noreferrer">OPEN GITHUB <ExternalLink size={14} /></a>
           </article>
           <article className="identity-card linkedin-identity">
-            <Linkedin size={24} /><span className="meta-label">LINKEDIN / VERIFIED PROFILE</span><h2>{profile.name}</h2><p>{locale === "en" ? "Professional history, education, and the direct LinkedIn contact route. No invented connection or follower counts." : "Parcours professionnel, formation et canal de contact LinkedIn direct. Aucun nombre de relations ou d’abonnés inventé."}</p><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">OPEN VERIFIED LINKEDIN <ExternalLink size={14} /></a>
+            <Linkedin size={24} /><span className="meta-label">LINKEDIN / PROFESSIONAL PROFILE</span><h2>{profile.name}</h2><p>{locale === "en" ? "Professional history, education, and direct contact through LinkedIn." : "Parcours professionnel, formation et contact direct via LinkedIn."}</p><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">OPEN LINKEDIN <ExternalLink size={14} /></a>
           </article>
         </div>
         <p className="network-work-route"><span>{locale === "en" ? "Looking for repositories, current builds, or the contribution calendar?" : "Vous cherchez les dépôts, les projets actifs ou le calendrier de contributions ?"}</span><Link to={paths.work[locale]}>{locale === "en" ? "OPEN WORK & GITHUB ACTIVITY" : "OUVRIR PROJETS & ACTIVITÉ GITHUB"} ↗</Link></p>

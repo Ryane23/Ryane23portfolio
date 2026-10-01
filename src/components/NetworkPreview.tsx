@@ -5,8 +5,8 @@ import { paths, useLocale } from "@/lib/locale";
 const NetworkPreview = () => {
   const locale = useLocale();
   const items = [
-    { icon: Github, label: "GITHUB", text: locale === "en" ? "Live repositories and README" : "Dépôts et README en direct" },
-    { icon: Linkedin, label: "LINKEDIN", text: locale === "en" ? "Verified professional profile" : "Profil professionnel vérifié" },
+    { icon: Github, label: "GITHUB", text: locale === "en" ? "Projects and contribution activity" : "Projets et activité de contribution" },
+    { icon: Linkedin, label: "LINKEDIN", text: locale === "en" ? "Professional profile" : "Profil professionnel" },
     { icon: Users, label: "COMMUNITY", text: locale === "en" ? "Kidefind, AMKAY, events" : "Kidefind, AMKAY, événements" },
     { icon: MessageSquare, label: "GUESTBOOK", text: locale === "en" ? "Messages stored for moderation" : "Messages enregistrés pour modération" },
   ];

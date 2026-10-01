@@ -24,7 +24,7 @@ const ProjectCaseStudy = () => {
       <div className="case-narrative">
         <section><span className="meta-label">01 / CONTEXT</span><h2>{locale === "en" ? "Why it exists" : "Pourquoi ce projet existe"}</h2><p>{localize(project.context, locale)}</p></section>
         <section><span className="meta-label">02 / ROLE</span><h2>{locale === "en" ? "Ryan’s contribution" : "Contribution de Ryan"}</h2><p>{localize(project.role, locale)}</p></section>
-        <section><span className="meta-label">03 / OUTCOME</span><h2>{locale === "en" ? "What is verified" : "Ce qui est vérifié"}</h2><p>{localize(project.outcome, locale)}</p></section>
+        <section><span className="meta-label">03 / OUTCOME</span><h2>{locale === "en" ? "Project outcome" : "Résultat du projet"}</h2><p>{localize(project.outcome, locale)}</p></section>
         <section><span className="meta-label">04 / LESSON</span><h2>{locale === "en" ? "What remains" : "Ce qui reste"}</h2><p>{localize(project.lesson, locale)}</p></section>
       </div>
       <div className="case-stack"><span className="meta-label">STACK / CAPABILITIES</span><div>{project.stack.map((item) => <span key={item}>{item}</span>)}</div></div>
