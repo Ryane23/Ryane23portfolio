@@ -87,6 +87,14 @@ export const education = [
   },
 ];
 
+export const certifications = [
+  {
+    title: "Aspire Leaders Program Cohort",
+    type: { en: "Program recognition", fr: "Reconnaissance de programme" },
+    status: { en: "Listed on CV", fr: "Mentionné sur le CV" },
+  },
+];
+
 export const skillGroups = [
   {
     title: { en: "Frontend & Mobile", fr: "Frontend & Mobile" },
@@ -188,8 +196,8 @@ export const projects: Project[] = [
       fr: "Une marketplace agricole reliant les utilisateurs aux produits et services du secteur.",
     },
     outcome: {
-      en: "The approved product screenshots and links will be added during the media pass.",
-      fr: "Les captures et liens approuvés seront ajoutés pendant la phase média.",
+      en: "Marketplace workflows organize agricultural products, services, and user access.",
+      fr: "Les parcours de la marketplace organisent les produits agricoles, les services et l’accès utilisateur.",
     },
     lesson: {
       en: "Marketplace trust depends on understandable listings, useful filters, and transparent user journeys.",
@@ -281,15 +289,15 @@ export const projects: Project[] = [
     number: "07",
     name: "LegitCM",
     category: { en: "Private product", fr: "Produit privé" },
-    status: { en: "Documentation pending", fr: "Documentation à venir" },
-    price: { en: "Value pending confirmed scope", fr: "Valeur après validation du périmètre" },
-    role: { en: "Development contribution to be documented", fr: "Contribution à documenter" },
+    status: { en: "Repository available", fr: "Dépôt disponible" },
+    price: { en: "Scope-based", fr: "Selon le périmètre" },
+    role: { en: "Software-development contributor", fr: "Contributeur au développement logiciel" },
     context: {
-      en: "A private project awaiting an approved description and media package.",
-      fr: "Un projet privé en attente d’une description et de médias approuvés.",
+      en: "A software project whose technical documentation is currently being organized.",
+      fr: "Un projet logiciel dont la documentation technique est en cours d’organisation.",
     },
-    outcome: { en: "Project documentation is in progress.", fr: "La documentation du projet est en cours." },
-    lesson: { en: "To be written with Ryan.", fr: "À rédiger avec Ryan." },
+    outcome: { en: "The repository records the current implementation and development history.", fr: "Le dépôt présente l’implémentation actuelle et l’historique du développement." },
+    lesson: { en: "Clear technical documentation makes ongoing product work easier to review and maintain.", fr: "Une documentation technique claire facilite la revue et la maintenance d’un produit en évolution." },
     stack: ["Private repository"],
     repoUrl: "https://github.com/Ryane23/legitcm",
     preview: "pending",
@@ -301,8 +309,8 @@ export const articles = [
     slug: "from-intern-to-developer",
     title: { en: "From Intern to Software Developer", fr: "De stagiaire à développeur logiciel" },
     excerpt: {
-      en: "A future first-person account of moving from a CRESTLANCING internship into a software-development role.",
-      fr: "Un futur récit personnel sur le passage d’un stage chez CRESTLANCING à un poste de développeur logiciel.",
+      en: "Lessons from moving from a CRESTLANCING internship into a software-development role.",
+      fr: "Leçons tirées du passage d’un stage chez CRESTLANCING à un poste de développeur logiciel.",
     },
     status: { en: "Writing in progress", fr: "Rédaction en cours" },
     topics: ["Career", "Teamwork", "Learning"],
@@ -311,8 +319,8 @@ export const articles = [
     slug: "building-for-cameroon",
     title: { en: "Building Digital Products for Cameroon", fr: "Créer des produits numériques pour le Cameroun" },
     excerpt: {
-      en: "Notes for a future article about local constraints, mobile-first thinking, payments, connectivity, and useful software.",
-      fr: "Notes pour un futur article sur les contraintes locales, le mobile-first, les paiements, la connectivité et les logiciels utiles.",
+      en: "Local constraints, mobile-first thinking, payments, connectivity, and useful software.",
+      fr: "Contraintes locales, approche mobile-first, paiements, connectivité et logiciels utiles.",
     },
     status: { en: "Outline", fr: "Plan" },
     topics: ["Cameroon", "Product", "Engineering"],
@@ -321,8 +329,8 @@ export const articles = [
     slug: "lessons-from-busease",
     title: { en: "What BusEase Is Teaching Me", fr: "Ce que BusEase m’apprend" },
     excerpt: {
-      en: "A planned development journal about digital booking, transport workflows, and building a product over time.",
-      fr: "Un journal de développement prévu autour de la réservation numérique, des parcours de transport et de la construction progressive d’un produit.",
+      en: "A development journal about digital booking, transport workflows, and building a product over time.",
+      fr: "Un journal de développement sur la réservation numérique, les parcours de transport et la construction progressive d’un produit.",
     },
     status: { en: "Outline", fr: "Plan" },
     topics: ["BusEase", "Development", "Transport"],

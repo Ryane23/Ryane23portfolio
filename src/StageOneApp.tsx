@@ -16,6 +16,7 @@ const LibraryPage = lazy(routeModules.library);
 const ArticlePage = lazy(routeModules.article);
 const AnimePage = lazy(routeModules.anime);
 const FootballPage = lazy(routeModules.football);
+const BeyondWorkPage = lazy(routeModules.beyond);
 const CvPage = lazy(routeModules.cv);
 const NetworkPage = lazy(routeModules.network);
 const ReachOutPage = lazy(routeModules.contact);
@@ -55,6 +56,7 @@ const StageOneApp = () => {
                   <Route path="/en/library/:slug" element={<ArticlePage />} /><Route path="/fr/bibliotheque/:slug" element={<ArticlePage />} />
                   <Route path="/en/anime" element={<AnimePage />} /><Route path="/fr/anime" element={<AnimePage />} />
                   <Route path="/en/football" element={<FootballPage />} /><Route path="/fr/football" element={<FootballPage />} />
+                  <Route path="/en/beyond-work" element={<BeyondWorkPage />} /><Route path="/fr/hors-travail" element={<BeyondWorkPage />} />
                   <Route path="/en/cv" element={<CvPage />} /><Route path="/fr/cv" element={<CvPage />} />
                   <Route path="/en/network" element={<NetworkPage />} /><Route path="/fr/reseau" element={<NetworkPage />} />
                   <Route path="/en/contact" element={<ReachOutPage />} /><Route path="/fr/contact" element={<ReachOutPage />} />

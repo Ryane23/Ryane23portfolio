@@ -8,8 +8,8 @@ import { paths, useLocale } from "@/lib/locale";
 import { preloadRoute, type RouteModuleKey } from "@/lib/routeModules";
 
 const labels = {
-  en: { work: "Work", about: "About", experience: "Record", library: "Library", network: "Network", contact: "Contact", cv: "CV" },
-  fr: { work: "Projets", about: "À propos", experience: "Parcours", library: "Bibliothèque", network: "Réseau", contact: "Contact", cv: "CV" },
+  en: { work: "Work", about: "About", experience: "Experience", library: "Library", beyond: "Beyond", network: "Network", contact: "Contact", cv: "CV" },
+  fr: { work: "Projets", about: "À propos", experience: "Parcours", library: "Bibliothèque", beyond: "Hors travail", network: "Réseau", contact: "Contact", cv: "CV" },
 };
 
 const EditorialNavigation = () => {
@@ -32,6 +32,7 @@ const EditorialNavigation = () => {
   const links: [string, string, RouteModuleKey][] = [
     [copy.work, paths.work[locale], "work"], [copy.about, paths.about[locale], "profile"],
     [copy.experience, paths.experience[locale], "record"], [copy.library, paths.library[locale], "library"],
+    [copy.beyond, paths.beyond[locale], "beyond"],
     [copy.network, paths.network[locale], "network"], [copy.contact, paths.contact[locale], "contact"],
   ];
   const desktopLinks = links.filter(([, , module]) => module !== "contact");
@@ -42,7 +43,10 @@ const EditorialNavigation = () => {
       <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
         <Link to={paths.home[locale]} className="brand-lockup" aria-label="Ryan Erick home"><RyanMark className="brand-mark" /><span>RYAN ERICK</span></Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
-          {desktopLinks.map(([label, href, module]) => <Link key={href} to={href} onPointerEnter={() => preloadRoute(module)} onPointerDown={() => preloadRoute(module)} onFocus={() => preloadRoute(module)} className={pathname === href ? "is-active" : ""}>{label}</Link>)}
+          {desktopLinks.map(([label, href, module]) => {
+            const beyondActive = module === "beyond" && (pathname.includes("/anime") || pathname.includes("/football"));
+            return <Link key={href} to={href} onPointerEnter={() => preloadRoute(module)} onPointerDown={() => preloadRoute(module)} onFocus={() => preloadRoute(module)} className={pathname === href || beyondActive ? "is-active" : ""}>{label}</Link>;
+          })}
         </nav>
         <div className="header-actions">
           <Link className="language-switch" to={locale === "en" ? paths.home.fr : paths.home.en}>{locale === "en" ? "FR" : "EN"}</Link>
@@ -57,7 +61,6 @@ const EditorialNavigation = () => {
           <motion.nav id="mobile-navigation" className="mobile-nav" initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} aria-label="Mobile navigation">
             <p className="meta-label">INDEX / {locale.toUpperCase()}</p>
             {links.map(([label, href, module], index) => <Link key={href} to={href} onPointerEnter={() => preloadRoute(module)} onPointerDown={() => preloadRoute(module)} onFocus={() => preloadRoute(module)}><span>0{index + 1}</span>{label}</Link>)}
-            <div className="mobile-world-links"><Link to={paths.anime[locale]}>ANIME</Link><Link to={paths.football[locale]}>FOOTBALL / 11</Link></div>
           </motion.nav>
         )}
       </AnimatePresence>

@@ -23,7 +23,7 @@ const FootballPage = () => {
       <section className="match-line" aria-label="Match moment timeline"><span><small>64′</small><strong>11</strong></span><i /><span><small>86′</small><strong>4—4</strong></span><i /><span><small>90+6′</small><strong>4—5</strong></span></section>
       <section className="raphinha-gallery" aria-label="Raphinha gallery"><figure><img src="/images/football/raphinha-official.webp" alt="Raphinha in the official FC Barcelona portrait" loading="lazy" /><figcaption>RAPHINHA / 11</figcaption></figure><figure><img src="/images/football/raphinha-supplied.webp" alt="Raphinha wearing the FC Barcelona shirt" loading="lazy" /><figcaption>BARÇA / FORWARD</figcaption></figure></section>
       <section className="pitch-study"><div className="pitch-lines" aria-hidden="true"><span className="centre-circle" /><span className="goal-box left" /><span className="goal-box right" /><button type="button" className="ball-mark" onClick={kick}>11</button></div><div><p className="meta-label">ROOM 11 / INTERACTIVE SHOT</p><h2>{locale === "en" ? "Replay the moment in the room." : "Rejouer ce moment dans la pièce."}</h2><p>{locale === "en" ? "Use the number 11 button to send the 3D ball toward the net." : "Utilisez le bouton numéro 11 pour envoyer le ballon 3D vers le filet."}</p></div></section>
-      <Link className="outline-action" to={paths.network[locale]}>← {locale === "en" ? "NETWORK & COMMUNITY" : "RÉSEAU & COMMUNAUTÉ"}</Link>
+      <Link className="outline-action" to={paths.beyond[locale]}>← {locale === "en" ? "BACK TO BEYOND WORK" : "RETOUR À HORS TRAVAIL"}</Link>
     </div>
   );
 };

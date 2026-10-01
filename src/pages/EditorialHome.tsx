@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { articles, experiences, localize, profile, projects, skillGroups } from "@/data/portfolio";
+import { articles, experiences, localize, profile, projects } from "@/data/portfolio";
 import NetworkPreview from "@/components/NetworkPreview";
 import { articlePath, paths, projectPath, useLocale } from "@/lib/locale";
 
@@ -16,7 +16,7 @@ const EditorialHome = () => {
 
   return (
     <>
-      <section className="editorial-hero section-pad">
+      <section className="editorial-hero section-pad" data-room-stop="room">
         <div className="hero-name" aria-label="Ryan Erick"><span>RYAN</span><span>ERICK</span></div>
         <motion.div className="hero-meta hero-meta-left" {...reveal(0.1)}>
           <span className="meta-label">01 / PROFILE</span>
@@ -26,7 +26,7 @@ const EditorialHome = () => {
         <motion.div className="hero-meta hero-meta-right" {...reveal(0.2)}>
           <span className="meta-label">{profile.location.toUpperCase()}</span>
           <strong>{localize(profile.role, locale)}</strong>
-          <span>{locale === "en" ? "AVAILABLE FOR SELECT PROJECTS" : "DISPONIBLE POUR DES PROJETS SÉLECTIONNÉS"}</span>
+          <span>{locale === "en" ? "BASED IN YAOUNDÉ · CAMEROON" : "BASÉ À YAOUNDÉ · CAMEROUN"}</span>
         </motion.div>
         <motion.div className="hero-intro room-copy-panel" {...reveal(0.25)}>
           <span className="display-serif">{locale === "en" ? "Hello," : "Bonjour,"}</span>
@@ -37,7 +37,7 @@ const EditorialHome = () => {
         <a href="#selected-work" className="scroll-cue"><span>{locale === "en" ? "SCROLL TO EXPLORE" : "DÉFILER POUR EXPLORER"}</span><ArrowDown size={16} /></a>
       </section>
 
-      <section id="selected-work" className="editorial-section section-pad">
+      <section id="selected-work" className="editorial-section section-pad" data-room-stop="work">
         <div className="section-heading"><span className="section-number">02</span><div><p className="meta-label">{locale === "en" ? "PROJECTS" : "PROJETS"}</p><h2>{locale === "en" ? "Web, mobile, and platform work." : "Projets web, mobile et plateformes."}</h2></div><Link to={paths.work[locale]}>{locale === "en" ? "VIEW ALL" : "TOUT VOIR"} ↗</Link></div>
         <div className="project-index">
           {featured.map((project) => (
@@ -48,32 +48,22 @@ const EditorialHome = () => {
         </div>
       </section>
 
-      <section className="record-section section-pad inverse-section">
-        <div className="section-heading"><span className="section-number">03</span><div><p className="meta-label">{locale === "en" ? "PROFESSIONAL RECORD" : "PARCOURS PROFESSIONNEL"}</p><h2>{locale === "en" ? "A short history of learning and shipping." : "Un parcours d’apprentissage et de réalisation."}</h2></div><Link to={paths.experience[locale]}>{locale === "en" ? "FULL RECORD" : "PARCOURS COMPLET"} ↗</Link></div>
+      <section className="record-section section-pad inverse-section" data-room-stop="record">
+        <div className="section-heading"><span className="section-number">03</span><div><p className="meta-label">{locale === "en" ? "EXPERIENCE" : "PARCOURS"}</p><h2>{locale === "en" ? "Professional experience and responsibilities." : "Expérience professionnelle et responsabilités."}</h2></div><Link to={paths.experience[locale]}>{locale === "en" ? "VIEW EXPERIENCE" : "VOIR LE PARCOURS"} ↗</Link></div>
         <div className="record-list">
           {experiences.slice(0, 4).map((item) => <div className="record-row" key={`${item.organization}-${item.period}`}><span>{item.period}</span><strong>{localize(item.role, locale)}</strong><span>{item.organization}</span></div>)}
         </div>
       </section>
 
-      <section className="editorial-section section-pad">
-        <div className="section-heading"><span className="section-number">04</span><div><p className="meta-label">{locale === "en" ? "CAPABILITIES" : "COMPÉTENCES"}</p><h2>{locale === "en" ? "Built around complete products." : "Pensé autour de produits complets."}</h2></div></div>
-        <div className="capability-grid">
-          {skillGroups.map((group, index) => <div className="capability-block" key={group.title.en}><span className="meta-label">0{index + 1}</span><h3>{localize(group.title, locale)}</h3><p>{group.items.join(" · ")}</p></div>)}
-        </div>
-      </section>
-
-      <section className="worlds-section section-pad">
-        <div className="section-heading"><span className="section-number">05</span><div><p className="meta-label">{locale === "en" ? "COMMUNITY & FOOTBALL" : "COMMUNAUTÉ & FOOTBALL"}</p><h2>{locale === "en" ? "Two human corners of the room." : "Deux espaces humains dans la pièce."}</h2></div></div>
-        <div className="world-grid">
-          <Link to={paths.network[locale]} className="world-card anime-world"><span className="meta-label">COMMUNITY / ARCHIVE</span><strong>KIDEFIND<br />AMKAY</strong><span>{locale === "en" ? "OPEN COMMUNITY ARCHIVE" : "OUVRIR L’ARCHIVE COMMUNAUTAIRE"} ↗</span></Link>
-          <Link to={paths.football[locale]} className="world-card football-world"><img className="world-raphinha" src="/images/football/raphinha-11-goal.svg" alt="" /><span className="meta-label">MATCH / 21.01.2025</span><strong>11<br />90+6</strong><span>{locale === "en" ? "ENTER FOOTBALL ROOM" : "ENTRER DANS LA SALLE FOOTBALL"} ↗</span></Link>
-        </div>
+      <section className="worlds-section section-pad" data-room-stop="beyond">
+        <div className="section-heading"><span className="section-number">04</span><div><p className="meta-label">{locale === "en" ? "BEYOND WORK" : "HORS TRAVAIL"}</p><h2>{locale === "en" ? "Football, anime, and community." : "Football, anime et engagement communautaire."}</h2></div><Link to={paths.beyond[locale]}>{locale === "en" ? "EXPLORE" : "EXPLORER"} ↗</Link></div>
+        <Link to={paths.beyond[locale]} className="world-card beyond-world"><img className="world-raphinha" src="/images/football/raphinha-11-goal.svg" alt="" /><span className="meta-label">FOOTBALL / ANIME / COMMUNITY</span><strong>{locale === "en" ? "THE OTHER SIDE OF ME" : "L’AUTRE CÔTÉ DE MOI"}</strong><span>{locale === "en" ? "OPEN BEYOND WORK" : "OUVRIR HORS TRAVAIL"} ↗</span></Link>
       </section>
 
       <NetworkPreview />
 
-      <section className="editorial-section section-pad">
-        <div className="section-heading"><span className="section-number">07</span><div><p className="meta-label">LIBRARY</p><h2>{locale === "en" ? "Notes from work in progress." : "Notes d’un travail en cours."}</h2></div><Link to={paths.library[locale]}>{locale === "en" ? "OPEN LIBRARY" : "OUVRIR LA BIBLIOTHÈQUE"} ↗</Link></div>
+      <section className="editorial-section section-pad" data-room-stop="library">
+        <div className="section-heading"><span className="section-number">06</span><div><p className="meta-label">LIBRARY</p><h2>{locale === "en" ? "Notes from ongoing work." : "Notes sur les travaux en cours."}</h2></div><Link to={paths.library[locale]}>{locale === "en" ? "OPEN LIBRARY" : "OUVRIR LA BIBLIOTHÈQUE"} ↗</Link></div>
         <div className="article-grid">
           {articles.map((article) => <Link to={articlePath(locale, article.slug)} key={article.slug} className="article-card"><span className="meta-label">{localize(article.status, locale)}</span><h3>{localize(article.title, locale)}</h3><p>{localize(article.excerpt, locale)}</p><span>{article.topics.join(" / ")}</span></Link>)}
         </div>
