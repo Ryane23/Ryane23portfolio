@@ -11,6 +11,7 @@ const stops: Record<string, Stop> = {
   record: { position: [2.1, 2.3, 1.4], lookAt: [2.25, 2.05, -1.82] },
   library: { position: [4.25, 2.25, 2.25], lookAt: [4.35, 1.85, -1.75] },
   football: { position: [5.6, 1.65, 3.65], lookAt: [5.75, 0.65, -1.15] },
+  network: { position: [-3.75, 1.9, 1.7], lookAt: [-3.75, 1.35, -1.72] },
   contact: { position: [-2.1, 1.8, 2.1], lookAt: [-1.8, 1.05, -1.35] },
 };
 
@@ -22,6 +23,7 @@ const zoneForPath = (pathname: string) => {
   if (pathname.includes("anime") || pathname.includes("library") || pathname.includes("bibliotheque")) return "library";
   if (pathname.includes("experience") || pathname.includes("parcours")) return "record";
   if (pathname.includes("about") || pathname.includes("a-propos") || pathname.includes("cv")) return "profile";
+  if (pathname.includes("network") || pathname.includes("reseau")) return "network";
   if (pathname.includes("contact")) return "contact";
   return "work";
 };
@@ -101,15 +103,48 @@ const RoomScene = () => {
         return mesh;
       };
 
+      const roomShell = new THREE.Group();
+      const workGroup = new THREE.Group();
+      const profileGroup = new THREE.Group();
+      const recordGroup = new THREE.Group();
+      const libraryGroup = new THREE.Group();
+      const networkGroup = new THREE.Group();
+      const footballGroup = new THREE.Group();
+      const contactGroup = new THREE.Group();
+      scene.add(roomShell, workGroup, profileGroup, recordGroup, libraryGroup, networkGroup, footballGroup, contactGroup);
+
+      const wallText = (text: string, position: [number, number, number], width: number, fontSize: number, parent: THREE.Object3D = roomShell) => {
+        const textCanvas = document.createElement("canvas");
+        textCanvas.width = 1200;
+        textCanvas.height = 220;
+        const context = textCanvas.getContext("2d");
+        if (!context) return;
+        context.clearRect(0, 0, textCanvas.width, textCanvas.height);
+        context.fillStyle = "#111111";
+        context.font = `700 ${fontSize}px Arial, sans-serif`;
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.fillText(text, textCanvas.width / 2, textCanvas.height / 2);
+        const texture = new THREE.CanvasTexture(textCanvas);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        const plane = new THREE.Mesh(new THREE.PlaneGeometry(width, width * (textCanvas.height / textCanvas.width)), new THREE.MeshBasicMaterial({ map: texture, transparent: true }));
+        plane.position.set(...position);
+        plane.userData.labelTexture = texture;
+        parent.add(plane);
+      };
+
       // Room and work station.
-      box([18, 0.12, 10], [3, -0.06, 1], 0.58);
-      box([18, 6, 0.12], [3, 3, -2.05], 0.78);
-      box([0.12, 6, 10], [-6, 3, 1], 0.7);
-      box([4.4, 0.1, 1.45], [-0.55, 0.78, -1.22], 0.28);
-      [-2.5, 1.4].forEach((x) => box([0.09, 0.78, 1.3], [x, 0.39, -1.22], 0.22));
-      box([1.75, 1.03, 0.07], [-0.72, 1.48, -1.62], 0.1);
-      box([0.08, 0.46, 0.08], [-0.72, 1.02, -1.65], 0.14);
-      box([0.48, 0.03, 0.28], [-0.72, 0.82, -1.58], 0.16);
+      box([18, 0.12, 10], [3, -0.06, 1], 0.58, roomShell);
+      box([18, 6, 0.12], [3, 3, -2.05], 0.78, roomShell);
+      box([0.12, 6, 10], [-6, 3, 1], 0.7, roomShell);
+      wallText("RYAN ERICK", [0.2, 4.25, -1.97], 4.8, 152);
+      wallText("BUILD USEFUL THINGS", [-3.55, 2.65, -1.97], 2.2, 78);
+      wallText("LEARN · SHIP · IMPROVE", [4.25, 3.55, -1.97], 2.25, 68);
+      box([4.4, 0.1, 1.45], [-0.55, 0.78, -1.22], 0.28, workGroup);
+      [-2.5, 1.4].forEach((x) => box([0.09, 0.78, 1.3], [x, 0.39, -1.22], 0.22, workGroup));
+      box([1.75, 1.03, 0.07], [-0.72, 1.48, -1.62], 0.1, workGroup);
+      box([0.08, 0.46, 0.08], [-0.72, 1.02, -1.65], 0.14, workGroup);
+      box([0.48, 0.03, 0.28], [-0.72, 0.82, -1.58], 0.16, workGroup);
 
       const screenCanvas = document.createElement("canvas");
       screenCanvas.width = 512;
@@ -119,48 +154,72 @@ const RoomScene = () => {
       screenTexture.colorSpace = THREE.SRGBColorSpace;
       const monitorScreen = new THREE.Mesh(new THREE.PlaneGeometry(1.62, 0.9), new THREE.MeshBasicMaterial({ map: screenTexture }));
       monitorScreen.position.set(-0.72, 1.48, -1.575);
-      scene.add(monitorScreen);
+      workGroup.add(monitorScreen);
 
-      box([1.15, 0.035, 0.38], [-0.72, 0.85, -0.88], 0.12);
+      box([1.15, 0.035, 0.38], [-0.72, 0.85, -0.88], 0.12, workGroup);
       for (let row = 0; row < 4; row += 1) {
         for (let column = 0; column < 13; column += 1) {
-          box([0.055, 0.025, 0.055], [-1.13 + column * 0.07 + row * 0.012, 0.88, -0.98 + row * 0.068], 0.25);
+          box([0.055, 0.025, 0.055], [-1.13 + column * 0.07 + row * 0.012, 0.88, -0.98 + row * 0.068], 0.25, workGroup);
         }
       }
-      box([0.13, 0.035, 0.2], [0.12, 0.86, -0.9], 0.18);
-      cylinder(0.085, 0.072, 0.2, [-1.88, 0.92, -0.93], 0.83);
+      box([0.13, 0.035, 0.2], [0.12, 0.86, -0.9], 0.18, workGroup);
+      cylinder(0.085, 0.072, 0.2, [-1.88, 0.92, -0.93], 0.83, workGroup);
 
       // Lamp.
-      cylinder(0.12, 0.14, 0.035, [1.13, 0.84, -1.63], 0.12);
-      const lampArm = box([0.035, 0.62, 0.035], [1.13, 1.15, -1.63], 0.12);
+      cylinder(0.12, 0.14, 0.035, [1.13, 0.84, -1.63], 0.12, workGroup);
+      const lampArm = box([0.035, 0.62, 0.035], [1.13, 1.15, -1.63], 0.12, workGroup);
       lampArm.rotation.z = 0.28;
       const lampShade = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.24, 18, 1, true), makeMaterial(0.16));
       lampShade.position.set(0.92, 1.46, -1.63);
       lampShade.rotation.z = 0.28;
-      scene.add(lampShade);
+      workGroup.add(lampShade);
       const deskLight = new THREE.PointLight(0xf2eee6, 1.6, 5.5);
       deskLight.position.set(0.92, 1.34, -1.45);
-      scene.add(deskLight);
+      workGroup.add(deskLight);
 
       // Experience and anime shelves.
-      [1.42, 2.04].forEach((y) => box([1.7, 0.055, 0.34], [2.15, y, -1.86], 0.28));
+      [1.42, 2.04].forEach((y) => box([1.7, 0.055, 0.34], [2.15, y, -1.86], 0.28, recordGroup));
       for (let index = 0; index < 11; index += 1) {
-        const book = box([0.065, 0.28 + (index % 3) * 0.05, 0.22], [1.48 + index * 0.13, 1.59 + (index % 3) * 0.025, -1.84], 0.16 + (index % 5) * 0.13);
+        const book = box([0.065, 0.28 + (index % 3) * 0.05, 0.22], [1.48 + index * 0.13, 1.59 + (index % 3) * 0.025, -1.84], 0.16 + (index % 5) * 0.13, recordGroup);
         book.rotation.z = index === 8 ? -0.14 : 0;
       }
-      box([0.72, 0.95, 0.04], [2.23, 2.68, -1.96], 0.12);
-      box([0.62, 0.85, 0.025], [2.23, 2.68, -1.92], 0.88);
-      [1.35, 1.98, 2.62].forEach((y) => box([1.72, 0.05, 0.34], [4.28, y, -1.85], 0.27));
+      box([0.82, 1.08, 0.04], [1.05, 2.35, -1.96], 0.12, profileGroup);
+      box([0.72, 0.98, 0.025], [1.05, 2.35, -1.92], 0.88, profileGroup);
+      [1.35, 1.98, 2.62].forEach((y) => box([1.72, 0.05, 0.34], [4.28, y, -1.85], 0.27, libraryGroup));
       for (let index = 0; index < 21; index += 1) {
         const row = Math.floor(index / 8);
         const column = index % 8;
-        const book = box([0.075, 0.25 + (index % 4) * 0.035, 0.2], [3.64 + column * 0.16, 1.5 + row * 0.63, -1.83], 0.12 + (index % 6) * 0.13);
+        const book = box([0.075, 0.25 + (index % 4) * 0.035, 0.2], [3.64 + column * 0.16, 1.5 + row * 0.63, -1.83], 0.12 + (index % 6) * 0.13, libraryGroup);
         book.rotation.z = index % 7 === 0 ? 0.12 : 0;
       }
-      cylinder(0.055, 0.075, 0.24, [4.72, 2.13, -1.82], 0.78);
+      cylinder(0.055, 0.075, 0.24, [4.72, 2.13, -1.82], 0.78, libraryGroup);
       const figureHead = new THREE.Mesh(new THREE.SphereGeometry(0.07, 12, 10), makeMaterial(0.78));
       figureHead.position.set(4.72, 2.31, -1.82);
-      scene.add(figureHead);
+      libraryGroup.add(figureHead);
+
+      // Network station: a dedicated communications console and connected-node board.
+      box([2.15, 0.08, 0.9], [-3.72, 0.82, -1.2], 0.26, networkGroup);
+      [-4.55, -2.9].forEach((x) => box([0.07, 0.8, 0.75], [x, 0.4, -1.2], 0.2, networkGroup));
+      box([1.25, 0.78, 0.06], [-3.72, 1.38, -1.68], 0.14, networkGroup);
+      box([1.1, 0.64, 0.025], [-3.72, 1.38, -1.64], 0.84, networkGroup);
+      const nodePositions = [[-4.25, 2.3], [-3.7, 2.65], [-3.15, 2.25], [-3.75, 1.95]] as const;
+      nodePositions.forEach(([x, y]) => {
+        const node = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 10), makeMaterial(0.16));
+        node.position.set(x, y, -1.9);
+        networkGroup.add(node);
+      });
+      const nodeLines = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(-4.25, 2.3, -1.91), new THREE.Vector3(-3.7, 2.65, -1.91),
+        new THREE.Vector3(-3.7, 2.65, -1.91), new THREE.Vector3(-3.15, 2.25, -1.91),
+        new THREE.Vector3(-3.15, 2.25, -1.91), new THREE.Vector3(-3.75, 1.95, -1.91),
+        new THREE.Vector3(-3.75, 1.95, -1.91), new THREE.Vector3(-4.25, 2.3, -1.91),
+      ]), new THREE.LineBasicMaterial({ color: 0x333333 }));
+      networkGroup.add(nodeLines);
+
+      // Contact marker: a simple door and illuminated mail slot.
+      box([1.25, 2.35, 0.08], [-5.15, 1.18, -1.92], 0.22, contactGroup);
+      box([0.52, 0.08, 0.04], [-5.15, 1.25, -1.85], 0.82, contactGroup);
+      cylinder(0.045, 0.045, 0.05, [-4.72, 1.08, -1.82], 0.72, contactGroup).rotation.x = Math.PI / 2;
 
       // Football corner with a playable ball and responsive net.
       const goal = new THREE.Group();
@@ -169,18 +228,18 @@ const RoomScene = () => {
       const crossbar = cylinder(0.027, 0.027, 1.78, [0, 0.92, 0], 0.88, goal);
       crossbar.rotation.z = Math.PI / 2;
       goal.position.set(5.75, 0, -1.72);
-      scene.add(goal);
+      footballGroup.add(goal);
       const netGeometry = new THREE.PlaneGeometry(1.74, 0.92, 14, 8);
       const net = new THREE.Mesh(netGeometry, new THREE.MeshBasicMaterial({ color: 0x777777, wireframe: true, transparent: true, opacity: 0.42 }));
       net.position.set(5.75, 0.46, -1.82);
-      scene.add(net);
+      footballGroup.add(net);
       const netBase = Float32Array.from(netGeometry.attributes.position.array as ArrayLike<number>);
       const ballGroup = new THREE.Group();
       ballGroup.add(
         new THREE.Mesh(new THREE.SphereGeometry(0.17, 18, 14), makeMaterial(0.9)),
         new THREE.Mesh(new THREE.IcosahedronGeometry(0.173, 1), new THREE.MeshBasicMaterial({ color: 0x111111, wireframe: true })),
       );
-      scene.add(ballGroup);
+      footballGroup.add(ballGroup);
       const ballStart = new THREE.Vector3(5.75, 0.18, 0.82);
       ballGroup.position.copy(ballStart);
       let kickTime = -1;
@@ -205,6 +264,15 @@ const RoomScene = () => {
       let lastDark: boolean | null = null;
       let blinkAt = 0;
       let blink = true;
+      let visibleZone = "";
+
+      const routeGroups: Record<string, THREE.Group> = { work: workGroup, profile: profileGroup, record: recordGroup, library: libraryGroup, network: networkGroup, football: footballGroup, contact: contactGroup };
+      const updateVisibility = () => {
+        const nextZone = zoneForPath(pathRef.current);
+        if (nextZone === visibleZone) return;
+        visibleZone = nextZone;
+        Object.entries(routeGroups).forEach(([name, group]) => { group.visible = nextZone === "room" || name === nextZone; });
+      };
 
       const drawMonitor = () => {
         if (!screenContext) return;
@@ -279,6 +347,7 @@ const RoomScene = () => {
         lastTime = now;
         lastRender = now;
         updateTheme();
+        updateVisibility();
         updateTarget();
         const easing = reducedMotion ? 1 : Math.min(1, delta * 4.8);
         currentPosition.lerp(desiredPosition, easing);
@@ -332,6 +401,8 @@ const RoomScene = () => {
           if (object instanceof THREE.Mesh) {
             object.geometry.dispose();
             (Array.isArray(object.material) ? object.material : [object.material]).forEach((entry) => entry.dispose());
+            const labelTexture = object.userData.labelTexture as { dispose?: () => void } | undefined;
+            labelTexture?.dispose?.();
           }
         });
         screenTexture.dispose();
@@ -348,7 +419,6 @@ const RoomScene = () => {
     <div className={`room-scene room-scene-${zone}${fallback ? " is-fallback" : ""}`} aria-hidden="true">
       <canvas ref={canvasRef} />
       <div className="room-fallback-grid" />
-      <div className="room-coordinate meta-label"><span>ROOM 11</span><span>{zone.toUpperCase()} / 3D</span></div>
     </div>
   );
 };

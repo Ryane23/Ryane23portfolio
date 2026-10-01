@@ -4,12 +4,11 @@ import EditorialNavigation from "@/components/EditorialNavigation";
 import EditorialFooter from "@/components/EditorialFooter";
 import MusicPlayer from "@/components/EditorialMusicPlayer";
 import RoomScene from "@/components/RoomScene";
-import RoomOverlay from "@/components/RoomOverlay";
 
 const EditorialLayout = () => {
   const { pathname } = useLocation();
   useEffect(() => window.scrollTo({ top: 0, behavior: "auto" }), [pathname]);
-  return <div className="site-shell"><RoomScene /><RoomOverlay /><EditorialNavigation /><main id="main-content"><Suspense fallback={<div className="route-fallback meta-label" role="status">OPENING ROOM…</div>}><Outlet /></Suspense></main><EditorialFooter /><MusicPlayer /></div>;
+  return <div className="site-shell"><RoomScene /><EditorialNavigation /><main id="main-content"><Suspense fallback={<div className="route-fallback meta-label" role="status">OPENING ROOM…</div>}><Outlet /></Suspense></main><EditorialFooter /><MusicPlayer /></div>;
 };
 
 export default EditorialLayout;
