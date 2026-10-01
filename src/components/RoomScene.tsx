@@ -87,14 +87,26 @@ const RoomScene = () => {
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 40);
       const materials: THREE.MeshStandardMaterial[] = [];
+      const materialCache = new Map<string, THREE.MeshStandardMaterial>();
+      const boxGeometryCache = new Map<string, THREE.BoxGeometry>();
       const makeMaterial = (gray: number, roughness = 0.72) => {
+        const key = `${gray.toFixed(3)}:${roughness.toFixed(2)}`;
+        const cachedMaterial = materialCache.get(key);
+        if (cachedMaterial) return cachedMaterial;
         const result = new THREE.MeshStandardMaterial({ color: new THREE.Color(gray, gray, gray), roughness, metalness: 0.03 });
         result.userData.gray = gray;
         materials.push(result);
+        materialCache.set(key, result);
         return result;
       };
       const box = (size: [number, number, number], position: [number, number, number], gray: number, parent: THREE.Object3D = scene) => {
-        const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size), makeMaterial(gray));
+        const geometryKey = size.join(":");
+        let geometry = boxGeometryCache.get(geometryKey);
+        if (!geometry) {
+          geometry = new THREE.BoxGeometry(...size);
+          boxGeometryCache.set(geometryKey, geometry);
+        }
+        const mesh = new THREE.Mesh(geometry, makeMaterial(gray));
         mesh.position.set(...position);
         mesh.castShadow = shadows;
         mesh.receiveShadow = shadows;
@@ -545,25 +557,31 @@ const RoomScene = () => {
       };
       const resize = () => {
         renderer.setSize(window.innerWidth, window.innerHeight, false);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth <= 760 ? 0.9 : (lowPower ? 1 : 1.25)));
         camera.aspect = window.innerWidth / Math.max(window.innerHeight, 1);
-        camera.fov = camera.aspect < 0.9 ? 64 : 46;
+        camera.fov = camera.aspect < 0.9 ? 58 : 46;
         camera.updateProjectionMatrix();
       };
       const onPointer = (event: PointerEvent) => {
+        if (event.pointerType && event.pointerType !== "mouse") return;
         pointerX = event.clientX / window.innerWidth - 0.5;
         pointerY = event.clientY / window.innerHeight - 0.5;
+      };
+      const setCameraStop = (stop: Stop, overview = false) => {
+        const portrait = window.innerWidth / Math.max(window.innerHeight, 1) < 0.9;
+        const mobileDistance = portrait ? (overview ? 3.1 : 1.85) : 0;
+        desiredPosition.set(stop.position[0], stop.position[1] + (portrait ? 0.12 : 0), stop.position[2] + mobileDistance);
+        desiredLookAt.set(...stop.lookAt);
       };
       const updateTarget = () => {
         const path = pathRef.current;
         if (/^\/(en|fr)\/?$/.test(path)) {
           const stop = stops[homeStop] ?? stops.room;
-          desiredPosition.set(...stop.position);
-          desiredLookAt.set(...stop.lookAt);
+          setCameraStop(stop, homeStop === "room");
         } else {
           const zone = zoneForPath(path);
           const stop = zone === "work" && projectPreview ? stops.workPreview : stops[zone];
-          desiredPosition.set(...stop.position);
-          desiredLookAt.set(...stop.lookAt);
+          setCameraStop(stop);
         }
       };
       const render = (now: number) => {
@@ -579,7 +597,8 @@ const RoomScene = () => {
         updateTheme();
         updateVisibility();
         updateTarget();
-        const easing = reducedMotion ? 1 : Math.min(1, delta * 4.8);
+        const onHome = /^\/(en|fr)\/?$/.test(pathRef.current);
+        const easing = reducedMotion ? 1 : Math.min(1, delta * (onHome ? 6.2 : 9.5));
         currentPosition.lerp(desiredPosition, easing);
         currentLookAt.lerp(desiredLookAt, easing);
         camera.position.set(currentPosition.x + (reducedMotion ? 0 : pointerX * 0.18), currentPosition.y + (reducedMotion ? 0 : -pointerY * 0.1), currentPosition.z);
@@ -645,10 +664,20 @@ const RoomScene = () => {
         window.removeEventListener("pointerdown", kickFromBall);
         window.removeEventListener("room11:project-preview", showProjectPreview);
         window.removeEventListener("room11:project-preview-clear", clearProjectPreview);
+        const disposedGeometries = new Set<THREE.BufferGeometry>();
+        const disposedMaterials = new Set<THREE.Material>();
         scene.traverse((object) => {
           if (object instanceof THREE.Mesh) {
-            object.geometry.dispose();
-            (Array.isArray(object.material) ? object.material : [object.material]).forEach((entry) => entry.dispose());
+            if (!disposedGeometries.has(object.geometry)) {
+              object.geometry.dispose();
+              disposedGeometries.add(object.geometry);
+            }
+            (Array.isArray(object.material) ? object.material : [object.material]).forEach((entry) => {
+              if (!disposedMaterials.has(entry)) {
+                entry.dispose();
+                disposedMaterials.add(entry);
+              }
+            });
             const labelTexture = object.userData.labelTexture as { dispose?: () => void } | undefined;
             labelTexture?.dispose?.();
           }
