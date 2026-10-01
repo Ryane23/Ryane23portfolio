@@ -15,6 +15,7 @@ const WorkIndex = () => {
         status: localize(project.status, locale),
         stack: project.stack,
         liveUrl: project.liveUrl,
+        previewImage: project.previewImage,
       },
     }));
   };

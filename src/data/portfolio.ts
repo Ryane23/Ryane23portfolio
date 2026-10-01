@@ -128,6 +128,7 @@ export type Project = {
   stack: string[];
   liveUrl?: string;
   repoUrl?: string;
+  previewImage?: string;
   preview: "embed" | "screenshot" | "pending";
   featured?: boolean;
 };
@@ -155,6 +156,7 @@ export const projects: Project[] = [
     },
     stack: ["Full-Stack", "APIs", "Databases", "Responsive UI"],
     liveUrl: "https://www.projina.top/",
+    previewImage: "/images/projects/projina.png",
     preview: "embed",
     featured: true,
   },
@@ -180,6 +182,7 @@ export const projects: Project[] = [
     },
     stack: ["Web", "Mobile", "Backend Integration", "Responsive UI"],
     liveUrl: "https://chopasap.com/",
+    previewImage: "/images/projects/chopasap.png",
     preview: "embed",
     featured: true,
   },
@@ -280,6 +283,7 @@ export const projects: Project[] = [
     },
     stack: ["Python", "FastAPI", "SSR", "SSG", "WebSockets"],
     liveUrl: "https://nextpy-framework.onrender.com/",
+    previewImage: "/images/projects/nextpy.png",
     repoUrl: "https://github.com/RahimStudios/nextpy-framework",
     preview: "screenshot",
     featured: true,

@@ -4,18 +4,19 @@ import { useTheme } from "@/contexts/EditorialThemeContext";
 import ryanProfile from "@/assets/ryan-profile.webp";
 
 type Stop = { position: [number, number, number]; lookAt: [number, number, number] };
-type ProjectPreview = { slug: string; name: string; category: string; status: string; stack: string[]; liveUrl?: string };
+type ProjectPreview = { slug: string; name: string; category: string; status: string; stack: string[]; liveUrl?: string; previewImage?: string };
 
 const stops: Record<string, Stop> = {
   room: { position: [1.4, 2.7, 7.8], lookAt: [1.5, 1.1, -0.5] },
-  work: { position: [-0.7, 1.65, 1.2], lookAt: [-0.7, 1.35, -1.72] },
-  workPreview: { position: [-0.72, 1.57, 0.3], lookAt: [-0.72, 1.48, -1.62] },
+  work: { position: [0, 1.72, 1.5], lookAt: [0, 1.4, -1.72] },
+  workPreview: { position: [0, 1.62, 0.5], lookAt: [0, 1.46, -1.62] },
   profile: { position: [1.25, 2.35, 1.6], lookAt: [1.15, 1.45, -1.85] },
   record: { position: [2.1, 2.3, 1.4], lookAt: [2.25, 2.05, -1.82] },
+  certifications: { position: [9.75, 2.5, 2.05], lookAt: [9.75, 2.35, -1.86] },
   library: { position: [4.25, 2.25, 2.25], lookAt: [4.35, 1.85, -1.75] },
   football: { position: [5.6, 1.65, 3.65], lookAt: [5.75, 0.65, -1.15] },
   network: { position: [-3.75, 1.9, 1.7], lookAt: [-3.75, 1.35, -1.72] },
-  contact: { position: [-2.1, 1.8, 2.1], lookAt: [-1.8, 1.05, -1.35] },
+  contact: { position: [10.9, 1.75, 2.25], lookAt: [10.9, 1.15, -1.82] },
   beyond: { position: [8.25, 1.75, 3.35], lookAt: [8.3, 0.72, -0.22] },
 };
 
@@ -25,6 +26,7 @@ const zoneForPath = (pathname: string) => {
   if (pathname.includes("football")) return "football";
   if (pathname.includes("anime") || pathname.includes("library") || pathname.includes("bibliotheque")) return "library";
   if (pathname.includes("experience") || pathname.includes("parcours")) return "record";
+  if (pathname.includes("certifications")) return "certifications";
   if (pathname.includes("about") || pathname.includes("a-propos") || pathname.includes("cv")) return "profile";
   if (pathname.includes("network") || pathname.includes("reseau")) return "network";
   if (pathname.includes("contact")) return "contact";
@@ -111,11 +113,12 @@ const RoomScene = () => {
       const workGroup = new THREE.Group();
       const profileGroup = new THREE.Group();
       const recordGroup = new THREE.Group();
+      const certificationGroup = new THREE.Group();
       const libraryGroup = new THREE.Group();
       const networkGroup = new THREE.Group();
       const footballGroup = new THREE.Group();
       const contactGroup = new THREE.Group();
-      scene.add(roomShell, homeGroup, workGroup, profileGroup, recordGroup, libraryGroup, networkGroup, footballGroup, contactGroup);
+      scene.add(roomShell, homeGroup, workGroup, profileGroup, recordGroup, certificationGroup, libraryGroup, networkGroup, footballGroup, contactGroup);
 
       const wallText = (text: string, position: [number, number, number], width: number, fontSize: number, parent: THREE.Object3D = roomShell) => {
         const textCanvas = document.createElement("canvas");
@@ -149,9 +152,8 @@ const RoomScene = () => {
       box([18, 0.12, 10], [3, -0.06, 1], 0.58, roomShell);
       box([18, 6, 0.12], [3, 3, -2.05], 0.78, roomShell);
       box([0.12, 6, 10], [-6, 3, 1], 0.7, roomShell);
-      wallText("RYAN ERICK", [0.2, 4.25, -1.97], 4.8, 152);
-      wallText("BUILD USEFUL THINGS", [-3.55, 2.65, -1.97], 2.2, 78);
-      wallText("LEARN · SHIP · IMPROVE", [4.25, 3.55, -1.97], 2.25, 68);
+      wallText("BUILD USEFUL THINGS", [-2.85, 4.35, -1.97], 2.7, 72);
+      wallText("LEARN · SHIP · IMPROVE", [3.55, 4.35, -1.97], 2.75, 64);
 
       // Home furniture: a low bed that completes the room without appearing in focused route views.
       box([2.8, 0.18, 1.72], [8.35, 0.34, -0.15], 0.18, homeGroup);
@@ -175,6 +177,17 @@ const RoomScene = () => {
       const monitorScreen = new THREE.Mesh(new THREE.PlaneGeometry(1.62, 0.9), new THREE.MeshBasicMaterial({ map: screenTexture }));
       monitorScreen.position.set(-0.72, 1.48, -1.575);
       workGroup.add(monitorScreen);
+      const curvedScreenGeometry = new THREE.PlaneGeometry(1.25, 0.78, 16, 1);
+      const curvedScreenPositions = curvedScreenGeometry.attributes.position;
+      for (let index = 0; index < curvedScreenPositions.count; index += 1) {
+        const x = curvedScreenPositions.getX(index);
+        curvedScreenPositions.setZ(index, -0.1 * x * x);
+      }
+      curvedScreenPositions.needsUpdate = true;
+      curvedScreenGeometry.computeVertexNormals();
+      const curvedScreen = new THREE.Mesh(curvedScreenGeometry, new THREE.MeshBasicMaterial({ map: screenTexture }));
+      curvedScreen.position.set(0.78, 1.45, -1.56);
+      workGroup.add(curvedScreen);
 
       box([1.15, 0.035, 0.38], [-0.72, 0.85, -0.88], 0.12, workGroup);
       for (let row = 0; row < 4; row += 1) {
@@ -222,35 +235,48 @@ const RoomScene = () => {
       figureHead.position.set(4.72, 2.31, -1.82);
       libraryGroup.add(figureHead);
 
-      // Network station: a dedicated communications console and connected-node board.
-      box([2.15, 0.08, 0.9], [-3.72, 0.82, -1.2], 0.26, networkGroup);
-      [-4.55, -2.9].forEach((x) => box([0.07, 0.8, 0.75], [x, 0.4, -1.2], 0.2, networkGroup));
-      box([1.25, 0.78, 0.06], [-3.72, 1.38, -1.68], 0.14, networkGroup);
-      box([1.1, 0.64, 0.025], [-3.72, 1.38, -1.64], 0.84, networkGroup);
-      const nodePositions = [[-4.25, 2.3], [-3.7, 2.65], [-3.15, 2.25], [-3.75, 1.95]] as const;
+      // Certificate wall: verified credentials are framed above the far end of the room.
+      [8.85, 9.75, 10.65].forEach((x, index) => {
+        box([0.72, 0.9, 0.045], [x, 2.45, -1.96], index === 0 ? 0.15 : 0.28, certificationGroup);
+        box([0.61, 0.79, 0.018], [x, 2.45, -1.92], 0.88, certificationGroup);
+      });
+      wallText("ASPIRE", [8.85, 2.5, -1.89], 0.5, 78, certificationGroup);
+      wallText("VERIFIED CREDENTIALS", [9.75, 3.22, -1.95], 2.6, 54, certificationGroup);
+
+      // Network station: separated from the workstation and built around event frames.
+      box([2.45, 0.08, 0.9], [-4.22, 0.82, -1.2], 0.26, networkGroup);
+      [-5.12, -3.32].forEach((x) => box([0.07, 0.8, 0.75], [x, 0.4, -1.2], 0.2, networkGroup));
+      [
+        { src: "/images/ngo/kidefind.webp", x: -4.9 },
+        { src: "/images/ngo/amkay.webp", x: -4.22 },
+        { src: "/images/ngo/tic-summit.webp", x: -3.54 },
+      ].forEach(({ src, x }) => {
+        box([0.52, 0.42, 0.04], [x, 1.12, -1.56], 0.14, networkGroup);
+        wallImage(src, [0.44, 0.34], [x, 1.12, -1.53], networkGroup);
+      });
+      const nodePositions = [[-5.05, 2.3], [-4.45, 2.68], [-3.75, 2.28], [-4.38, 1.92]] as const;
       nodePositions.forEach(([x, y]) => {
         const node = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 10), makeMaterial(0.16));
         node.position.set(x, y, -1.9);
         networkGroup.add(node);
       });
       const nodeLines = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(-4.25, 2.3, -1.91), new THREE.Vector3(-3.7, 2.65, -1.91),
-        new THREE.Vector3(-3.7, 2.65, -1.91), new THREE.Vector3(-3.15, 2.25, -1.91),
-        new THREE.Vector3(-3.15, 2.25, -1.91), new THREE.Vector3(-3.75, 1.95, -1.91),
-        new THREE.Vector3(-3.75, 1.95, -1.91), new THREE.Vector3(-4.25, 2.3, -1.91),
+        new THREE.Vector3(-5.05, 2.3, -1.91), new THREE.Vector3(-4.45, 2.68, -1.91),
+        new THREE.Vector3(-4.45, 2.68, -1.91), new THREE.Vector3(-3.75, 2.28, -1.91),
+        new THREE.Vector3(-3.75, 2.28, -1.91), new THREE.Vector3(-4.38, 1.92, -1.91),
+        new THREE.Vector3(-4.38, 1.92, -1.91), new THREE.Vector3(-5.05, 2.3, -1.91),
       ]), new THREE.LineBasicMaterial({ color: 0x333333 }));
       networkGroup.add(nodeLines);
 
       // Contact marker: a simple door and illuminated mail slot.
-      box([1.25, 2.35, 0.08], [-5.15, 1.18, -1.92], 0.22, contactGroup);
-      box([0.52, 0.08, 0.04], [-5.15, 1.25, -1.85], 0.82, contactGroup);
-      cylinder(0.045, 0.045, 0.05, [-4.72, 1.08, -1.82], 0.72, contactGroup).rotation.x = Math.PI / 2;
+      box([1.25, 2.35, 0.08], [11.05, 1.18, -1.92], 0.22, contactGroup);
+      box([0.52, 0.08, 0.04], [11.05, 1.25, -1.85], 0.82, contactGroup);
+      cylinder(0.045, 0.045, 0.05, [11.48, 1.08, -1.82], 0.72, contactGroup).rotation.x = Math.PI / 2;
 
       // Football corner with a playable ball and responsive net.
-      wallImage("/images/football/raphinha-official.webp", [0.82, 1.05], [4.88, 2.45, -1.96], footballGroup);
-      wallImage("/images/football/raphinha-supplied.webp", [0.82, 1.05], [5.82, 2.45, -1.96], footballGroup);
-      wallImage("/images/football/fcb-official-badge.png", [2.25, 0.44], [7.2, 2.88, -1.95], footballGroup);
-      wallText("MY FAVORITE CLUB", [7.2, 2.35, -1.96], 2.15, 70, footballGroup);
+      wallImage("/images/football/fcb-official-badge.png", [2.45, 0.48], [6.75, 2.88, -1.95], footballGroup);
+      wallText("MY FAVORITE CLUB", [6.75, 2.35, -1.96], 2.3, 64, footballGroup);
+      wallText("MESSI · 10", [6.75, 1.98, -1.96], 1.45, 62, footballGroup);
       const goal = new THREE.Group();
       cylinder(0.027, 0.027, 0.92, [-0.87, 0.46, 0], 0.88, goal);
       cylinder(0.027, 0.027, 0.92, [0.87, 0.46, 0], 0.88, goal);
@@ -268,6 +294,7 @@ const RoomScene = () => {
         new THREE.Mesh(new THREE.SphereGeometry(0.17, 18, 14), makeMaterial(0.9)),
         new THREE.Mesh(new THREE.IcosahedronGeometry(0.173, 1), new THREE.MeshBasicMaterial({ color: 0x111111, wireframe: true })),
       );
+      ballGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.31, 12, 10), new THREE.MeshBasicMaterial({ visible: false })));
       footballGroup.add(ballGroup);
       const ballStart = new THREE.Vector3(5.75, 0.18, 0.82);
       ballGroup.position.copy(ballStart);
@@ -275,12 +302,26 @@ const RoomScene = () => {
       let netAmplitude = 0;
       const kick = () => { if (kickTime < 0) kickTime = 0; };
       window.addEventListener("room11:kick", kick);
+      const raycaster = new THREE.Raycaster();
+      const kickPointer = new THREE.Vector2();
+      const kickFromBall = (event: PointerEvent) => {
+        const zone = zoneForPath(pathRef.current);
+        if (!["room", "football", "beyond"].includes(zone) || !ballGroup.visible) return;
+        kickPointer.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1);
+        raycaster.setFromCamera(kickPointer, camera);
+        if (raycaster.intersectObject(ballGroup, true).length) kick();
+      };
+      window.addEventListener("pointerdown", kickFromBall, { passive: true });
 
       const hemisphere = new THREE.HemisphereLight(0xffffff, 0x555555, 1.25);
       const sun = new THREE.DirectionalLight(0xffffff, 1.7);
       sun.position.set(4, 7, 6);
       sun.castShadow = shadows;
-      scene.add(hemisphere, sun);
+      const roomFill = new THREE.PointLight(0xffffff, 0.55, 9);
+      roomFill.position.set(7.5, 3.5, 2.5);
+      const networkFill = new THREE.PointLight(0xffffff, 0.45, 6);
+      networkFill.position.set(-4.2, 2.8, 1.4);
+      scene.add(hemisphere, sun, roomFill, networkFill);
 
       const currentPosition = new THREE.Vector3(...stops.room.position);
       const currentLookAt = new THREE.Vector3(...stops.room.lookAt);
@@ -295,9 +336,10 @@ const RoomScene = () => {
       let blink = true;
       let visibleZone = "";
       let projectPreview: ProjectPreview | null = null;
+      const previewImages = new Map<string, HTMLImageElement>();
       let homeStop = "room";
 
-      const routeGroups: Record<string, THREE.Group> = { home: homeGroup, work: workGroup, profile: profileGroup, record: recordGroup, library: libraryGroup, network: networkGroup, football: footballGroup, contact: contactGroup };
+      const routeGroups: Record<string, THREE.Group> = { home: homeGroup, work: workGroup, profile: profileGroup, record: recordGroup, certifications: certificationGroup, library: libraryGroup, network: networkGroup, football: footballGroup, contact: contactGroup };
       const updateHomeStop = () => {
         if (!/^\/(en|fr)\/?$/.test(pathRef.current)) return;
         const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-room-stop]"));
@@ -325,6 +367,13 @@ const RoomScene = () => {
 
       const showProjectPreview = (event: Event) => {
         projectPreview = (event as CustomEvent<ProjectPreview>).detail;
+        if (projectPreview.previewImage && !previewImages.has(projectPreview.previewImage)) {
+          const previewImage = new Image();
+          previewImage.decoding = "async";
+          previewImage.onload = () => drawMonitor();
+          previewImage.src = projectPreview.previewImage;
+          previewImages.set(projectPreview.previewImage, previewImage);
+        }
         drawMonitor();
       };
       const clearProjectPreview = () => {
@@ -343,48 +392,48 @@ const RoomScene = () => {
         const workMode = zoneForPath(pathRef.current) === "work";
         if (workMode && projectPreview) {
           const preview = projectPreview;
-          const accentByProject: Record<string, string> = {
-            projina: dark ? "#7dd3fc" : "#075985",
-            chopasap: dark ? "#fbbf24" : "#92400e",
-            bajoma: dark ? "#86efac" : "#166534",
-            busease: dark ? "#c4b5fd" : "#5b21b6",
-            eagle: dark ? "#fca5a5" : "#991b1b",
-            nextpy: dark ? "#93c5fd" : "#1e40af",
-            legitcm: dark ? "#d4d4d4" : "#404040",
-          };
-          const accent = accentByProject[preview.slug] ?? (dark ? "#ededeb" : "#111111");
-          screenContext.fillStyle = accent;
-          screenContext.fillRect(0, 0, 512, 9);
-          screenContext.font = "bold 11px monospace";
-          screenContext.fillStyle = dark ? "#8b8b8b" : "#676767";
-          screenContext.fillText(preview.liveUrl ? "LIVE PRODUCT / HOVER PREVIEW" : "PROJECT / HOVER PREVIEW", 24, 35);
-          screenContext.font = "bold 39px Arial, sans-serif";
-          screenContext.fillStyle = dark ? "#f2f2ef" : "#101010";
-          screenContext.fillText(preview.name.toUpperCase(), 24, 82);
-          screenContext.font = "13px Arial, sans-serif";
-          screenContext.fillStyle = dark ? "#b8b8b4" : "#4f4f4f";
-          screenContext.fillText(preview.category.slice(0, 58), 24, 108);
-          screenContext.strokeStyle = accent;
-          screenContext.lineWidth = 2;
-          screenContext.strokeRect(24, 132, 292, 112);
-          screenContext.fillStyle = dark ? "#1d1d1d" : "#d6d6d1";
-          screenContext.fillRect(38, 147, 264, 15);
-          const progress = (performance.now() / 18) % 180;
-          screenContext.fillStyle = accent;
-          screenContext.fillRect(38, 176, 92 + progress, 7);
-          screenContext.fillStyle = dark ? "#454545" : "#b4b4ae";
-          screenContext.fillRect(38, 197, 224, 7);
-          screenContext.fillRect(38, 218, 154, 7);
-          screenContext.fillStyle = accent;
-          screenContext.fillRect(338, 132, 150, 51);
-          screenContext.fillStyle = dark ? "#101010" : "#f2f2ef";
-          screenContext.font = "bold 12px monospace";
-          screenContext.fillText(preview.status.toUpperCase().slice(0, 19), 350, 162);
-          screenContext.fillStyle = dark ? "#a9a9a5" : "#555";
-          screenContext.font = "11px monospace";
-          preview.stack.slice(0, 3).forEach((item, index) => screenContext.fillText(item.toUpperCase().slice(0, 19), 338, 211 + index * 19));
-          screenContext.fillStyle = accent;
-          screenContext.fillText(preview.liveUrl ? preview.liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "").toUpperCase() : "CASE STUDY", 24, 278);
+          const capturedPreview = preview.previewImage ? previewImages.get(preview.previewImage) : undefined;
+          if (capturedPreview?.complete && capturedPreview.naturalWidth > 0) {
+            const destinationAspect = 512 / 300;
+            const sourceAspect = capturedPreview.naturalWidth / capturedPreview.naturalHeight;
+            let sourceX = 0;
+            let sourceY = 0;
+            let sourceWidth = capturedPreview.naturalWidth;
+            let sourceHeight = capturedPreview.naturalHeight;
+            if (sourceAspect > destinationAspect) {
+              sourceWidth = sourceHeight * destinationAspect;
+              sourceX = (capturedPreview.naturalWidth - sourceWidth) / 2;
+            } else {
+              sourceHeight = sourceWidth / destinationAspect;
+              sourceY = Math.max(0, (capturedPreview.naturalHeight - sourceHeight) * 0.08);
+            }
+            screenContext.drawImage(capturedPreview, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, 512, 300);
+            const overlay = screenContext.createLinearGradient(0, 190, 0, 300);
+            overlay.addColorStop(0, "rgba(0,0,0,0)");
+            overlay.addColorStop(1, "rgba(0,0,0,.9)");
+            screenContext.fillStyle = overlay;
+            screenContext.fillRect(0, 180, 512, 120);
+            screenContext.fillStyle = "#ffffff";
+            screenContext.font = "bold 25px Arial, sans-serif";
+            screenContext.fillText(preview.name.toUpperCase(), 22, 264);
+            screenContext.font = "11px monospace";
+            screenContext.fillText(preview.liveUrl?.replace(/^https?:\/\//, "").replace(/\/$/, "").toUpperCase() ?? "PROJECT PREVIEW", 22, 285);
+          } else {
+            screenContext.font = "bold 12px monospace";
+            screenContext.fillStyle = dark ? "#8b8b8b" : "#676767";
+            screenContext.fillText(preview.previewImage ? "LOADING CAPTURE" : "PROJECT PREVIEW", 24, 38);
+            screenContext.font = "bold 40px Arial, sans-serif";
+            screenContext.fillStyle = dark ? "#f2f2ef" : "#101010";
+            screenContext.fillText(preview.name.toUpperCase(), 24, 92);
+            screenContext.font = "13px Arial, sans-serif";
+            screenContext.fillStyle = dark ? "#b8b8b4" : "#4f4f4f";
+            screenContext.fillText(preview.category.slice(0, 58), 24, 120);
+            preview.stack.slice(0, 4).forEach((item, index) => {
+              screenContext.strokeStyle = dark ? "#777" : "#555";
+              screenContext.strokeRect(24 + (index % 2) * 235, 160 + Math.floor(index / 2) * 54, 210, 36);
+              screenContext.fillText(item.toUpperCase().slice(0, 22), 36 + (index % 2) * 235, 183 + Math.floor(index / 2) * 54);
+            });
+          }
         } else if (workMode) {
           const codeLines = [
             "const room = createPortfolio({",
@@ -521,6 +570,7 @@ const RoomScene = () => {
         window.removeEventListener("pointermove", onPointer);
         window.removeEventListener("scroll", updateHomeStop);
         window.removeEventListener("room11:kick", kick);
+        window.removeEventListener("pointerdown", kickFromBall);
         window.removeEventListener("room11:project-preview", showProjectPreview);
         window.removeEventListener("room11:project-preview-clear", clearProjectPreview);
         scene.traverse((object) => {
