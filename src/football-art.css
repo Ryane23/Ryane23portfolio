@@ -1,21 +1,20 @@
-.football-visual { position: relative; display: grid; place-items: end center; min-height: 68vh; overflow: hidden; }
-.football-visual::before { content: ""; position: absolute; inset: 9%; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; box-shadow: 0 0 0 5rem rgba(255,255,255,.025); }
-.football-visual img { position: relative; z-index: 1; width: min(42rem, 100%); max-height: 68vh; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 2rem 2rem rgba(0,0,0,.42)); animation: striker-idle 4.5s ease-in-out infinite; }
-.football-visual .football-score { position: absolute; left: 0; bottom: 1rem; z-index: 2; padding: .75rem; background: rgba(9,9,9,.72); border: 1px solid rgba(255,255,255,.2); backdrop-filter: blur(10px); }
-.ball-mark { border: 0; cursor: pointer; font: inherit; }
-.ball-mark:hover { transform: translateY(-50%) scale(1.08); }
-@keyframes striker-idle { 50% { transform: translateY(-.55rem) rotate(-.5deg); } }
+.football-visual { position: relative; display: grid; min-height: 64vh; place-items: center; overflow: hidden; background: radial-gradient(circle at center, #242424 0, #090909 62%); border: 1px solid #333; }
+.football-orbit { position: relative; display: grid; place-items: center; width: min(30rem, 72%); aspect-ratio: 1; border: 1px solid rgba(255,255,255,.28); border-radius: 50%; animation: football-orbit 12s linear infinite; }
+.football-orbit::before, .football-orbit::after { content: ""; position: absolute; border: 1px solid rgba(255,255,255,.14); border-radius: 50%; }
+.football-orbit::before { inset: 12%; }
+.football-orbit::after { inset: -14%; border-style: dashed; }
+.football-css-ball, .world-football, .beyond-ball { display: block; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 34% 27%, #fff 0 6%, transparent 7%), radial-gradient(circle at 50% 50%, #111 0 18%, transparent 19%), conic-gradient(from 18deg, #f3f3ef 0 12%, #1a1a1a 13% 21%, #f3f3ef 22% 37%, #1a1a1a 38% 46%, #f3f3ef 47% 63%, #1a1a1a 64% 72%, #f3f3ef 73% 100%); border: 2px solid #f3f3ef; box-shadow: 0 1.4rem 3rem rgba(0,0,0,.5); }
+.football-css-ball { width: 34%; animation: football-float 3.4s ease-in-out infinite; }
+.football-club-mark { position: absolute; right: 1.5rem; bottom: 1.5rem; width: min(13rem, 42%); height: auto; filter: grayscale(1) contrast(1.12); opacity: .78; }
 
-.football-world .world-raphinha { position: absolute; right: -2%; bottom: -4%; width: 58%; height: 94%; object-fit: contain; object-position: right bottom; opacity: .82; filter: grayscale(1) contrast(1.08); transition: filter .35s, transform .5s; }
-.football-world:hover .world-raphinha { filter: grayscale(0); transform: translateY(-.5rem); }
-.football-world > span, .football-world > strong { position: relative; z-index: 2; }
+@keyframes football-orbit { to { transform: rotate(360deg); } }
+@keyframes football-float { 50% { transform: translateY(-.7rem) rotate(-12deg); } }
 
 @media (max-width: 720px) {
-  .football-visual { min-height: 52vh; }
-  .football-visual img { max-height: 52vh; width: 100%; }
-  .football-world .world-raphinha { width: 76%; opacity: .62; }
+  .football-visual { min-height: 48vh; }
+  .football-orbit { width: 72%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .football-visual img { animation: none; }
+  .football-orbit, .football-css-ball { animation: none; }
 }

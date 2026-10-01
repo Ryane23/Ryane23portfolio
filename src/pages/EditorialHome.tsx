@@ -57,7 +57,7 @@ const EditorialHome = () => {
 
       <section className="worlds-section section-pad" data-room-stop="beyond">
         <div className="section-heading"><span className="section-number">04</span><div><p className="meta-label">{locale === "en" ? "BEYOND WORK" : "HORS TRAVAIL"}</p><h2>{locale === "en" ? "Football, anime, and community." : "Football, anime et engagement communautaire."}</h2></div><Link to={paths.beyond[locale]}>{locale === "en" ? "EXPLORE" : "EXPLORER"} ↗</Link></div>
-        <Link to={paths.beyond[locale]} className="world-card beyond-world"><img className="world-raphinha" src="/images/football/raphinha-11-goal.svg" alt="" /><span className="meta-label">FOOTBALL / ANIME / COMMUNITY</span><strong>{locale === "en" ? "THE OTHER SIDE OF ME" : "L’AUTRE CÔTÉ DE MOI"}</strong><span>{locale === "en" ? "OPEN BEYOND WORK" : "OUVRIR HORS TRAVAIL"} ↗</span></Link>
+        <Link to={paths.beyond[locale]} className="world-card beyond-world"><span className="world-football" aria-hidden="true" /><span className="meta-label">FOOTBALL / ANIME / COMMUNITY</span><strong>{locale === "en" ? "THE OTHER SIDE OF ME" : "L’AUTRE CÔTÉ DE MOI"}</strong><span>{locale === "en" ? "OPEN BEYOND WORK" : "OUVRIR HORS TRAVAIL"} ↗</span></Link>
       </section>
 
       <NetworkPreview />
