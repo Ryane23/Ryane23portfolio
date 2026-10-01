@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useTheme } from "@/contexts/EditorialThemeContext";
+import ryanProfile from "@/assets/ryan-profile.webp";
 
 type Stop = { position: [number, number, number]; lookAt: [number, number, number] };
 
@@ -184,7 +185,12 @@ const RoomScene = () => {
         book.rotation.z = index === 8 ? -0.14 : 0;
       }
       box([0.82, 1.08, 0.04], [1.05, 2.35, -1.96], 0.12, profileGroup);
-      box([0.72, 0.98, 0.025], [1.05, 2.35, -1.92], 0.88, profileGroup);
+      const profileTexture = new THREE.TextureLoader().load(ryanProfile, () => window.dispatchEvent(new Event("room11:portrait-ready")));
+      profileTexture.colorSpace = THREE.SRGBColorSpace;
+      const profilePhoto = new THREE.Mesh(new THREE.PlaneGeometry(0.72, 0.98), new THREE.MeshBasicMaterial({ map: profileTexture }));
+      profilePhoto.position.set(1.05, 2.35, -1.925);
+      profilePhoto.userData.labelTexture = profileTexture;
+      profileGroup.add(profilePhoto);
       [1.35, 1.98, 2.62].forEach((y) => box([1.72, 0.05, 0.34], [4.28, y, -1.85], 0.27, libraryGroup));
       for (let index = 0; index < 21; index += 1) {
         const row = Math.floor(index / 8);

@@ -1,4 +1,19 @@
 .route-fallback { position: fixed; right: 1rem; bottom: 1rem; z-index: 2000; padding: .6rem .8rem; color: var(--paper); background: var(--ink); }
 
+.tech-stack-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 95%, transparent); }
+.tech-stack-group { min-height: 19rem; padding: 1.35rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.tech-stack-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.tech-stack-heading h3 { margin: 0; font-size: clamp(1.2rem, 2vw, 1.8rem); letter-spacing: -.04em; }
+.tech-stack-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; margin-top: 2rem; }
+.tech-stack-item { display: flex; align-items: center; gap: .75rem; min-height: 3.25rem; padding: .65rem; border: 1px solid var(--line); color: var(--quiet); font-size: .78rem; transition: color .2s ease, border-color .2s ease, transform .2s ease; }
+.tech-stack-item:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-2px); }
+.tech-stack-mark { display: grid; place-items: center; flex: 0 0 1.55rem; width: 1.55rem; height: 1.55rem; color: var(--ink); }
+.tech-stack-mark svg { width: 1.35rem; height: 1.35rem; fill: currentColor; }
+.tech-stack-item:hover .tech-stack-mark { color: var(--brand, var(--ink)); }
+.tech-stack-mark b { font: 700 .53rem/1 ui-monospace, monospace; letter-spacing: -.04em; }
+
 @media (max-width: 720px) {
+  .tech-stack-grid { grid-template-columns: 1fr; }
+  .tech-stack-group { min-height: auto; }
+  .tech-stack-items { grid-template-columns: 1fr 1fr; }
 }
