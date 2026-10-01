@@ -12,7 +12,7 @@
 .brand-mark { width: 1.8rem; height: 1.8rem; }
 .brand-lockup { font-size: .78rem; }
 .desktop-nav { gap: clamp(.8rem, 1.7vw, 1.8rem); }
-.desktop-nav a, .language-switch, .cv-link { font-size: .59rem; }
+.desktop-nav a, .language-switch, .cv-link, .contact-link { font-size: .59rem; }
 .cv-link { padding: .55rem .72rem; }
 .icon-button { width: 2.05rem; height: 2.05rem; }
 

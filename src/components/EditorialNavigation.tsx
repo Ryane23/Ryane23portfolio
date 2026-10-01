@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { Menu, Moon, Phone, Sun, X } from "lucide-react";
 import RyanMark from "@/components/RyanMark";
 import { useTheme } from "@/contexts/EditorialThemeContext";
 import { paths, useLocale } from "@/lib/locale";
@@ -34,6 +34,7 @@ const EditorialNavigation = () => {
     [copy.experience, paths.experience[locale], "record"], [copy.library, paths.library[locale], "library"],
     [copy.network, paths.network[locale], "network"], [copy.contact, paths.contact[locale], "contact"],
   ];
+  const desktopLinks = links.filter(([, , module]) => module !== "contact");
 
   return (
     <>
@@ -41,10 +42,11 @@ const EditorialNavigation = () => {
       <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
         <Link to={paths.home[locale]} className="brand-lockup" aria-label="Ryan Erick home"><RyanMark className="brand-mark" /><span>RYAN ERICK</span></Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
-          {links.map(([label, href, module]) => <Link key={href} to={href} onPointerEnter={() => preloadRoute(module)} onPointerDown={() => preloadRoute(module)} onFocus={() => preloadRoute(module)} className={pathname === href ? "is-active" : ""}>{label}</Link>)}
+          {desktopLinks.map(([label, href, module]) => <Link key={href} to={href} onPointerEnter={() => preloadRoute(module)} onPointerDown={() => preloadRoute(module)} onFocus={() => preloadRoute(module)} className={pathname === href ? "is-active" : ""}>{label}</Link>)}
         </nav>
         <div className="header-actions">
           <Link className="language-switch" to={locale === "en" ? paths.home.fr : paths.home.en}>{locale === "en" ? "FR" : "EN"}</Link>
+          <Link className="contact-link" to={paths.contact[locale]} onPointerEnter={() => preloadRoute("contact")} onPointerDown={() => preloadRoute("contact")}><Phone size={13} /><span>{copy.contact}</span></Link>
           <Link className="cv-link" to={paths.cv[locale]}>{copy.cv} ↓</Link>
           <button type="button" className="icon-button" onClick={toggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}>{theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}</button>
           <button type="button" className="icon-button mobile-menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mobile-navigation" aria-label="Toggle menu">{open ? <X size={20} /> : <Menu size={20} />}</button>
