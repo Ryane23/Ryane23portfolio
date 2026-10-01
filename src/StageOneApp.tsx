@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useState } from "react";
+import { lazy, useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,26 +6,35 @@ import { ThemeProvider } from "@/contexts/EditorialThemeContext";
 import EditorialLayout from "@/components/EditorialLayout";
 import LoadingScreen from "@/components/LoadingScreen";
 import EditorialHome from "@/pages/EditorialHome";
+import { preloadPrimaryRoutes, routeModules } from "@/lib/routeModules";
 
-const WorkIndex = lazy(() => import("@/pages/WorkIndex"));
-const ProjectCaseStudy = lazy(() => import("@/pages/ProjectCaseStudy"));
-const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
-const RecordPage = lazy(() => import("@/pages/RecordPage"));
-const LibraryPage = lazy(() => import("@/pages/LibraryPage"));
-const ArticlePage = lazy(() => import("@/pages/ArticlePage"));
-const AnimePage = lazy(() => import("@/pages/AnimePage"));
-const FootballPage = lazy(() => import("@/pages/FootballPage"));
-const CvPage = lazy(() => import("@/pages/CvPage"));
-const NetworkPage = lazy(() => import("@/pages/NetworkPage"));
-const ReachOutPage = lazy(() => import("@/pages/ReachOutPage"));
-const EditorialNotFound = lazy(() => import("@/pages/EditorialNotFound"));
+const WorkIndex = lazy(routeModules.work);
+const ProjectCaseStudy = lazy(routeModules.project);
+const ProfilePage = lazy(routeModules.profile);
+const RecordPage = lazy(routeModules.record);
+const LibraryPage = lazy(routeModules.library);
+const ArticlePage = lazy(routeModules.article);
+const AnimePage = lazy(routeModules.anime);
+const FootballPage = lazy(routeModules.football);
+const CvPage = lazy(routeModules.cv);
+const NetworkPage = lazy(routeModules.network);
+const ReachOutPage = lazy(routeModules.contact);
+const EditorialNotFound = lazy(routeModules.notFound);
 
 const LocaleRedirect = () => <Navigate replace to={navigator.language.toLowerCase().startsWith("fr") ? "/fr" : "/en"} />;
-const RouteFallback = () => <div className="route-fallback meta-label" role="status">OPENING ROOM…</div>;
-
 const StageOneApp = () => {
   const [introComplete, setIntroComplete] = useState(false);
   const finishIntro = useCallback(() => setIntroComplete(true), []);
+
+  useEffect(() => {
+    const idleWindow = window as Window & { requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number; cancelIdleCallback?: (id: number) => void };
+    const idleId = idleWindow.requestIdleCallback?.(preloadPrimaryRoutes, { timeout: 1800 });
+    const timer = idleId === undefined ? window.setTimeout(preloadPrimaryRoutes, 700) : undefined;
+    return () => {
+      if (idleId !== undefined) idleWindow.cancelIdleCallback?.(idleId);
+      if (timer !== undefined) window.clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <ThemeProvider>
@@ -34,7 +43,6 @@ const StageOneApp = () => {
         <LoadingScreen onComplete={finishIntro} />
         <div data-intro-complete={introComplete}>
           <BrowserRouter>
-            <Suspense fallback={<RouteFallback />}>
               <Routes>
                 <Route path="/" element={<LocaleRedirect />} />
                 <Route element={<EditorialLayout />}>
@@ -55,7 +63,6 @@ const StageOneApp = () => {
                   <Route path="/contact" element={<Navigate replace to="/en/contact" />} /><Route path="*" element={<EditorialNotFound />} />
                 </Route>
               </Routes>
-            </Suspense>
           </BrowserRouter>
         </div>
       </TooltipProvider>

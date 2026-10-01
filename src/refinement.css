@@ -16,6 +16,7 @@ body { font-size: 15px; }
 .intro-grid-drift { animation: intro-grid-drift 5s linear both; }
 .intro-scanline { position: absolute; inset: -20% 0 auto; height: 18%; opacity: .24; background: linear-gradient(transparent, rgba(255,255,255,.16), transparent); animation: intro-scan 2.2s ease-in-out infinite; }
 .intro-orbit { position: absolute; width: clamp(12rem, 24vw, 20rem); aspect-ratio: 1; border: 1px solid rgba(255,255,255,.16); border-radius: 50%; animation: intro-spin 8s linear infinite; }
+.intro-pulse { position: absolute; width: clamp(8rem, 16vw, 13rem); aspect-ratio: 1; border: 1px solid rgba(255,255,255,.35); border-radius: 50%; animation: intro-pulse 2.1s cubic-bezier(.22,1,.36,1) infinite; }
 .intro-orbit span { position: absolute; width: .45rem; aspect-ratio: 1; border-radius: 50%; background: #f3f3ef; }
 .intro-orbit span:nth-child(1) { top: -.22rem; left: 50%; }
 .intro-orbit span:nth-child(2) { right: 9%; bottom: 18%; }
@@ -26,6 +27,7 @@ body { font-size: 15px; }
 @keyframes intro-grid-drift { from { transform: scale(1.08); } to { transform: scale(1); } }
 @keyframes intro-scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(720%); } }
 @keyframes intro-spin { to { transform: rotate(360deg); } }
+@keyframes intro-pulse { 0% { opacity: .8; transform: scale(.65); } 80%, 100% { opacity: 0; transform: scale(1.75); } }
 
 @media (max-width: 720px) {
   body { font-size: 14px; }
@@ -36,5 +38,5 @@ body { font-size: 15px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro-grid-drift, .intro-scanline, .intro-orbit { animation: none; }
+  .intro-grid-drift, .intro-scanline, .intro-orbit, .intro-pulse { animation: none; }
 }

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import RyanMark from "@/components/RyanMark";
 
-const DURATION = 5000;
+const DURATION = 5500;
 const messages = [
   "CALIBRATING ROOM 11",
   "LIGHTING THE WORKSTATION",
@@ -12,10 +12,7 @@ const messages = [
 ];
 
 const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
-  const [visible, setVisible] = useState(() => {
-    try { return sessionStorage.getItem("room11-intro-seen") !== "true"; }
-    catch { return true; }
-  });
+  const [visible, setVisible] = useState(() => /^\/(?:en|fr)?\/?$/.test(window.location.pathname));
   const [progress, setProgress] = useState(0);
   const roomReady = useRef(false);
   const finished = useRef(false);
@@ -23,7 +20,6 @@ const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
   const finish = useCallback(() => {
     if (finished.current) return;
     finished.current = true;
-    try { sessionStorage.setItem("room11-intro-seen", "true"); } catch { /* Storage may be disabled. */ }
     setVisible(false);
     window.setTimeout(onComplete, 320);
   }, [onComplete]);
@@ -65,6 +61,7 @@ const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
           <div className="intro-top meta-label"><span>RYAN ERICK / ROOM 11</span><span>YAOUNDÉ · CM</span></div>
           <div className="intro-center">
             <div className="intro-orbit" aria-hidden="true"><span /><span /><span /></div>
+            <div className="intro-pulse" aria-hidden="true" />
             <RyanMark className="intro-mark" animated />
             <p className="meta-label">{messages[messageIndex]}</p>
           </div>

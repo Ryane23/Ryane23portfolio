@@ -1,0 +1,33 @@
+import type { ComponentType } from "react";
+
+type RouteModule = { default: ComponentType };
+
+const cached = (loader: () => Promise<RouteModule>) => {
+  let promise: Promise<RouteModule> | undefined;
+  return () => (promise ??= loader());
+};
+
+export const routeModules = {
+  work: cached(() => import("@/pages/WorkIndex")),
+  project: cached(() => import("@/pages/ProjectCaseStudy")),
+  profile: cached(() => import("@/pages/ProfilePage")),
+  record: cached(() => import("@/pages/RecordPage")),
+  library: cached(() => import("@/pages/LibraryPage")),
+  article: cached(() => import("@/pages/ArticlePage")),
+  anime: cached(() => import("@/pages/AnimePage")),
+  football: cached(() => import("@/pages/FootballPage")),
+  cv: cached(() => import("@/pages/CvPage")),
+  network: cached(() => import("@/pages/NetworkPage")),
+  contact: cached(() => import("@/pages/ReachOutPage")),
+  notFound: cached(() => import("@/pages/EditorialNotFound")),
+};
+
+export type RouteModuleKey = keyof typeof routeModules;
+
+export const preloadRoute = (key: RouteModuleKey) => {
+  void routeModules[key]();
+};
+
+export const preloadPrimaryRoutes = () => {
+  (["work", "profile", "record", "library", "contact"] as RouteModuleKey[]).forEach(preloadRoute);
+};

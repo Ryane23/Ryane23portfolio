@@ -5,6 +5,7 @@ import { Menu, Moon, Sun, X } from "lucide-react";
 import RyanMark from "@/components/RyanMark";
 import { useTheme } from "@/contexts/EditorialThemeContext";
 import { paths, useLocale } from "@/lib/locale";
+import { preloadRoute, type RouteModuleKey } from "@/lib/routeModules";
 
 const labels = {
   en: { work: "Work", about: "About", experience: "Record", library: "Library", network: "Network", contact: "Contact", cv: "CV" },
@@ -28,10 +29,10 @@ const EditorialNavigation = () => {
 
   useEffect(() => setOpen(false), [pathname]);
 
-  const links = [
-    [copy.work, paths.work[locale]], [copy.about, paths.about[locale]],
-    [copy.experience, paths.experience[locale]], [copy.library, paths.library[locale]],
-    [copy.network, paths.network[locale]], [copy.contact, paths.contact[locale]],
+  const links: [string, string, RouteModuleKey][] = [
+    [copy.work, paths.work[locale], "work"], [copy.about, paths.about[locale], "profile"],
+    [copy.experience, paths.experience[locale], "record"], [copy.library, paths.library[locale], "library"],
+    [copy.network, paths.network[locale], "network"], [copy.contact, paths.contact[locale], "contact"],
   ];
 
   return (
@@ -40,7 +41,7 @@ const EditorialNavigation = () => {
       <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
         <Link to={paths.home[locale]} className="brand-lockup" aria-label="Ryan Erick home"><RyanMark className="brand-mark" /><span>RYAN ERICK</span></Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
-          {links.map(([label, href]) => <Link key={href} to={href} className={pathname === href ? "is-active" : ""}>{label}</Link>)}
+          {links.map(([label, href, module]) => <Link key={href} to={href} onPointerEnter={() => preloadRoute(module)} onFocus={() => preloadRoute(module)} className={pathname === href ? "is-active" : ""}>{label}</Link>)}
         </nav>
         <div className="header-actions">
           <Link className="language-switch" to={locale === "en" ? paths.home.fr : paths.home.en}>{locale === "en" ? "FR" : "EN"}</Link>
@@ -53,7 +54,7 @@ const EditorialNavigation = () => {
         {open && (
           <motion.nav id="mobile-navigation" className="mobile-nav" initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} aria-label="Mobile navigation">
             <p className="meta-label">INDEX / {locale.toUpperCase()}</p>
-            {links.map(([label, href], index) => <Link key={href} to={href}><span>0{index + 1}</span>{label}</Link>)}
+            {links.map(([label, href, module], index) => <Link key={href} to={href} onPointerEnter={() => preloadRoute(module)} onFocus={() => preloadRoute(module)}><span>0{index + 1}</span>{label}</Link>)}
             <div className="mobile-world-links"><Link to={paths.anime[locale]}>ANIME</Link><Link to={paths.football[locale]}>FOOTBALL / 11</Link></div>
           </motion.nav>
         )}
