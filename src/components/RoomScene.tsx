@@ -207,16 +207,19 @@ const RoomScene = () => {
       }
       curvedScreenPositions.needsUpdate = true;
       curvedScreenGeometry.computeVertexNormals();
+      const secondaryMonitor = new THREE.Group();
+      secondaryMonitor.position.set(0.76, 1.48, -1.59);
+      secondaryMonitor.rotation.y = -0.14;
+      workGroup.add(secondaryMonitor);
       const curvedScreen = new THREE.Mesh(curvedScreenGeometry, new THREE.MeshBasicMaterial({ map: previewTexture }));
-      curvedScreen.position.set(0.62, 1.45, -1.54);
-      curvedScreen.rotation.y = -0.08;
-      workGroup.add(curvedScreen);
-      box([1.38, 0.055, 0.055], [0.62, 1.88, -1.61], 0.09, workGroup);
-      box([1.38, 0.055, 0.055], [0.62, 1.02, -1.61], 0.09, workGroup);
-      box([0.06, 0.88, 0.055], [-0.08, 1.45, -1.61], 0.09, workGroup);
-      box([0.06, 0.88, 0.055], [1.32, 1.45, -1.61], 0.09, workGroup);
-      box([0.08, 0.45, 0.08], [0.62, 0.98, -1.64], 0.12, workGroup);
-      box([0.52, 0.035, 0.26], [0.62, 0.81, -1.55], 0.14, workGroup);
+      curvedScreen.position.set(0, 0, 0.045);
+      secondaryMonitor.add(curvedScreen);
+      box([1.4, 0.055, 0.07], [0, 0.425, -0.035], 0.09, secondaryMonitor);
+      box([1.4, 0.055, 0.07], [0, -0.425, -0.035], 0.09, secondaryMonitor);
+      box([0.06, 0.9, 0.07], [-0.69, 0, -0.035], 0.09, secondaryMonitor);
+      box([0.06, 0.9, 0.07], [0.69, 0, -0.035], 0.09, secondaryMonitor);
+      box([0.07, 0.4, 0.07], [0, -0.61, -0.06], 0.12, secondaryMonitor);
+      box([0.54, 0.035, 0.28], [0, -0.655, 0.06], 0.14, secondaryMonitor);
 
       // Gaming desk details.
       box([2.65, 0.025, 0.62], [-0.12, 0.835, -1.01], 0.08, workGroup);
@@ -249,15 +252,15 @@ const RoomScene = () => {
       phone.rotation.x = -0.18;
       box([0.17, 0.32, 0.012], [0.34, 1.03, -0.755], 0.72, workGroup).rotation.x = -0.18;
 
-      cylinder(0.12, 0.14, 0.035, [1.58, 0.84, -1.55], 0.12, workGroup);
-      const lampArm = box([0.035, 0.62, 0.035], [1.58, 1.15, -1.55], 0.12, workGroup);
+      cylinder(0.12, 0.14, 0.035, [1.78, 0.84, -1.5], 0.12, workGroup);
+      const lampArm = box([0.035, 0.62, 0.035], [1.78, 1.15, -1.5], 0.12, workGroup);
       lampArm.rotation.z = 0.28;
       const lampShade = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.24, 18, 1, true), makeMaterial(0.16));
-      lampShade.position.set(1.37, 1.46, -1.55);
+      lampShade.position.set(1.57, 1.46, -1.5);
       lampShade.rotation.z = 0.28;
       workGroup.add(lampShade);
       const deskLight = new THREE.PointLight(0xf2eee6, 1.6, 5.5);
-      deskLight.position.set(1.36, 1.34, -1.38);
+      deskLight.position.set(1.58, 1.34, -1.34);
       workGroup.add(deskLight);
 
       // Experience and anime shelves.
