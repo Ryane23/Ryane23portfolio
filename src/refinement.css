@@ -11,6 +11,7 @@ body { font-size: 15px; }
 .case-hero h1 { font-size: clamp(3rem, 6.5vw, 6.5rem); }
 .article-page > header h1 { font-size: clamp(2.7rem, 5vw, 5rem); }
 .contact-page header h1 { font-size: clamp(2.5rem, 4.8vw, 4.8rem); }
+.hero-intro { bottom: 5rem; }
 
 .intro-screen-cinematic { overflow: hidden; }
 .intro-grid-drift { animation: intro-grid-drift 5s linear both; }
@@ -34,6 +35,7 @@ body { font-size: 15px; }
   .footer-lead > a { font-size: 2.25rem; }
   .section-heading h2 { font-size: 2.15rem; }
   .page-hero h1, .profile-hero h1, .contact-page header h1 { font-size: 2.45rem; }
+  .hero-intro { bottom: 4.75rem; }
   .player-controls { min-width: min(16rem, calc(100vw - 4.5rem)); }
 }
 
