@@ -37,6 +37,10 @@ const EditorialNavigation = () => {
     [copy.network, paths.network[locale], "network"], [copy.contact, paths.contact[locale], "contact"],
   ];
   const desktopLinks = links.filter(([, , module]) => module !== "contact");
+  const isActive = (href: string) => {
+    if (href.includes("#beyond")) return hash === "#beyond" || pathname.includes("/anime") || pathname.includes("/football");
+    return pathname === href;
+  };
 
   return (
     <>
@@ -45,9 +49,9 @@ const EditorialNavigation = () => {
         <Link to={paths.home[locale]} className="brand-lockup" aria-label="Ryan Erick home"><RyanMark className="brand-mark" /><span>RYAN ERICK</span></Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
           {desktopLinks.map(([label, href, module]) => {
-            const beyondActive = href.includes("#beyond") && (hash === "#beyond" || pathname.includes("/anime") || pathname.includes("/football"));
             const preload = () => { if (module) preloadRoute(module); };
-            return <Link key={href} to={href} onPointerEnter={preload} onPointerDown={preload} onFocus={preload} className={pathname === href || beyondActive ? "is-active" : ""}>{label}</Link>;
+            const active = isActive(href);
+            return <Link key={href} to={href} onPointerEnter={preload} onPointerDown={preload} onFocus={preload} className={active ? "is-active" : ""} aria-current={active ? "page" : undefined}>{label}</Link>;
           })}
         </nav>
         <div className="header-actions">
@@ -64,7 +68,8 @@ const EditorialNavigation = () => {
             <p className="meta-label">INDEX / {locale.toUpperCase()}</p>
             {links.map(([label, href, module], index) => {
               const preload = () => { if (module) preloadRoute(module); };
-              return <Link key={href} to={href} onPointerEnter={preload} onPointerDown={preload} onFocus={preload}><span>0{index + 1}</span>{label}</Link>;
+              const active = isActive(href);
+              return <Link key={href} to={href} onPointerEnter={preload} onPointerDown={preload} onFocus={preload} className={active ? "is-active" : ""} aria-current={active ? "page" : undefined}><span>0{index + 1}</span>{label}</Link>;
             })}
           </motion.nav>
         )}

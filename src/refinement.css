@@ -1,6 +1,14 @@
 /* Final scale, pacing, and utility corrections. */
 body { font-size: 15px; }
-.editorial-player { position: fixed; left: 0; bottom: 0; z-index: 900; }
+.editorial-player { position: fixed; left: 0; bottom: env(safe-area-inset-bottom, 0); z-index: 900; }
+.site-footer { padding-bottom: calc(7rem + env(safe-area-inset-bottom, 0)); }
+[id] { scroll-margin-top: 5rem; }
+:where(a, button, input, textarea, select):focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+:where(a, button) { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+:where(.page-hero h1, .section-heading h2, .footer-lead > a, .hero-intro h1) { text-wrap: balance; }
+.solid-action, .outline-action, .text-action, .contact-link, .cv-link, .interest-card { transition: transform .22s ease, color .22s ease, background-color .22s ease, border-color .22s ease; }
+.mobile-nav { overflow-y: auto; overscroll-behavior: contain; }
+.mobile-nav > a.is-active { padding-left: .75rem; background: var(--soft); }
 .footer-lead > a { font-size: clamp(2rem, 4.4vw, 4.25rem); }
 .footer-grid { font-size: .7rem; }
 .footer-grid > div { font-size: .68rem; }
@@ -30,6 +38,16 @@ body { font-size: 15px; }
 @keyframes intro-spin { to { transform: rotate(360deg); } }
 @keyframes intro-pulse { 0% { opacity: .8; transform: scale(.65); } 80%, 100% { opacity: 0; transform: scale(1.75); } }
 
+@media (hover: hover) {
+  .solid-action:hover, .outline-action:hover, .contact-link:hover, .cv-link:hover { transform: translateY(-2px); }
+  .outline-action:hover, .cv-link:hover { color: var(--paper); background: var(--ink); }
+}
+
+@media (max-width: 1180px) {
+  .desktop-nav { display: none; }
+  .mobile-menu-button { display: grid; }
+}
+
 @media (max-width: 720px) {
   body { font-size: 14px; }
   .footer-lead > a { font-size: 2.25rem; }
@@ -37,6 +55,14 @@ body { font-size: 15px; }
   .page-hero h1, .profile-hero h1, .contact-page header h1 { font-size: 2.45rem; }
   .hero-intro { bottom: 4.75rem; }
   .player-controls { min-width: min(16rem, calc(100vw - 4.5rem)); }
+}
+
+@media (max-width: 480px) {
+  .hero-actions { align-items: stretch; }
+  .hero-actions .solid-action { width: 100%; }
+  .interest-grid { grid-template-columns: 1fr; }
+  .interest-card { min-height: 12.5rem; }
+  .phone-actions { flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {
