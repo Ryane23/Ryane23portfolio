@@ -8,8 +8,8 @@ type ProjectPreview = { slug: string; name: string; category: string; status: st
 
 const stops: Record<string, Stop> = {
   room: { position: [1.4, 2.7, 7.8], lookAt: [1.5, 1.1, -0.5] },
-  work: { position: [-0.1, 1.72, 1.65], lookAt: [-0.1, 1.38, -1.72] },
-  workPreview: { position: [0.22, 1.62, 0.62], lookAt: [0.22, 1.43, -1.62] },
+  work: { position: [-0.28, 1.72, 1.7], lookAt: [-0.28, 1.38, -1.72] },
+  workPreview: { position: [-0.28, 1.62, 0.78], lookAt: [-0.28, 1.45, -1.62] },
   profile: { position: [1.82, 2.35, 1.65], lookAt: [1.82, 1.92, -1.85] },
   record: { position: [2.95, 2.3, 1.55], lookAt: [2.95, 2.05, -1.82] },
   certifications: { position: [9.55, 2.45, 2.25], lookAt: [9.55, 2.35, -1.86] },
@@ -179,47 +179,42 @@ const RoomScene = () => {
       box([2.7, 0.08, 0.82], [8.15, 0.82, 0.31], 0.46, furnitureGroup);
       box([3.8, 0.1, 1.45], [-0.1, 0.78, -1.22], 0.28, furnitureGroup);
       [-1.82, 1.62].forEach((x) => box([0.09, 0.78, 1.3], [x, 0.39, -1.22], 0.22, furnitureGroup));
-      box([1.75, 1.03, 0.07], [-0.72, 1.48, -1.62], 0.1, workGroup);
-      box([0.08, 0.46, 0.08], [-0.72, 1.02, -1.65], 0.14, workGroup);
-      box([0.48, 0.03, 0.28], [-0.72, 0.82, -1.58], 0.16, workGroup);
 
       const codeCanvas = document.createElement("canvas");
       codeCanvas.width = 512;
       codeCanvas.height = 300;
       const codeContext = codeCanvas.getContext("2d");
-      const codeTexture = new THREE.CanvasTexture(codeCanvas);
-      codeTexture.colorSpace = THREE.SRGBColorSpace;
-      const monitorScreen = new THREE.Mesh(new THREE.PlaneGeometry(1.62, 0.9), new THREE.MeshBasicMaterial({ map: codeTexture }));
-      monitorScreen.position.set(-0.72, 1.48, -1.575);
-      workGroup.add(monitorScreen);
-
       const previewCanvas = document.createElement("canvas");
       previewCanvas.width = 512;
       previewCanvas.height = 300;
       const previewContext = previewCanvas.getContext("2d");
-      const previewTexture = new THREE.CanvasTexture(previewCanvas);
-      previewTexture.colorSpace = THREE.SRGBColorSpace;
-      const curvedScreenGeometry = new THREE.PlaneGeometry(1.28, 0.79, 20, 1);
-      const curvedScreenPositions = curvedScreenGeometry.attributes.position;
-      for (let index = 0; index < curvedScreenPositions.count; index += 1) {
-        const x = curvedScreenPositions.getX(index);
-        curvedScreenPositions.setZ(index, -0.13 * x * x);
+
+      const displayCanvas = document.createElement("canvas");
+      displayCanvas.width = 1024;
+      displayCanvas.height = 300;
+      const displayContext = displayCanvas.getContext("2d");
+      const displayTexture = new THREE.CanvasTexture(displayCanvas);
+      displayTexture.colorSpace = THREE.SRGBColorSpace;
+      const ultrawideGeometry = new THREE.PlaneGeometry(2.95, 0.865, 32, 1);
+      const ultrawidePositions = ultrawideGeometry.attributes.position;
+      for (let index = 0; index < ultrawidePositions.count; index += 1) {
+        const x = ultrawidePositions.getX(index);
+        ultrawidePositions.setZ(index, -0.055 * x * x);
       }
-      curvedScreenPositions.needsUpdate = true;
-      curvedScreenGeometry.computeVertexNormals();
-      const secondaryMonitor = new THREE.Group();
-      secondaryMonitor.position.set(0.76, 1.48, -1.59);
-      secondaryMonitor.rotation.y = -0.14;
-      workGroup.add(secondaryMonitor);
-      const curvedScreen = new THREE.Mesh(curvedScreenGeometry, new THREE.MeshBasicMaterial({ map: previewTexture }));
-      curvedScreen.position.set(0, 0, 0.045);
-      secondaryMonitor.add(curvedScreen);
-      box([1.4, 0.055, 0.07], [0, 0.425, -0.035], 0.09, secondaryMonitor);
-      box([1.4, 0.055, 0.07], [0, -0.425, -0.035], 0.09, secondaryMonitor);
-      box([0.06, 0.9, 0.07], [-0.69, 0, -0.035], 0.09, secondaryMonitor);
-      box([0.06, 0.9, 0.07], [0.69, 0, -0.035], 0.09, secondaryMonitor);
-      box([0.07, 0.4, 0.07], [0, -0.61, -0.06], 0.12, secondaryMonitor);
-      box([0.54, 0.035, 0.28], [0, -0.655, 0.06], 0.14, secondaryMonitor);
+      ultrawidePositions.needsUpdate = true;
+      ultrawideGeometry.computeVertexNormals();
+      const ultrawideMonitor = new THREE.Group();
+      ultrawideMonitor.position.set(-0.28, 1.49, -1.6);
+      workGroup.add(ultrawideMonitor);
+      const ultrawideScreen = new THREE.Mesh(ultrawideGeometry, new THREE.MeshBasicMaterial({ map: displayTexture }));
+      ultrawideScreen.position.z = 0.045;
+      ultrawideMonitor.add(ultrawideScreen);
+      box([3.07, 0.06, 0.075], [0, 0.465, -0.045], 0.09, ultrawideMonitor);
+      box([3.07, 0.06, 0.075], [0, -0.465, -0.045], 0.09, ultrawideMonitor);
+      box([0.06, 0.99, 0.075], [-1.505, 0, -0.045], 0.09, ultrawideMonitor);
+      box([0.06, 0.99, 0.075], [1.505, 0, -0.045], 0.09, ultrawideMonitor);
+      box([0.075, 0.38, 0.075], [0, -0.62, -0.055], 0.12, ultrawideMonitor);
+      box([0.64, 0.035, 0.3], [0, -0.67, 0.075], 0.14, ultrawideMonitor);
 
       // Gaming desk details.
       box([2.65, 0.025, 0.62], [-0.12, 0.835, -1.01], 0.08, workGroup);
@@ -450,6 +445,17 @@ const RoomScene = () => {
       ];
       const codeText = codeLines.join("\n");
       const getTypedCount = (time = performance.now()) => Math.min(codeText.length, Math.floor(time / 52) % (codeText.length + 46));
+      const composeDisplay = () => {
+        if (!displayContext) return;
+        const dark = themeRef.current === "dark";
+        displayContext.fillStyle = dark ? "#080a09" : "#deded9";
+        displayContext.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
+        displayContext.drawImage(codeCanvas, 0, 0);
+        displayContext.drawImage(previewCanvas, 512, 0);
+        displayContext.fillStyle = dark ? "#373b38" : "#a8aaa6";
+        displayContext.fillRect(510, 0, 4, displayCanvas.height);
+        displayTexture.needsUpdate = true;
+      };
 
       const drawCodeMonitor = (time = performance.now()) => {
         if (!codeContext) return;
@@ -470,7 +476,7 @@ const RoomScene = () => {
         const cursorX = 62 + codeContext.measureText(activeLine).width;
         const cursorY = 55 + Math.max(0, typedLines.length - 1) * 28;
         if (blink) codeContext.fillRect(cursorX + 2, cursorY, 9, 18);
-        codeTexture.needsUpdate = true;
+        composeDisplay();
       };
 
       const drawPreviewMonitor = () => {
@@ -526,7 +532,7 @@ const RoomScene = () => {
         } else {
           previewContext.font = "bold 12px monospace";
           previewContext.fillStyle = dark ? "#777" : "#696969";
-          previewContext.fillText("SECONDARY DISPLAY / LIVE PREVIEW", 24, 38);
+          previewContext.fillText("LIVE PROJECT PREVIEW", 24, 38);
           previewContext.font = "bold 35px Arial, sans-serif";
           previewContext.fillStyle = dark ? "#f2f2ef" : "#111111";
           previewContext.fillText("SELECT A PROJECT", 24, 100);
@@ -538,7 +544,7 @@ const RoomScene = () => {
             previewContext.strokeRect(24, 165 + row * 36, 464, 24);
           }
         }
-        previewTexture.needsUpdate = true;
+        composeDisplay();
       };
       const drawMonitor = (time = performance.now()) => {
         drawCodeMonitor(time);
@@ -685,8 +691,7 @@ const RoomScene = () => {
             labelTexture?.dispose?.();
           }
         });
-        codeTexture.dispose();
-        previewTexture.dispose();
+        displayTexture.dispose();
         renderer.dispose();
       };
     };
